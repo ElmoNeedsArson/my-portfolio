@@ -147,17 +147,9 @@
                         class:open={categoryDropdownOpen}
                         on:click={toggleCategoryDropdown}
                     >
-                        <svelte:component
-                            this={currentCategory?.icon}
-                            size="20"
-                        />
-                        <span class="category-label"
-                            >{currentCategory?.label}</span
-                        >
-                        <ChevronDown
-                            size={16}
-                            class={categoryDropdownOpen ? "rotate" : ""}
-                        />
+                        <svelte:component this={currentCategory?.icon} size="20" />
+                        <span class="category-label">{currentCategory?.label}</span>
+                        <ChevronDown size={16} class={categoryDropdownOpen ? "rotate" : ""} />
                     </button>
 
                     {#if categoryDropdownOpen}
@@ -165,19 +157,10 @@
                             {#each SEARCH_CATEGORIES as category}
                                 <button
                                     class="category-option"
-                                    class:selected={category.id ===
-                                        selectedCategory}
-                                    on:click={(event) =>
-                                        handleCategorySelect(
-                                            category.id,
-                                            event,
-                                        )}
+                                    class:selected={category.id === selectedCategory}
+                                    on:click={(event) => handleCategorySelect( category.id, event, )}
                                 >
-                                    <svelte:component
-                                        this={category.icon}
-                                        size="20"
-                                    />
-
+                                    <svelte:component this={category.icon} size="20" />
                                     <span>{category.label}</span>
                                 </button>
                             {/each}
@@ -214,18 +197,10 @@
                         {#each suggestions as suggestion}
                             <button
                                 class="suggestion-item"
-                                on:click={() =>
-                                    handleSuggestionClick(suggestion)}
+                                on:click={() => handleSuggestionClick(suggestion)}
                             >
-                                <!-- <span class="suggestion-icon"
-                                    >{currentCategory?.icon}</span
-                                > -->
-                                <svelte:component
-                                    this={currentCategory?.icon}
-                                    size="20"
-                                />
-                                <span class="suggestion-text">{suggestion}</span
-                                >
+                                <svelte:component this={currentCategory?.icon} size="20" />
+                                <span class="suggestion-text">{suggestion}</span>
                             </button>
                         {/each}
                     </div>
@@ -248,7 +223,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: var(--transparent-overlay);
         backdrop-filter: blur(4px);
         display: flex;
         align-items: flex-start;
@@ -264,7 +239,7 @@
         width: 90%;
         max-width: 600px;
         max-height: 400px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 20px 40px var(--box-shadow);
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -276,10 +251,12 @@
         padding: 1rem;
         border-bottom: 1px solid var(--border-color);
         gap: 0.75rem;
+        align-items: stretch;
     }
 
     .category-selector {
         position: relative;
+        height: auto;
     }
 
     .category-button {
@@ -294,6 +271,7 @@
         cursor: pointer;
         transition: all 0.2s ease;
         white-space: nowrap;
+        height: 100%;
     }
 
     .category-button:hover {
@@ -303,10 +281,6 @@
     .category-button.open {
         background-color: var(--hover-color);
     }
-
-    /* .category-icon {
-        font-size: 0.875rem;
-    } */
 
     .category-label {
         font-size: 0.875rem;
@@ -324,7 +298,7 @@
         border: 1px solid var(--border-color);
         border-radius: 6px;
         margin-top: 0.25rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 12px var(--box-shadow);
         z-index: 1001;
         min-width: 180px;
     }
@@ -348,7 +322,7 @@
     }
 
     .category-option.selected {
-        background-color: var(--accent-color);
+        background-color: var(--secondary-text-color);
         color: white;
     }
 
@@ -372,7 +346,7 @@
     }
 
     .search-input:focus {
-        border-color: var(--accent-color);
+        border-color: var(--secondary-text-color);
     }
 
     .search-input::placeholder {

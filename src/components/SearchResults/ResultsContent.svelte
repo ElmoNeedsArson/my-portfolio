@@ -111,7 +111,7 @@
 
     .try-again-button {
         padding: 0.75rem 1.5rem;
-        background-color: var(--accent-color);
+        background-color: var(--secondary-text-color);
         color: white;
         border: none;
         border-radius: 6px;
@@ -122,7 +122,7 @@
     }
 
     .try-again-button:hover {
-        background-color: var(--accent-hover-color, var(--accent-color));
+        background-color: var(--secondary-text-color, var(--secondary-text-color));
         filter: brightness(110%);
     }
 

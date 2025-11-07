@@ -7,8 +7,10 @@
   --header-color: #23272F;
   --muted-color: #A1A4AA;
   --border-color: #525252;
-  --accent-color: #F96743;
   --hover-color: #2A2D35;
+
+  --transparent-overlay: rgba(0, 0, 0, 0.5);
+  --box-shadow: rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="light"] {

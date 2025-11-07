@@ -47,7 +47,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: var(--transparent-overlay);
         backdrop-filter: blur(4px);
         display: flex;
         align-items: center;
@@ -63,7 +63,7 @@
         width: 100%;
         max-width: 1200px;
         max-height: 90vh;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 20px 40px var(--box-shadow);
         display: flex;
         flex-direction: column;
         overflow: hidden;

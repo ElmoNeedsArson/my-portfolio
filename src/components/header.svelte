@@ -218,18 +218,17 @@
     }
 
     .search-button:hover {
-        color: var(--accent-color);
+        color: var(--secondary-text-color);
         transform: scale(1.05);
     }
 
     .divider {
         display: inline-block;
-        width: 1px; /* thickness of the line */
-        height: 24px; /* match your icons' height */
-        /* background-color: var(--muted-color); */
+        width: 1px;
+        height: 24px; 
         background-color: var(--secondary-text-color);
-        margin: 0 0.5rem; /* spacing around the divider */
-        vertical-align: middle; /* align with buttons */
+        margin: 0 0.5rem; 
+        vertical-align: middle; 
     }
 
     .mode-toggle {

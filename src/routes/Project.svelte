@@ -264,7 +264,7 @@
 
   .chip:hover {
     background: var(--hover-color);
-    border-color: var(--accent-color);
+    border-color: var(--secondary-text-color);
     transform: translateY(-1px);
   }
 
