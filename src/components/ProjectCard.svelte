@@ -2,10 +2,13 @@
   // ProjectCard component
   // - Receives a `project` prop containing metadata loaded from a JSON file
   // - Subscribes to the global `darkMode` store to pick the appropriate image
+  // - Makes tags clickable to navigate to search results
   // The reactive statement below updates `imageUrl` whenever $darkMode or the
   // `project` object changes.
   import type { Project } from "../types";
   import { darkMode } from "../lib/darkModeStore";
+  import { navigateToSearch } from "../lib/searchNavigation";
+  
   export let project: Project;
 
   // Helpers: thumbnails may be a string or an object { src, alt, caption }
@@ -21,6 +24,16 @@
       ? project.thumbnail
       : project.thumbnailLight;
   $: imageUrl = getSrc(selectedThumb) ?? "";
+
+  /**
+   * Handle tag click - navigate to search results for that tag
+   * Prevents event bubbling to avoid navigating to project page
+   */
+  function handleTagClick(event: MouseEvent, tag: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    navigateToSearch(tag, 'tags');
+  }
 </script>
 
 <!--
@@ -36,7 +49,9 @@
 
     <div class="tags">
       {#each project.tags.slice(0, 3) as tag}
-        <span class="tag">{tag}</span>
+        <button class="tag" on:click={(e) => handleTagClick(e, tag)}>
+          {tag}
+        </button>
       {/each}
     </div>
     <!-- overlay that contains meta (date + tags) and the title -->
@@ -144,11 +159,15 @@
     color: var(--primary-text-color);
     /* text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); */
     border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-family: inherit;
   }
 
   @media (hover: hover) {
     .tag:hover {
       background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
     }
   }
 </style>

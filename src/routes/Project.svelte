@@ -3,6 +3,7 @@
   import type { Project } from "../types";
   import Header from "../components/header.svelte";
   import Footer from "../components/footer.svelte";
+  import { navigateToSearch } from "../lib/searchNavigation";
 
   // same import as i do in home.svelte
   const jsonModules = import.meta.glob("../projects/*/*.json", {
@@ -48,6 +49,21 @@
     if ("images" in gallery) return gallery;
     return { images: [], caption: undefined };
   }
+
+  /**
+   * Handle clicks on tags, languages, or tools to show related projects
+   */
+  function handleTagClick(tag: string) {
+    navigateToSearch(tag, 'tags');
+  }
+
+  function handleLanguageClick(language: string) {
+    navigateToSearch(language, 'languages');
+  }
+
+  function handleToolClick(tool: string) {
+    navigateToSearch(tool, 'tools');
+  }
 </script>
 
 <Header />
@@ -74,8 +90,33 @@
       <!-- Tag list -->
       <div class="tags">
         {#each project.tags as tag}
-          <span class="tag">{tag}</span>
+          <button class="tag" on:click={() => handleTagClick(tag)}>{tag}</button>
         {/each}
+      </div>
+
+      <!-- Languages and Tools -->
+      <div class="meta-info">
+        <div class="languages">
+          <h3>Languages</h3>
+          <div class="chips">
+            {#each project.languages as language}
+              <button class="chip language-chip" on:click={() => handleLanguageClick(language)}>
+                💻 {language}
+              </button>
+            {/each}
+          </div>
+        </div>
+
+        <div class="tools">
+          <h3>Tools</h3>
+          <div class="chips">
+            {#each project.tools as tool}
+              <button class="chip tool-chip" on:click={() => handleToolClick(tool)}>
+                🛠️ {tool}
+              </button>
+            {/each}
+          </div>
+        </div>
       </div>
 
       <!-- Content sections: overview, key features, and any additional sections -->
@@ -175,6 +216,78 @@
     border-radius: 999px;
     font-size: 0.8rem;
     outline: var(--border-color) 1px solid;
+    border: none;
+    color: var(--primary-text-color);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+
+  .tag:hover {
+    background: var(--hover-color);
+    transform: translateY(-1px);
+  }
+
+  .meta-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .languages, .tools {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .languages h3, .tools h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--secondary-text-color);
+    font-weight: 600;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    background: var(--secondary-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--primary-text-color);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .chip:hover {
+    background: var(--hover-color);
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+  }
+
+  .language-chip:hover {
+    border-color: #61dafb; /* Blue for languages */
+  }
+
+  .tool-chip:hover {
+    border-color: #ff6b35; /* Orange for tools */
+  }
+
+  @media (max-width: 768px) {
+    .meta-info {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
   }
 
   .content {
