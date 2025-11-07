@@ -1,86 +1,78 @@
 import type { Project } from '../types';
 
-// Define the possible search categories
+// possible search categories
 export type SearchCategory = 'projects' | 'tags' | 'languages' | 'tools';
 
-// Interface for search results returned to components
+// Interface for search results returned
 export interface SearchResult {
-    projects: Project[];     // Array of projects matching the search
-    searchTerm: string;     // What the user searched for
-    category: SearchCategory; // Which category they searched in
+    projects: Project[];
+    searchTerm: string;    
+    category: SearchCategory;
 }
 
-/**
- * Load all projects dynamically using Vite's import.meta.glob
- * This scans the projects folder and imports all JSON files
- */
-const loadAllProjects = (): Project[] => {
-    // Vite's glob import - loads all .json files in projects subdirectories
+// Load all projects dynamically using Vite's import.meta.glob
+export const loadAllProjects = (): Project[] => {
     const jsonModules = import.meta.glob("../projects/*/*.json", {
-        eager: true, // Load immediately, not lazy
+        eager: true,
     }) as Record<string, { default: Project }>;
     
     // Extract the default export (the project data) from each module
     return Object.values(jsonModules).map(m => m.default);
 };
 
-/**
- * Get all unique values for a specific search category
- * This powers the suggestion dropdowns
- */
+export const findProjectBySlug = (slug: string): Project | undefined => {
+    const projects = loadAllProjects();
+    return projects.find(project => project.slug === slug);
+};
+
+//Get all unique values for a specific search category - used for suggestions in search
 export const getAllCategoryValues = (category: SearchCategory): string[] => {
     const projects = loadAllProjects();
-    const values = new Set<string>(); // Use Set to automatically handle duplicates
 
-    // Extract values based on the selected category
+    //Very cool js function gpt told me about, set makes it so you wont have duplicates
+    const values = new Set<string>();
+
+    // based on category, add everything from all projects to the set. (Its automatically unique, bc of set)
     projects.forEach(project => {
         switch (category) {
             case 'projects':
-                values.add(project.title); // Add project titles
+                values.add(project.title);
                 break;
             case 'tags':
-                project.tags.forEach(tag => values.add(tag)); // Add each tag
+                project.tags.forEach(tag => values.add(tag)); 
                 break;
             case 'languages':
-                project.languages.forEach(lang => values.add(lang)); // Add each language
+                project.languages.forEach(lang => values.add(lang)); 
                 break;
             case 'tools':
-                project.tools.forEach(tool => values.add(tool)); // Add each tool
+                project.tools.forEach(tool => values.add(tool));
                 break;
         }
     });
 
-    // Convert Set to sorted Array for consistent ordering
+    // sort alphabetically and return as array
     return Array.from(values).sort();
 };
 
-/**
- * Search projects by category and term
- * Returns projects that match the search criteria
- */
+// Filter projects based on search category and term
 export const searchProjects = (category: SearchCategory, searchTerm: string): SearchResult => {
     const projects = loadAllProjects();
-    const normalizedSearch = searchTerm.toLowerCase().trim(); // Case-insensitive search
+    const normalizedSearch = searchTerm.toLowerCase().trim();
     
-    // Filter projects based on search category and term
     const filteredProjects = projects.filter(project => {
         switch (category) {
             case 'projects':
-                // Search in project title and description
                 return project.title.toLowerCase().includes(normalizedSearch) ||
                        project.description.toLowerCase().includes(normalizedSearch);
             case 'tags':
-                // Check if any tag contains the search term
                 return project.tags.some(tag => 
                     tag.toLowerCase().includes(normalizedSearch)
                 );
             case 'languages':
-                // Check if any language contains the search term
                 return project.languages.some(lang => 
                     lang.toLowerCase().includes(normalizedSearch)
                 );
             case 'tools':
-                // Check if any tool contains the search term
                 return project.tools.some(tool => 
                     tool.toLowerCase().includes(normalizedSearch)
                 );
@@ -97,19 +89,17 @@ export const searchProjects = (category: SearchCategory, searchTerm: string): Se
     };
 };
 
-/**
- * Get search suggestions based on partial user input
- * Used for the real-time suggestions dropdown
- */
+
+//Get search suggestions based on partial user input
 export const getSuggestions = (category: SearchCategory, partialInput: string): string[] => {
-    const allValues = getAllCategoryValues(category);
+    const allValues = getAllCategoryValues(category); // returns arrays of all projects or all tags, etc. 
     const normalizedInput = partialInput.toLowerCase().trim();
     
-    // If no input, show first 12 items as initial suggestions
+    // if no input just show first 12 items
     if (!normalizedInput) return allValues.slice(0, 12);
     
-    // Filter suggestions that contain the user's input and limit results
+    // otherwise show filtered suggestions
     return allValues.filter(value => 
         value.toLowerCase().includes(normalizedInput)
-    ).slice(0, 12); // Limit to 12 suggestions for performance
+    ).slice(0, 12); // max 12
 };

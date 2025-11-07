@@ -1,36 +1,19 @@
 <script lang="ts">
-    // Header component script with search functionality
-    // - Imports icons from lucide and the project logo asset
-    // - Imports the shared `darkMode` store so we can read/update global theme state
-    // - Manages search modal state and results display
     import { Linkedin, Github, Moon, Sun, Search } from "@lucide/svelte";
-    import logo from "../assets/logos/logoJS.svg";
     import { darkMode } from '../lib/darkModeStore';
     import SearchModal from './SearchModal.svelte';
     import SearchResults from './SearchResults.svelte';
     import type { SearchResult } from '../lib/searchUtils';
-    import { subscribeToSearchResults, closeSearchResults } from '../lib/searchNavigation';
-    import { onDestroy } from 'svelte';
+    import { searchResultStore, showSearchResultsStore, closeSearchResults } from '../lib/searchNavigation';
 
     // State variables for managing search functionality
     let showSearchModal = false;    // Controls when the search modal is visible
-    let showSearchResults = false;  // Controls when the results modal is visible
-    let searchResult: SearchResult | null = null; // Stores the search results data
 
-    // Subscribe to global search navigation events
-    // This allows other components (ProjectCard, Project page) to trigger search results
-    const unsubscribe = subscribeToSearchResults((result, show) => {
-        searchResult = result;
-        showSearchResults = show;
-        if (show) {
-            showSearchModal = false; // Close search modal if results are being shown
-        }
-    });
-
-    // Clean up subscription when component is destroyed
-    onDestroy(() => {
-        unsubscribe();
-    });
+    // Reactive statements using Svelte store subscriptions with $ syntax
+    // These automatically update when the stores change
+    $: if ($showSearchResultsStore) {
+        showSearchModal = false; // Close search modal if results are being shown
+    }
 
     // Simple click handler used for the social icon buttons (placeholder)
     const handleClick = () => {
@@ -69,16 +52,9 @@
      * This is called when user performs a search in the modal
      */
     function handleSearchResults(event: CustomEvent<SearchResult>) {
-        searchResult = event.detail;    // Store the search results
-        showSearchModal = false;        // Close the search modal
-        showSearchResults = true;       // Show the results modal
-    }
-
-    /**
-     * Close the search modal (called when user cancels search)
-     */
-    function handleSearchClose() {
-        showSearchModal = false;
+        searchResultStore.set(event.detail);    // Store the search results
+        showSearchModal = false;                // Close the search modal
+        showSearchResultsStore.set(true);       // Show the results modal
     }
 
     /**
@@ -92,8 +68,8 @@
      * Go back from results to search modal (allows user to refine search)
      */
     function handleBackToSearch() {
-        showSearchResults = false;  // Hide results
-        showSearchModal = true;     // Show search modal again
+        showSearchResultsStore.set(false);  // Hide results
+        showSearchModal = true;             // Show search modal again
     }
 </script>
 
@@ -136,7 +112,6 @@
 <SearchModal 
     bind:isOpen={showSearchModal}
     on:searchResults={handleSearchResults}
-    on:close={handleSearchClose}
 />
 
 <!-- Global keyboard event listener for search shortcuts -->
@@ -182,28 +157,15 @@
 </header>
 
 <!-- 
-  Search Modal Component
-  - Appears when user clicks search button or uses keyboard shortcut
-  - Handles category selection (projects, tags, languages, tools)
-  - Shows real-time suggestions as user types
-  - Dispatches search results when user selects/searches
--->
-<SearchModal 
-    bind:isOpen={showSearchModal}
-    on:searchResults={handleSearchResults}
-    on:close={handleSearchClose}
-/>
-
-<!-- 
   Search Results Modal Component
   - Shows filtered projects based on search criteria
   - Only visible when search results are available
   - Allows navigation to individual projects
   - Provides option to go back and refine search
 -->
-{#if showSearchResults && searchResult}
+{#if $showSearchResultsStore && $searchResultStore}
     <SearchResults 
-        {searchResult}
+        searchResult={$searchResultStore}
         on:close={handleResultsClose}
         on:backToSearch={handleBackToSearch}
     />

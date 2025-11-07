@@ -26,11 +26,15 @@
  *    ├── Handles empty results gracefully
  *    └── Provides navigation to project pages
  * 
- * 4. searchUtils.ts (Core Logic)
- *    ├── Loads all project data dynamically
+ * 4. searchUtils.ts (Core Logic & Shared Utilities)
+ *    ├── loadAllProjects() - SHARED project loading function
+ *    ├── findProjectBySlug() - Convenience function for single project lookup
  *    ├── Extracts unique values for suggestions
  *    ├── Performs filtering across different data fields
  *    └── Returns structured search results
+ * 
+ * IMPORTANT: All project loading now uses the shared loadAllProjects() function
+ * to eliminate code duplication across Home.svelte, Project.svelte, and search features.
  * 
  * ==================================================================================
  * USER INTERACTION FLOWS
@@ -89,6 +93,26 @@
  * • Consistent spacing and border radius with existing design
  * • Hover states and transitions for smooth interactions
  * • Fixed positioning for category dropdown to avoid clipping
+ * 
+ * ==================================================================================
+ * CODE ORGANIZATION & REUSABILITY
+ * ==================================================================================
+ * 
+ * SHARED PROJECT LOADING:
+ * All components now use the centralized loadAllProjects() function from searchUtils.ts:
+ * 
+ * • Home.svelte: Uses loadAllProjects() to display project grid
+ * • Project.svelte: Uses findProjectBySlug() (which calls loadAllProjects())
+ * • SearchModal.svelte: Uses loadAllProjects() for direct project navigation
+ * • Search functions: Use loadAllProjects() for filtering and suggestions
+ * 
+ * This eliminates code duplication and ensures consistent project loading behavior.
+ * 
+ * BENEFITS:
+ * • Single source of truth for project loading logic
+ * • Easier maintenance and debugging
+ * • Consistent error handling across components
+ * • Better performance through shared caching opportunities
  * 
  * ==================================================================================
  * EXTENSIBILITY

@@ -5,15 +5,10 @@
     import ProjectCard from "../components/ProjectCard.svelte";
     import { link } from "svelte-spa-router";
     import type { Project } from "../types";
+    import { loadAllProjects } from "../lib/searchUtils";
 
-    // Some weird loading function only available in vite
-    // Dynamically loads all json according to the rule i give it
-    const jsonModules = import.meta.glob("../projects/*/*.json", {
-        eager: true,
-    }) as Record<string, { default: Project }>;
-    const projects: Project[] = Object.values(jsonModules).map(
-        (m) => m.default,
-    );
+    // Load all projects using the shared utility function
+    const projects: Project[] = loadAllProjects();
 
     console.log("Loaded projects:", projects);
     console.table(projects);

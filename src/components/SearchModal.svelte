@@ -1,19 +1,17 @@
 <script lang="ts">
-    /**
-     * SearchModal Component
-     * 
-     * Advanced search interface that provides:
-     * - Category selection (projects, tags, languages, tools)
-     * - Real-time suggestions as user types
-     * - Keyboard navigation (Enter to search, Esc to close)
-     * - Smart behavior: direct navigation for projects, search results for others
-     * - Click-outside-to-close with delay to prevent immediate closure
-     */
-    
-    import { createEventDispatcher } from 'svelte';
-    import { Search, ChevronDown, X } from '@lucide/svelte';
-    import { searchProjects, getSuggestions, type SearchCategory, type SearchResult } from '../lib/searchUtils';
-    import type { Project } from '../types';
+    import { createEventDispatcher, onMount, onDestroy } from "svelte";
+    import { Search, ChevronDown, X } from "@lucide/svelte";
+    import {
+        searchProjects,
+        getSuggestions,
+        type SearchCategory,
+        type SearchResult,
+        loadAllProjects,
+    } from "../lib/searchUtils";
+    import {
+        SEARCH_CATEGORIES,
+        getCategoryById,
+    } from "../lib/searchCategories";
 
     const dispatch = createEventDispatcher<{
         searchResults: SearchResult;
@@ -22,132 +20,115 @@
 
     export let isOpen = false;
 
-    let selectedCategory: SearchCategory = 'projects';
-    let searchInput = '';
+    let selectedCategory: SearchCategory = "projects";
+    let searchInput = "";
     let suggestions: string[] = [];
-    let showSuggestions = false;
     let categoryDropdownOpen = false;
     let searchInputElement: HTMLInputElement;
 
-    const categories = [
-        { id: 'projects', label: 'Project Names', icon: '📁' },
-        { id: 'tags', label: 'Tags', icon: '🏷️' },
-        { id: 'languages', label: 'Languages', icon: '💻' },
-        { id: 'tools', label: 'Tools', icon: '🛠️' }
-    ] as const;
+    let categoryDropdown: HTMLElement;
+    let categoryButtonElement: HTMLElement;
 
-    // Focus input when modal opens
+    function positionDropdown() {
+        if (categoryDropdownOpen && categoryButtonElement && categoryDropdown) {
+            const rect = categoryButtonElement.getBoundingClientRect();
+            categoryDropdown.style.top = `${rect.bottom + 4}px`;
+            categoryDropdown.style.left = `${rect.left}px`;
+        }
+    }
+
+    //onmount is iets wat svelte heel erg aanraad, want tis beter fzo
+    onMount(() => {
+        window.addEventListener("resize", positionDropdown);
+    });
+
+    onDestroy(() => {
+        window.removeEventListener("resize", positionDropdown);
+    });
+
+    // Focus on input when modal opens
     $: if (isOpen && searchInputElement) {
         searchInputElement.focus();
     }
 
-    $: currentCategory = categories.find(cat => cat.id === selectedCategory);
+    $: currentCategory = getCategoryById(selectedCategory);
 
-    // Update suggestions when input or category changes
+    // Update suggestions when input or category changes (reactive!)
     $: if (selectedCategory) {
         suggestions = getSuggestions(selectedCategory, searchInput);
-        showSuggestions = true; // Always show suggestions when a category is selected
     }
 
     function handleCategorySelect(category: SearchCategory, event: MouseEvent) {
-        event.stopPropagation();
-        selectedCategory = category;
+        event.stopPropagation(); //stops it from closing the modal
+        selectedCategory = category; // i love svelte, immediate reactivity
         categoryDropdownOpen = false;
-        searchInput = '';
-        showSuggestions = true;
-        updateSuggestions();
+        searchInput = ""; // i think this is more user friendly
     }
-
-    let categoryButtonElement: HTMLButtonElement;
 
     function toggleCategoryDropdown(event: MouseEvent) {
-        event.stopPropagation();
         categoryDropdownOpen = !categoryDropdownOpen;
-        
-        // Position dropdown
-        if (categoryDropdownOpen && categoryButtonElement) {
-            setTimeout(() => {
-                const dropdown = document.querySelector('.category-dropdown') as HTMLElement;
-                if (dropdown) {
-                    const rect = categoryButtonElement.getBoundingClientRect();
-                    dropdown.style.top = `${rect.bottom + 4}px`;
-                    dropdown.style.left = `${rect.left}px`;
-                }
-            }, 0);
-        }
-    }
-
-    function updateSuggestions() {
-        suggestions = getSuggestions(selectedCategory, searchInput);
+        if (categoryDropdownOpen) positionDropdown(); //places it in the right spot for a fixed display
     }
 
     function handleSuggestionClick(suggestion: string) {
-        console.log('Suggestion clicked:', suggestion, 'Category:', selectedCategory);
-        searchInput = suggestion;
-        
-        // If it's a project name and we find an exact match, navigate directly
-        if (selectedCategory === 'projects') {
-            const projects = import.meta.glob("../projects/*/*.json", { eager: true }) as Record<string, { default: Project }>;
-            const allProjects = Object.values(projects).map(m => m.default);
-            const exactMatch = allProjects.find(p => p.title === suggestion);
+        event.stopPropagation(); //otherwise the results modal immediately closes
+        console.log(
+            "Suggestion clicked: " +
+                suggestion +
+                ", Category:" +
+                selectedCategory,
+        );
+        searchInput = suggestion; //bc of reactivity this is important
+
+        //If it's a project name and we find an exact match, navigate directly
+        if (selectedCategory === "projects") {
+            const allProjects = loadAllProjects();
+            const exactMatch = allProjects.find((p) => p.title === suggestion);
             if (exactMatch) {
-                console.log('Direct navigation to project:', exactMatch.slug);
+                console.log("Direct navigation to project:", exactMatch.slug);
                 // Import the router and navigate
-                import('svelte-spa-router').then(({ push }) => {
+                import("svelte-spa-router").then(({ push }) => {
                     push(`/${exactMatch.slug}`);
                 });
                 closeSearch();
                 return;
             }
         }
-        
+
         // Otherwise, perform search to show results
         performSearch();
     }
 
     function performSearch() {
+        console.log(
+            "Performing search for:",
+            searchInput,
+            "in category:",
+            selectedCategory,
+        );
         const trimmedInput = searchInput.trim();
-        console.log('Performing search:', trimmedInput, 'Category:', selectedCategory);
         if (!trimmedInput) return;
-        
         const results = searchProjects(selectedCategory, trimmedInput);
-        console.log('Search results:', results);
-        dispatch('searchResults', results);
+        dispatch("searchResults", results);
         closeSearch();
     }
 
     function closeSearch() {
         isOpen = false;
-        searchInput = '';
-        showSuggestions = false;
-        categoryDropdownOpen = false;
-        dispatch('close');
+        searchInput = "";
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-        if (event.key === 'Enter') {
+        if (event.key === "Enter") {
             performSearch();
-        } else if (event.key === 'Escape') {
+        } else if (event.key === "Escape") {
             closeSearch();
         }
     }
 
-    let clickOutsideEnabled = false;
-
-    // Enable click outside after a short delay to prevent immediate closure
-    $: if (isOpen) {
-        setTimeout(() => {
-            clickOutsideEnabled = true;
-        }, 100);
-    } else {
-        clickOutsideEnabled = false;
-    }
-
     function handleClickOutside(event: MouseEvent) {
-        if (!clickOutsideEnabled) return;
-        
         const target = event.target as HTMLElement;
-        if (!target.closest('.search-container')) {
+        if (!target.closest(".search-container")) {
             closeSearch();
         }
     }
@@ -160,26 +141,43 @@
         <div class="search-container">
             <div class="search-header">
                 <div class="category-selector">
-                    <button 
+                    <button
                         bind:this={categoryButtonElement}
                         class="category-button"
                         class:open={categoryDropdownOpen}
                         on:click={toggleCategoryDropdown}
                     >
-                        <span class="category-icon">{currentCategory?.icon}</span>
-                        <span class="category-label">{currentCategory?.label}</span>
-                        <ChevronDown size={16} class={categoryDropdownOpen ? 'rotate' : ''} />
+                        <svelte:component
+                            this={currentCategory?.icon}
+                            size="20"
+                        />
+                        <span class="category-label"
+                            >{currentCategory?.label}</span
+                        >
+                        <ChevronDown
+                            size={16}
+                            class={categoryDropdownOpen ? "rotate" : ""}
+                        />
                     </button>
 
                     {#if categoryDropdownOpen}
-                        <div class="category-dropdown" on:click|stopPropagation>
-                            {#each categories as category}
+                        <div class="category-dropdown">
+                            {#each SEARCH_CATEGORIES as category}
                                 <button
                                     class="category-option"
-                                    class:selected={category.id === selectedCategory}
-                                    on:click={(event) => handleCategorySelect(category.id, event)}
+                                    class:selected={category.id ===
+                                        selectedCategory}
+                                    on:click={(event) =>
+                                        handleCategorySelect(
+                                            category.id,
+                                            event,
+                                        )}
                                 >
-                                    <span class="category-icon">{category.icon}</span>
+                                    <svelte:component
+                                        this={category.icon}
+                                        size="20"
+                                    />
+
                                     <span>{category.label}</span>
                                 </button>
                             {/each}
@@ -194,10 +192,8 @@
                         type="text"
                         bind:value={searchInput}
                         on:keydown={handleKeyDown}
-                        on:input={updateSuggestions}
                         placeholder={`Search ${currentCategory?.label.toLowerCase()}...`}
                         class="search-input"
-                    />
                     />
                 </div>
 
@@ -206,20 +202,30 @@
                 </button>
             </div>
 
-            {#if showSuggestions && suggestions.length > 0}
+            {#if suggestions.length > 0}
                 <div class="suggestions-container">
                     <div class="suggestions-header">
                         <span class="suggestions-title">Suggestions</span>
-                        <span class="suggestions-count">{suggestions.length}</span>
+                        <span class="suggestions-count"
+                            >{suggestions.length}</span
+                        >
                     </div>
                     <div class="suggestions-list">
                         {#each suggestions as suggestion}
                             <button
                                 class="suggestion-item"
-                                on:click={() => handleSuggestionClick(suggestion)}
+                                on:click={() =>
+                                    handleSuggestionClick(suggestion)}
                             >
-                                <span class="suggestion-icon">{currentCategory?.icon}</span>
-                                <span class="suggestion-text">{suggestion}</span>
+                                <!-- <span class="suggestion-icon"
+                                    >{currentCategory?.icon}</span
+                                > -->
+                                <svelte:component
+                                    this={currentCategory?.icon}
+                                    size="20"
+                                />
+                                <span class="suggestion-text">{suggestion}</span
+                                >
                             </button>
                         {/each}
                     </div>
@@ -298,9 +304,9 @@
         background-color: var(--hover-color);
     }
 
-    .category-icon {
+    /* .category-icon {
         font-size: 0.875rem;
-    }
+    } */
 
     .category-label {
         font-size: 0.875rem;

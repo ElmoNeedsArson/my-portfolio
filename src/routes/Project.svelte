@@ -4,23 +4,16 @@
   import Header from "../components/header.svelte";
   import Footer from "../components/footer.svelte";
   import { navigateToSearch } from "../lib/searchNavigation";
-
-  // same import as i do in home.svelte
-  const jsonModules = import.meta.glob("../projects/*/*.json", {
-    eager: true,
-  }) as Record<string, { default: Project }>;
+  import { findProjectBySlug } from "../lib/searchUtils";
 
   // Reactive slug value derived from the router params. `$params` is provided
   // by svelte-spa-router and is reactive.
   let slug: string = "";
   $: slug = $params?.slug ?? "";
 
-  // Reactive project lookup: map modules to their `.default` exports and find
-  // the one that matches the current slug.
+  // Reactive project lookup using the shared utility function
   let project: Project | undefined;
-  $: project = Object.values(jsonModules)
-    .map((m) => m.default)
-    .find((p) => p.slug === slug);
+  $: project = findProjectBySlug(slug);
 
   function getSrc(img: string | { src?: string } | undefined) {
     if (!img) return undefined;
