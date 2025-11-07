@@ -1,0 +1,25 @@
+:root {
+  --primary-text-color: #ffffff;
+  --secondary-text-color: #F96743;
+  /* --background-color: #1C1E22; */
+  --background-color: #010409;
+  --header-color: #23272F;
+  --muted-color: #A1A4AA;
+  --border-color: #525252;
+}
+
+[data-theme="light"] {
+  --primary-text-color: #141414;
+  --secondary-text-color: #F96743;
+  --background-color: #ffffff;
+  --header-color: #ffffff;
+  --muted-color: #666666;
+  --border-color: #dddddd;
+}
+
+body {
+  /* font-family: "Fira Sans", sans-serif; */
+  font-family: "Space Grotesk", sans-serif;
+  margin: 0;
+  padding: 0;
+}
