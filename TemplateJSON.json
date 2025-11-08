@@ -1,0 +1,43 @@
+{
+    "slug": "",
+    "title": "",
+    "thumbnail": {
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "thumbnailLight": {
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "",
+    "languages": [],
+    "tools": [],
+    "tags": [],
+    "content": {
+        "overview": "",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "title": "",
+                "text": "",
+                "gallery": {
+                    "columns": 0,
+                    "media": [
+                        {
+                            "src": "",
+                            "alt": "",
+                            "caption": "",
+                            "autoplay": false,
+                            "loop": false,
+                            "muted": false,
+                            "controls": false
+                        }
+                    ],
+                    "caption": ""
+                }
+            }
+        ]
+    }
+}

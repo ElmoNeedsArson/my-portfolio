@@ -23,6 +23,8 @@ export interface GalleryObject {
 
 interface ProjectSection {
   title: string;
+  // subtitle for the section
+  subtitle?: string;
   // text is optional so a section can be an image or gallery-only
   text?: string;
   // single image (string path or object with alt/caption)
@@ -31,6 +33,7 @@ interface ProjectSection {
   gallery?: ImageObject[] | GalleryObject;
   // video object with src, type, and optional caption
   video?: VideoObject;
+
 }
 
 export interface Project {

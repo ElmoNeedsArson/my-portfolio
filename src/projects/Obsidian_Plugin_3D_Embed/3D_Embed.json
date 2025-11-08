@@ -1,9 +1,8 @@
 {
     "slug": "obsidian-plugin",
     "title": "Obsidian Plugin",
-    "description": "",
     "thumbnail": {
-        "src": "../assets/images/1.png",
+        "src": "../assets/images/Obsidian-Plugin3.png",
         "alt": "",
         "caption": "Promotional image I made for showcasing the plugin"
     },
@@ -13,16 +12,25 @@
         "caption": ""
     },
     "date": "2024-10-10",
-    "languages": [],
-    "tools": [],
-    "tags": [],
+    "languages": [
+        "TypeScript",
+        "JavaScript"
+    ],
+    "tools": [
+        "Three.js"
+    ],
+    "tags": [
+        "obsidian",
+        "plugin",
+        "3D"
+    ],
     "content": {
-        "overview": "",
+        "overview": "The process behind developing a plugin for Obsidian that allows embedding and viewing 3D models directly within your notes.",
         "keyFeatures": [],
         "sections": [
             {
-                "title": "",
-                "text": "<a href=\"https://obsidian.md\" target=\"_blank\">Obsidian</a> is \"the private and flexible writing app that adapts to the way you think\". At least that is what they say on their website. But this application has made my notetaking to a whole new level, and made me into kind of a fanboy.\n\nIt uses markdown files, so no fancy additions like word and google docs, and is itself very barebones, allow for incredibly fast loading times, and linking together of notes. This produces a very easily navigable note environment. kind of like your own Wikipedia. An additional feature is the graph you see below, that allows for easy navigation between notes aswell.",
+                "title": "About Obsidian",
+                "text": "<a href=\"https://obsidian.md\" target=\"_blank\">Obsidian</a> is \"the private and flexible writing app that adapts to the way you think\". At least that is what they say on their website. This application has taken my notetaking to a whole new level, and made me into kind of a fanboy.\n\nIt uses markdown files, which load incredibly fast, but have no fancy additions like word and google docs, and is itself very barebones, but allows for linking together of notes. This produces a very easily navigable note environment. Kind of like your own Wikipedia. An additional feature is the graph you see below, that allows for easy navigation between notes aswell.",
                 "gallery": {
                     "columns": 2,
                     "media": [
@@ -40,7 +48,16 @@
                 }
             },
             {
-                "text": "An incredible side of <a href=\"https://obsidian.md\" target=\"_blank\">Obsidian</a> is the plugin culture. As opposed to platforms like <a href=\"https://notion.so\" target=\"_blank\">Notion</a> who have everything already built in, making it slower and providing an overwhelming amount of options, obsidian allows you to pick and choose whatever functions you want to add to your notes. From amazing plugins like <a href=\"https://blacksmithgu.github.io/obsidian-dataview/\" target=\"_blank\">Dataview</a>, which allows you to query data from your notes using a form of sql.\n\nObsidian has been making notetaking a pleasurable and clear activity for me, not distracting me with unnecessary elements. A plugin I also use is the ink plugin that allows for handwritten notes/elements within your notes aswell. These embeds are awesome and come in all sorts of different forms and sizes, from graphing to masonry style image galleries.\n\nOddly enough, to my suprise, there was no such plugin yet for showcasing 3D models in your markdown note files. Even after searching the <a href=\"https://forum.obsidian.md\" target=\"_blank\">obsidian forums</a> extensively to see if anyone was working on it, I came to the conclusion nobody had succeeded yet, most likely since it is a very very niche part of the internet. So I got to working.\n\nObsidian uses an api for its plugins, allowing you to modify certain portions of the application. This is not very open in a lot of options, mostly so for security and stability concerns, which makes a lot of sense, but also makes it hard to work with. The documentation is great however. But there is always a workaround, even though the electron application is not really meant for running code in it. There is the dataview plugin that very stably allows you to run a .js file in a markdown note. Which sprung the idea of attempting to use the <a href=\"https://threejs.org\" target=\"_blank\">three.js</a> library in obsidian. For those unaware, three.js is a javascript library using webGL to render 3D objects in javascript, so it is commonly used in interactive or aesthetically pleasing websites.\n\nNow with a bunch of fidling, I got it working, being able to render a basic default cube in the obsidian note. Now this was done by just having the js in the note. The biggest struggle was loading the three.js library in some form, since import statements or downloading it would not work, but loading the script via CDN, seemed to do the trick. But this is not a plugin yet, nor very user friendly, so a lot of work was to be done.",
+                "title": "Motivation",
+                "text": "An incredible side of <a href=\"https://obsidian.md\" target=\"_blank\">Obsidian</a> is the plugin culture. As opposed to platforms like <a href=\"https://notion.so\" target=\"_blank\">Notion</a> who have everything already built in, making it slower and providing an overwhelming amount of options, obsidian allows you to pick and choose whatever functions you want to add to your notes. From amazing plugins like <a href=\"https://blacksmithgu.github.io/obsidian-dataview/\" target=\"_blank\">Dataview</a>, which allows you to query data from your notes using a form of sql.\n\nObsidian has been making notetaking a pleasurable and clear activity for me, not distracting me with unnecessary elements. Oddly enough, to my suprise, there was no such plugin yet for showcasing 3D models in your markdown note files. Even after searching the <a href=\"https://forum.obsidian.md\" target=\"_blank\">obsidian forums</a> extensively to see if anyone was working on it, I came to the conclusion nobody had succeeded yet (except for non-local solutions, such as uploading to a website and then using an iframe, but that feels like a lot of effort).\n\n So I got to working."
+            },
+            {
+                "title": "Process",
+                "text": "Obsidian uses an api for its plugins, allowing you to modify certain portions of the application. This is not very open in a lot of options, mostly so for security and stability concerns, which makes a lot of sense, but also makes it hard to work with. The documentation is great however. But there is always a workaround, even though the electron application is not really meant for running code in it. There is the dataview plugin that very stably allows you to run a .js file in a markdown note. Which sprung the idea of attempting to use the <a href=\"https://threejs.org\" target=\"_blank\">three.js</a> library in obsidian. For those unaware, three.js is a javascript library using webGL to render 3D objects in javascript, so it is commonly used in interactive or aesthetically pleasing websites."
+            },
+            {
+                "subtitle": "Dataview Experimentation",
+                "text": "One of obsidians biggest plugins, allows for the execution of js in a note. So starting there i wanted to see if i could get three.js working for myself. Now with a bunch of fidling, I got it working, being able to render a basic default cube in the obsidian note. The biggest struggle was loading the three.js library in some form, since import statements or downloading it would not work, but loading the script via CDN, seemed to do the trick. But this is not a plugin yet, nor very user friendly, so a lot of work was to be done.",
                 "gallery": {
                     "columns": 1,
                     "media": [
@@ -49,14 +66,55 @@
                             "autoplay": true,
                             "loop": true,
                             "muted": true,
-                            "controls": true
+                            "controls": false
                         }
                     ],
                     "caption": "Using dataview js to render a 3D scene in Obsidian"
                 }
             },
             {
-                "text": "After a lot of work, setting up an actual plugin, I am now able to load locally hosted 3D files. I have thusfar only added support for stl and glb files, but am planning on adding a few more in the future. And allowing the users control, with simple orbitcontrols for the 3D scene, and more advanced controls via an easy text based interface, located in the note embed itself. Check the video below to see how the plugin functions"
+                "subtitle": "Plugin Development",
+                "text": "I figured, if i wanted a userfriendly way of loading 3D models in obsidian, I would have to make a plugin. I clicked the first youtube video I could find, and followed the documentation on setting up a template plugin. And started attempting to load three.js in the plugin environment. Now about the user friendlyness, i wanted to be able to both: easily load 3D models that are in my fault, but also be able to modify a 3D scene to look exactly as i wanted it to. Leading me to use markdown codeblocks, and the api function for registering these codeblocks. And inserting the three.js canvas element in it, so it would render, but getting all the config from the codeblock contents itself.\n\n Now none of this plugin would have happened if it wasn't for the awesome people in the obsidian <a href=\"https://discord.com/invite/obsidianmd\" target=\"_blank\">discord</a>. They were super helpful in answering questions about the api, and giving suggestions on how to best implement certain features. Overall, the community behind obsidian is great, beside the awesome platform itself."
+            },
+            {
+                "title": "Final Result",
+                "text": "As of writing this, the plugin has over 1600 downloads! Making it one of my biggest projects yet. With 31 stars on github, I really appreciate the support. Now this plugin has been under development since beginning of 2024, and I have been responding to community inputs, through the discord and github issues page, to continually add features and fix bugs. But I am very happy to showcase its capabilities which keep improving over time. I will keep updating the <a href=\"https://github.com/ElmoNeedsArson/Obsidian-3D-embed\" target=\"_blank\">README.md page</a> on github with all the features, settings and instructions. So feel free to check it out. "
+            },
+            {
+                "subtitle": "Showcase",
+                "gallery": {
+                    "columns": 2,
+                    "media": [
+                        {
+                            "src": "../assets/images/1.png",
+                            "alt": "Promotional image I made for showcasing the plugin"
+                        },
+                        {
+                            "src": "../assets/videos/3D_obsidian_minecraft.mp4",
+                            "autoplay": true,
+                            "loop": true,
+                            "muted": true,
+                            "controls": false
+                        },
+                        {
+                            "src": "../assets/images/2.png",
+                            "alt": "Promotional image I made for showcasing the plugin"
+                        },
+                        {
+                            "src": "../assets/images/3.png",
+                            "alt": "Promotional image I made for showcasing the plugin"
+                        },
+                        {
+                            "src": "../assets/images/4.png",
+                            "alt": "Promotional image I made for showcasing the plugin"
+                        },
+                        {
+                            "src": "../assets/images/5.png",
+                            "alt": "Promotional image I made for showcasing the plugin"
+                        }
+                    ],
+                    "caption": "Quick last showcase of my plugin currently"
+                }
             }
         ]
     }

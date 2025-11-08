@@ -20,8 +20,8 @@
     }
 
     // Simple click handler used for the social icon buttons (placeholder)
-    const handleClick = () => {
-        console.log("Icon clicked");
+    const handleClick = (url: string) => {
+        window.open(url, "_blank");
     };
 
     // Toggle the global dark mode store. Other components subscribed to the store
@@ -100,10 +100,10 @@
             <Search />
         </button>
 
-        <button class="icon" on:click={handleClick}>
+        <button class="icon" on:click={() => handleClick("https://www.linkedin.com/in/jesse-strijker/")}>
             <Linkedin />
         </button>
-        <button class="icon" on:click={handleClick}>
+        <button class="icon" on:click={() => handleClick("https://github.com/ElmoNeedsArson")}>
             <Github />
         </button>
         <div class="divider"></div>
@@ -128,56 +128,6 @@
 <!-- Global keyboard event listener for search shortcuts -->
 <svelte:window on:keydown={handleKeydown} />
 
-<!--
-  Header markup
-  - Shows a small logo on the left and action icons on the right
-  - The mode toggle button reads `$darkMode` (auto-subscription) to pick the icon
-  - Includes search functionality with keyboard shortcuts
--->
-<header>
-    <!-- Brand/logo -->
-    <!-- <img src={logo} alt="Logo" /> -->
-
-    <!-- Right-side controls: search, social icons + theme toggle -->
-    <div class="icons">
-        <!-- Search button - opens search modal, supports Ctrl+K shortcut -->
-        <button
-            class="icon search-button"
-            on:click={openSearch}
-            title="Search projects (Ctrl+K)"
-        >
-            <Search />
-        </button>
-
-        <!-- Social media links (placeholder functionality) -->
-        <button class="icon" on:click={handleClick}>
-            <Linkedin />
-        </button>
-        <button class="icon" on:click={handleClick}>
-            <Github />
-        </button>
-
-        <!-- Visual separator -->
-        <div class="divider"></div>
-
-        <!-- Toggle the global theme. We read $darkMode to render the correct icon. -->
-        <button class="mode-toggle" on:click={toggleDarkMode}>
-            {#if $darkMode}
-                <Sun />
-            {:else}
-                <Moon />
-            {/if}
-        </button>
-    </div>
-</header>
-
-<!-- 
-  Search Results Modal Component
-  - Shows filtered projects based on search criteria
-  - Only visible when search results are available
-  - Allows navigation to individual projects
-  - Provides option to go back and refine search
--->
 {#if $showSearchResultsStore && $searchResultStore}
     <SearchResults
         searchResult={$searchResultStore}

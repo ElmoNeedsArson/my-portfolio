@@ -3,6 +3,7 @@
   import type { Project, GalleryObject, ImageObject, VideoObject, MediaObject } from "../types";
   import Header from "../components/header.svelte";
   import Footer from "../components/footer.svelte";
+  import ProjectOutline from "../components/ProjectOutline.svelte";
   import { navigateToSearch } from "../lib/searchNavigation";
   import { findProjectBySlug } from "../lib/searchUtils";
   import { getCategoryById } from "../lib/searchCategories";
@@ -90,6 +91,9 @@
 <Header />
 <main>
   {#if project}
+    <!-- Project outline component -->
+    <ProjectOutline {project} />
+    
     <!-- Project detail layout. Renders when a matching project is found. -->
     <article class="project-page">
       <!-- Back link to the list page -->
@@ -162,13 +166,13 @@
       <!-- Content sections: overview, key features, and any additional sections -->
       <div class="content">
         {#if project.content.overview}
-          <div class="overview-text">
+          <div id="overview" class="overview-text">
             {@html renderTextWithLinks(project.content.overview)}
           </div>
         {/if}
 
         {#if project.content.keyFeatures.length > 0}
-          <h2>Key Features</h2>
+          <h2 id="key-features">Key Features</h2>
           <ul class="features">
             {#each project.content.keyFeatures as feature}
               <li>{feature}</li>
@@ -176,9 +180,13 @@
           </ul>
         {/if}
 
-        {#each project.content.sections as section}
+        {#each project.content.sections as section, index}
           {#if section.title}
-            <h2>{section.title}</h2>
+            <h2 id="section-{index}"># {section.title}</h2>
+          {/if}
+
+          {#if section.subtitle}
+            <h4 id="section-subtitle-{index}"># {section.subtitle}</h4>
           {/if}
 
           {#if section.text}

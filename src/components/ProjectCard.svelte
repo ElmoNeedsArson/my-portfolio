@@ -2,6 +2,7 @@
   import type { Project } from "../types";
   import { darkMode } from "../lib/darkModeStore";
   import { navigateToSearch } from "../lib/searchNavigation";
+  import { link } from "svelte-spa-router";
 
   export let project: Project;
 
@@ -31,23 +32,25 @@
   }
 </script>
 
-<article class="card">
-  <!-- background image container; `imageUrl` is reactive to theme changes -->
-  <div class="card-bg" style="background-image: url('{imageUrl}')">
-    <span class="date">{project.date.slice(0, 4)}</span>
+<!-- <a href={`/${project.slug}`} use:link> -->
+  <article class="card">
+    <!-- background image container; `imageUrl` is reactive to theme changes -->
+    <div class="card-bg" style="background-image: url('{imageUrl}')">
+      <span class="date">{project.date.slice(0, 4)}</span>
 
-    <div class="tags">
-      {#each project.tags.slice(0, 3) as tag}
-        <button class="tag" on:click={(e) => handleTagClick(e, tag)}>
-          {tag}
-        </button>
-      {/each}
+      <div class="tags">
+        {#each project.tags.slice(0, 3) as tag}
+          <button class="tag" on:click={(e) => handleTagClick(e, tag)}>
+            {tag}
+          </button>
+        {/each}
+      </div>
+      <div class="overlay-content">
+        <h2>{project.title}</h2>
+      </div>
     </div>
-    <div class="overlay-content">
-      <h2>{project.title}</h2>
-    </div>
-  </div>
-</article>
+  </article>
+<!-- </a> -->
 
 <style>
   .card {
@@ -63,6 +66,11 @@
     cursor: pointer;
     background: #222;
     border: solid 2px var(--border-color);
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
   }
 
   .card-bg {
@@ -103,12 +111,12 @@
 
   .tags {
     position: absolute;
-    bottom: 8px; 
+    bottom: 8px;
     right: 12px;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    align-items: flex-end; 
+    align-items: flex-end;
   }
 
   .tag {
@@ -125,7 +133,8 @@
     font-family: inherit;
   }
 
-  @media (hover: hover) { /* hover styles only for non-touch devices */
+  @media (hover: hover) {
+    /* hover styles only for non-touch devices */
     .tag:hover {
       background: rgba(255, 255, 255, 0.3);
       transform: scale(1.05);
