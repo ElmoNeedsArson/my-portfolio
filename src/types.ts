@@ -1,11 +1,23 @@
-interface ImageObject {
+export interface ImageObject {
   src: string;
   alt?: string;
   caption?: string;
 }
 
-interface GalleryObject {
-  images: Array<ImageObject>;
+export interface VideoObject {
+  src: string;
+  caption?: string;
+  autoplay?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+  controls?: boolean;
+}
+
+export type MediaObject = ImageObject | VideoObject;
+
+export interface GalleryObject {
+  media: Array<MediaObject>;
+  columns?: number;
   caption?: string;
 }
 
@@ -17,6 +29,8 @@ interface ProjectSection {
   image?: ImageObject;
   // gallery of images with optional overall caption
   gallery?: ImageObject[] | GalleryObject;
+  // video object with src, type, and optional caption
+  video?: VideoObject;
 }
 
 export interface Project {

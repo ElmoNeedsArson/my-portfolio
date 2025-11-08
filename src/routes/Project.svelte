@@ -1,6 +1,6 @@
 <script lang="ts">
   import { params, link } from "svelte-spa-router";
-  import type { Project } from "../types";
+  import type { Project, GalleryObject, ImageObject, VideoObject, MediaObject } from "../types";
   import Header from "../components/header.svelte";
   import Footer from "../components/footer.svelte";
   import { navigateToSearch } from "../lib/searchNavigation";
@@ -36,22 +36,35 @@
     return img.caption;
   }
 
-  function getGalleryData(
-    gallery:
-      | string[]
-      | { src: string }[]
-      | { images: any[]; caption?: string }
-      | undefined,
-  ) {
-    if (!gallery) return { images: [], caption: undefined };
-    if (Array.isArray(gallery)) return { images: gallery, caption: undefined };
-    if ("images" in gallery) return gallery;
-    return { images: [], caption: undefined };
+  // Utility functions for media objects (images or videos)
+  function isVideoObject(media: MediaObject): media is VideoObject {
+    // Check if it has video-specific properties OR if the src is a video file
+    const hasVideoProps = 'autoplay' in media || 'loop' in media || 'muted' in media || 'controls' in media;
+    const isVideoFile = /\.(mp4|webm|ogg|mov|avi|mkv)$/i.test(media.src);
+    return hasVideoProps || isVideoFile;
   }
 
-  /**
-   * Handle clicks on tags, languages, or tools to show related projects
-   */
+  function getGalleryData(
+    gallery: MediaObject[] | GalleryObject | undefined,
+  ): GalleryObject {
+    if (!gallery) return { media: [], caption: undefined, columns: 2 };
+
+    if (Array.isArray(gallery)) {
+      return { 
+        media: gallery,
+        caption: undefined, 
+        columns: 2 
+      };
+    }
+
+    // Here gallery is a GalleryObject
+    return {
+      media: gallery.media ?? [],
+      caption: gallery.caption,
+      columns: gallery.columns ?? 2,
+    };
+  }
+
   function handleTagClick(tag: string) {
     navigateToSearch(tag, "tags");
   }
@@ -148,9 +161,11 @@
 
       <!-- Content sections: overview, key features, and any additional sections -->
       <div class="content">
-        <div class="overview-text">
-          {@html renderTextWithLinks(project.content.overview)}
-        </div>
+        {#if project.content.overview}
+          <div class="overview-text">
+            {@html renderTextWithLinks(project.content.overview)}
+          </div>
+        {/if}
 
         {#if project.content.keyFeatures.length > 0}
           <h2>Key Features</h2>
@@ -162,7 +177,9 @@
         {/if}
 
         {#each project.content.sections as section}
-          <h2>{section.title}</h2>
+          {#if section.title}
+            <h2>{section.title}</h2>
+          {/if}
 
           {#if section.text}
             <div class="section-text">
@@ -182,14 +199,48 @@
             </div>
           {/if}
 
+          {#if section.video}
+            <div class="video-container">
+              <video
+                src={section.video.src}
+                autoplay={section.video.autoplay}
+                loop={section.video.loop}
+                muted={section.video.muted}
+                controls={section.video.controls}
+                playsinline
+              >
+                Your browser does not support the video tag.
+              </video>
+              {#if section.video.caption}
+                <p class="caption">{section.video.caption}</p>
+              {/if}
+            </div>
+          {/if}
+
           {#if section.gallery}
             {@const galleryData = getGalleryData(section.gallery)}
-            <div class="gallery">
-              {#each galleryData.images as img}
+            <div
+              class="gallery"
+              style={`grid-template-columns: repeat(${galleryData.columns ?? 2}, 1fr);`}
+            >
+              {#each galleryData.media as item}
                 <div class="gallery-item">
-                  <img src={getSrc(img)} alt={getAlt(img, section.title)} />
-                  {#if getCaption(img)}
-                    <p class="caption">{getCaption(img)}</p>
+                  {#if isVideoObject(item)}
+                    <video
+                      src={item.src}
+                      autoplay={item.autoplay}
+                      loop={item.loop}
+                      muted={item.muted}
+                      controls={item.controls ?? true}
+                      playsinline
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  {:else}
+                    <img src={item.src} alt={getAlt(item, section.title)} />
+                  {/if}
+                  {#if item.caption}
+                    <p class="caption">{item.caption}</p>
                   {/if}
                 </div>
               {/each}
@@ -221,7 +272,8 @@
     padding: 0 1rem;
   }
 
-  img {
+  img,
+  video {
     max-width: 100%;
   }
 
@@ -345,7 +397,6 @@
   .section-text {
     line-height: 1.6;
     margin-bottom: 1rem;
-    margin-top: 3rem;
   }
 
   /* Style for links within text content */
@@ -394,27 +445,27 @@
   }
 
   .gallery {
-    display: flex;
-    flex-wrap: wrap;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
     margin-top: 1rem;
-     /* align-items: stretch; */
+    align-items: stretch; /* key: make each cell stretch equally tall */
   }
 
   .gallery-item {
-    /* max-width: 200px; */
-    width: 100%;
-    height: 100%;
-    /* overflow: hidden; */
-   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 6px;
   }
 
-  .gallery img {
+  .gallery-item img,
+  .gallery-item video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
     border-radius: 6px;
   }
 
@@ -423,6 +474,8 @@
     color: var(--muted-color);
     margin-top: 0.5rem;
     text-align: center;
+    margin-bottom: 0.5rem;
+    /* padding: 0 0.5rem 0.75rem; */
   }
 
   .gallery-caption {
@@ -431,9 +484,15 @@
     margin-top: 1rem;
     font-style: italic;
     color: var(--muted-color);
+    grid-column: 1 / -1;
+    margin-top: 0px;
   }
 
   .image-container {
+    margin: 1rem 0;
+  }
+
+  .video-container {
     margin: 1rem 0;
   }
 </style>

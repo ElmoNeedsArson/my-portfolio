@@ -53,7 +53,7 @@
           "caption": "Overview of the main dashboard with charts and controls"
         },
         "gallery": {
-          "images": [
+          "media": [
             {
               "src": "../assets/images/test.png",
               "alt": "Dashboard"
