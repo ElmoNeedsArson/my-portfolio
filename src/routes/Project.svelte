@@ -5,6 +5,7 @@
   import Footer from "../components/footer.svelte";
   import { navigateToSearch } from "../lib/searchNavigation";
   import { findProjectBySlug } from "../lib/searchUtils";
+  import { getCategoryById } from "../lib/searchCategories";
 
   // Reactive slug value derived from the router params. `$params` is provided
   // by svelte-spa-router and is reactive.
@@ -14,6 +15,11 @@
   // Reactive project lookup using the shared utility function
   let project: Project | undefined;
   $: project = findProjectBySlug(slug);
+
+  // Get category icons
+  const languagesCategory = getCategoryById("languages");
+  const toolsCategory = getCategoryById("tools");
+  const tagsCategory = getCategoryById("tags");
 
   function getSrc(img: string | { src?: string } | undefined) {
     if (!img) return undefined;
@@ -47,15 +53,24 @@
    * Handle clicks on tags, languages, or tools to show related projects
    */
   function handleTagClick(tag: string) {
-    navigateToSearch(tag, 'tags');
+    navigateToSearch(tag, "tags");
   }
 
   function handleLanguageClick(language: string) {
-    navigateToSearch(language, 'languages');
+    navigateToSearch(language, "languages");
   }
 
   function handleToolClick(tool: string) {
-    navigateToSearch(tool, 'tools');
+    navigateToSearch(tool, "tools");
+  }
+
+  /**
+   * Process text with HTML links and convert line breaks
+   * Allows direct HTML <a> tags in JSON content while preserving line breaks
+   */
+  function renderTextWithLinks(text: string): string {
+    // Convert \n line breaks to <br> tags for proper display
+    return text.replace(/\n/g, "<br>");
   }
 </script>
 
@@ -81,53 +96,78 @@
       </div>
 
       <!-- Tag list -->
-      <div class="tags">
-        {#each project.tags as tag}
-          <button class="tag" on:click={() => handleTagClick(tag)}>{tag}</button>
-        {/each}
-      </div>
+      {#if project.tags.length > 0}
+        <div class="tags">
+          {#each project.tags as tag}
+            <button class="tag" on:click={() => handleTagClick(tag)}>
+              <svelte:component this={tagsCategory.icon} size="14" />
+              {tag}
+            </button>
+          {/each}
+        </div>
+      {/if}
 
       <!-- Languages and Tools -->
-      <div class="meta-info">
-        <div class="languages">
-          <h3>Languages</h3>
-          <div class="chips">
-            {#each project.languages as language}
-              <button class="chip language-chip" on:click={() => handleLanguageClick(language)}>
-                💻 {language}
-              </button>
-            {/each}
+      {#if project.languages.length > 0 || project.tools.length > 0}
+        <div class="meta-info">
+          <div class="languages">
+            {#if project.languages.length > 0}
+              <h3>Languages</h3>
+              <div class="chips">
+                {#each project.languages as language}
+                  <button
+                    class="chip language-chip"
+                    on:click={() => handleLanguageClick(language)}
+                  >
+                    <svelte:component this={languagesCategory.icon} size="16" />
+                    {language}
+                  </button>
+                {/each}
+              </div>
+            {/if}
           </div>
-        </div>
 
-        <div class="tools">
-          <h3>Tools</h3>
-          <div class="chips">
-            {#each project.tools as tool}
-              <button class="chip tool-chip" on:click={() => handleToolClick(tool)}>
-                🛠️ {tool}
-              </button>
-            {/each}
+          <div class="tools">
+            {#if project.tools.length > 0}
+              <h3>Tools</h3>
+              <div class="chips">
+                {#each project.tools as tool}
+                  <button
+                    class="chip tool-chip"
+                    on:click={() => handleToolClick(tool)}
+                  >
+                    <svelte:component this={toolsCategory.icon} size="16" />
+                    {tool}
+                  </button>
+                {/each}
+              </div>
+            {/if}
           </div>
         </div>
-      </div>
+      {/if}
 
       <!-- Content sections: overview, key features, and any additional sections -->
       <div class="content">
-        <p class="overview">{project.content.overview}</p>
+        <div class="overview-text">
+          {@html renderTextWithLinks(project.content.overview)}
+        </div>
 
-        <h2>Key Features</h2>
-        <ul class="features">
-          {#each project.content.keyFeatures as feature}
-            <li>{feature}</li>
-          {/each}
-        </ul>
+        {#if project.content.keyFeatures.length > 0}
+          <h2>Key Features</h2>
+          <ul class="features">
+            {#each project.content.keyFeatures as feature}
+              <li>{feature}</li>
+            {/each}
+          </ul>
+        {/if}
 
         {#each project.content.sections as section}
           <h2>{section.title}</h2>
 
           {#if section.text}
-            <p>{section.text}</p>
+            <div class="section-text">
+              {@html renderTextWithLinks(section.text)}
+            </div>
           {/if}
 
           {#if section.image}
@@ -176,7 +216,7 @@
   }
 
   .project-page {
-    max-width: 80%;
+    max-width: 55%;
     margin: 2rem auto;
     padding: 0 1rem;
   }
@@ -214,11 +254,9 @@
     cursor: pointer;
     font-family: inherit;
     transition: all 0.2s ease;
-  }
-
-  .tag:hover {
-    background: var(--hover-color);
-    transform: translateY(-1px);
+    align-items: center;
+    display: flex;
+    gap: 4px;
   }
 
   .meta-info {
@@ -228,13 +266,15 @@
     margin: 2rem 0;
   }
 
-  .languages, .tools {
+  .languages,
+  .tools {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
   }
 
-  .languages h3, .tools h3 {
+  .languages h3,
+  .tools h3 {
     margin: 0;
     font-size: 1rem;
     color: var(--secondary-text-color);
@@ -262,18 +302,26 @@
     gap: 0.25rem;
   }
 
-  .chip:hover {
-    background: var(--hover-color);
-    border-color: var(--secondary-text-color);
-    transform: translateY(-1px);
-  }
+  @media (hover: hover) {
+    /* hover styles only for non-touch devices */
+    .tag:hover {
+      background: var(--hover-color);
+      transform: translateY(-1px);
+    }
 
-  .language-chip:hover {
-    border-color: #61dafb; /* Blue for languages */
-  }
+    .chip:hover {
+      background: var(--hover-color);
+      border-color: var(--secondary-text-color);
+      transform: translateY(-1px);
+    }
 
-  .tool-chip:hover {
-    border-color: #ff6b35; /* Orange for tools */
+    .language-chip:hover {
+      border-color: #61dafb; /* Blue for languages */
+    }
+
+    .tool-chip:hover {
+      border-color: #ff6b35; /* Orange for tools */
+    }
   }
 
   @media (max-width: 768px) {
@@ -284,14 +332,49 @@
   }
 
   .content {
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
     line-height: 1.6;
   }
 
-  .overview {
+  .overview-text {
     font-size: 1.1rem;
     color: var(--muted-color);
     margin-bottom: 2rem;
+  }
+
+  .section-text {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  /* Style for links within text content */
+  .overview-text :global(a),
+  .section-text :global(a) {
+    color: var(--secondary-text-color);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+
+  .overview-text :global(a:hover),
+  .section-text :global(a:hover) {
+    border-bottom-color: var(--secondary-text-color);
+  }
+
+  /* Ensure paragraphs from markdown have proper spacing */
+  .overview-text :global(p),
+  .section-text :global(p) {
+    margin: 1rem 0;
+  }
+
+  .overview-text :global(p:first-child),
+  .section-text :global(p:first-child) {
+    margin-top: 0;
+  }
+
+  .overview-text :global(p:last-child),
+  .section-text :global(p:last-child) {
+    margin-bottom: 0;
   }
 
   h2 {
@@ -344,10 +427,6 @@
   }
 
   .image-container {
-    margin: 1rem 0;
-  }
-
-  .thumbnail {
     margin: 1rem 0;
   }
 </style>

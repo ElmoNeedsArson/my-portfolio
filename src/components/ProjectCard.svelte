@@ -1,47 +1,36 @@
 <script lang="ts">
-  // ProjectCard component
-  // - Receives a `project` prop containing metadata loaded from a JSON file
-  // - Subscribes to the global `darkMode` store to pick the appropriate image
-  // - Makes tags clickable to navigate to search results
-  // The reactive statement below updates `imageUrl` whenever $darkMode or the
-  // `project` object changes.
   import type { Project } from "../types";
   import { darkMode } from "../lib/darkModeStore";
   import { navigateToSearch } from "../lib/searchNavigation";
-  
+
   export let project: Project;
 
   // Helpers: thumbnails may be a string or an object { src, alt, caption }
-  function getSrc(img: string | { src?: string } | undefined) {
-    if (!img) return undefined;
-    return typeof img === "string" ? img : img.src;
+  function getSrc(img?: { src?: string }) {
+    return img?.src;
   }
 
-  // If a light-mode thumbnail is provided (project.thumbnailLight) and the app
-  // is currently in light mode, use it; otherwise use the default `thumbnail`.
+  //reactive meaning if anything on the right side changes, it updates
+  //If either darkmode is true, or if there is no light thumbnail, use default, otherwise use the light one
   $: selectedThumb =
     $darkMode || !project.thumbnailLight
       ? project.thumbnail
       : project.thumbnailLight;
+  $: console.log(
+    "Selected thumbnail for project",
+    project.title,
+    "is",
+    selectedThumb,
+  );
   $: imageUrl = getSrc(selectedThumb) ?? "";
 
-  /**
-   * Handle tag click - navigate to search results for that tag
-   * Prevents event bubbling to avoid navigating to project page
-   */
   function handleTagClick(event: MouseEvent, tag: string) {
-    event.preventDefault();
+    event.preventDefault(); //even though stoppropagation is called, this ensures the link is not followed
     event.stopPropagation();
-    navigateToSearch(tag, 'tags');
+    navigateToSearch(tag, "tags");
   }
 </script>
 
-<!--
-  Card layout
-  - The image is applied as a CSS background on `.card-bg` so we can overlay
-  - content (title, date, tags) on top of it. The overlay sits at the bottom
-  - of the card to match the requested design.
--->
 <article class="card">
   <!-- background image container; `imageUrl` is reactive to theme changes -->
   <div class="card-bg" style="background-image: url('{imageUrl}')">
@@ -54,9 +43,7 @@
         </button>
       {/each}
     </div>
-    <!-- overlay that contains meta (date + tags) and the title -->
     <div class="overlay-content">
-      <div class="meta"></div>
       <h2>{project.title}</h2>
     </div>
   </div>
@@ -69,19 +56,13 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     overflow: hidden;
     text-decoration: none;
-    color: #fff;
+    color: var(--primary-text-color);
     transition:
       transform 0.2s ease,
       box-shadow 0.2s ease;
     cursor: pointer;
     background: #222;
     border: solid 2px var(--border-color);
-  }
-
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
-    border: solid 2px var(--secondary-text-color);
   }
 
   .card-bg {
@@ -92,17 +73,10 @@
     position: relative;
     display: flex;
     align-items: flex-end;
-    /* min-height: 300px; */
   }
 
   .overlay-content {
     width: 100%;
-    /* background: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.7) 70%,
-      rgba(0, 0, 0, 0.2) 100%,
-      rgba(0, 0, 0, 0) 100%
-    ); */
     padding: 1.2rem 1.4rem 1.4rem;
     display: flex;
     flex-direction: column;
@@ -113,16 +87,8 @@
     font-size: 1.1rem;
     margin: 0;
     font-weight: 600;
-    color: #fff;
+    color: var(--primary-text-color);
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
-  }
-
-  .meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8rem;
-    margin-bottom: 0.3rem;
   }
 
   .date {
@@ -135,19 +101,14 @@
     right: 12px;
   }
 
-  /* .tags {
-    display: flex;
-    gap: 0.3rem;
-  } */
-
   .tags {
     position: absolute;
-    bottom: 8px; /* just below the date */
+    bottom: 8px; 
     right: 12px;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    align-items: flex-end; /* keep them aligned with the right edge */
+    align-items: flex-end; 
   }
 
   .tag {
@@ -164,10 +125,16 @@
     font-family: inherit;
   }
 
-  @media (hover: hover) {
+  @media (hover: hover) { /* hover styles only for non-touch devices */
     .tag:hover {
       background: rgba(255, 255, 255, 0.3);
       transform: scale(1.05);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+      border: solid 2px var(--secondary-text-color);
     }
   }
 </style>

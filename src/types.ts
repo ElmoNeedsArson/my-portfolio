@@ -5,7 +5,7 @@ interface ImageObject {
 }
 
 interface GalleryObject {
-  images: Array<string | ImageObject>;
+  images: Array<ImageObject>;
   caption?: string;
 }
 
@@ -14,17 +14,17 @@ interface ProjectSection {
   // text is optional so a section can be an image or gallery-only
   text?: string;
   // single image (string path or object with alt/caption)
-  image?: string | ImageObject;
+  image?: ImageObject;
   // gallery of images with optional overall caption
-  gallery?: string[] | ImageObject[] | GalleryObject;
+  gallery?: ImageObject[] | GalleryObject;
 }
 
 export interface Project {
   slug: string;
   title: string;
   description: string;
-  thumbnail: string | ImageObject;
-  thumbnailLight?: string | ImageObject; // Optional: image for light mode
+  thumbnail: ImageObject;
+  thumbnailLight?: ImageObject; // Optional: image for light mode
   date: string;
   languages: string[];
   tools: string[];

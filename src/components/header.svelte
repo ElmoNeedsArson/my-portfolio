@@ -1,13 +1,17 @@
 <script lang="ts">
     import { Linkedin, Github, Moon, Sun, Search } from "@lucide/svelte";
-    import { darkMode } from '../lib/darkModeStore';
-    import SearchModal from './SearchModal.svelte';
-    import SearchResults from './SearchResults.svelte';
-    import type { SearchResult } from '../lib/searchUtils';
-    import { searchResultStore, showSearchResultsStore, closeSearchResults } from '../lib/searchNavigation';
+    import { darkMode } from "../lib/darkModeStore";
+    import SearchModal from "./SearchModal.svelte";
+    import SearchResults from "./SearchResults.svelte";
+    import type { SearchResult } from "../lib/searchUtils";
+    import {
+        searchResultStore,
+        showSearchResultsStore,
+        closeSearchResults,
+    } from "../lib/searchNavigation";
 
     // State variables for managing search functionality
-    let showSearchModal = false;    // Controls when the search modal is visible
+    let showSearchModal = false; // Controls when the search modal is visible
 
     // Reactive statements using Svelte store subscriptions with $ syntax
     // These automatically update when the stores change
@@ -23,7 +27,7 @@
     // Toggle the global dark mode store. Other components subscribed to the store
     // will react automatically when this updates.
     function toggleDarkMode() {
-        darkMode.update(v => !v);
+        darkMode.update((v) => !v);
     }
 
     /**
@@ -41,7 +45,10 @@
      */
     function handleKeydown(event: KeyboardEvent) {
         // Check for Ctrl+K or Ctrl+/ (or Cmd on Mac)
-        if ((event.ctrlKey || event.metaKey) && (event.key === 'k' || event.key === '/')) {
+        if (
+            (event.ctrlKey || event.metaKey) &&
+            (event.key === "k" || event.key === "/")
+        ) {
             event.preventDefault(); // Prevent default browser behavior
             showSearchModal = true; // Open search modal
         }
@@ -52,9 +59,9 @@
      * This is called when user performs a search in the modal
      */
     function handleSearchResults(event: CustomEvent<SearchResult>) {
-        searchResultStore.set(event.detail);    // Store the search results
-        showSearchModal = false;                // Close the search modal
-        showSearchResultsStore.set(true);       // Show the results modal
+        searchResultStore.set(event.detail); // Store the search results
+        showSearchModal = false; // Close the search modal
+        showSearchResultsStore.set(true); // Show the results modal
     }
 
     /**
@@ -68,8 +75,8 @@
      * Go back from results to search modal (allows user to refine search)
      */
     function handleBackToSearch() {
-        showSearchResultsStore.set(false);  // Hide results
-        showSearchModal = true;             // Show search modal again
+        showSearchResultsStore.set(false); // Hide results
+        showSearchModal = true; // Show search modal again
     }
 </script>
 
@@ -85,10 +92,14 @@
     <!-- Right-side controls: search, social icons + theme toggle -->
     <div class="icons">
         <!-- Search button -->
-        <button class="icon search-button" on:click={openSearch} title="Search projects (Ctrl+K)">
+        <button
+            class="icon search-button"
+            on:click={openSearch}
+            title="Search projects (Ctrl+K)"
+        >
             <Search />
         </button>
-        
+
         <button class="icon" on:click={handleClick}>
             <Linkedin />
         </button>
@@ -109,7 +120,7 @@
 </header>
 
 <!-- Search Modal -->
-<SearchModal 
+<SearchModal
     bind:isOpen={showSearchModal}
     on:searchResults={handleSearchResults}
 />
@@ -130,10 +141,14 @@
     <!-- Right-side controls: search, social icons + theme toggle -->
     <div class="icons">
         <!-- Search button - opens search modal, supports Ctrl+K shortcut -->
-        <button class="icon search-button" on:click={openSearch} title="Search projects (Ctrl+K)">
+        <button
+            class="icon search-button"
+            on:click={openSearch}
+            title="Search projects (Ctrl+K)"
+        >
             <Search />
         </button>
-        
+
         <!-- Social media links (placeholder functionality) -->
         <button class="icon" on:click={handleClick}>
             <Linkedin />
@@ -141,7 +156,7 @@
         <button class="icon" on:click={handleClick}>
             <Github />
         </button>
-        
+
         <!-- Visual separator -->
         <div class="divider"></div>
 
@@ -164,7 +179,7 @@
   - Provides option to go back and refine search
 -->
 {#if $showSearchResultsStore && $searchResultStore}
-    <SearchResults 
+    <SearchResults
         searchResult={$searchResultStore}
         on:close={handleResultsClose}
         on:backToSearch={handleBackToSearch}
@@ -182,16 +197,11 @@
         padding: 1rem;
         /* background-color: var(--background-color); */
         background-color: transparent;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
         margin: 0px;
         color: var(--primary-text-color);
         /* border-bottom: solid 1px var(--border-color); */
     }
-
-    /* img {
-        height: 30px;
-        margin-right: 1rem;
-    } */
 
     .icons {
         display: flex;
@@ -208,27 +218,17 @@
         padding: 5px;
     }
 
-    .icon:hover {
-        color: var(--secondary-text-color);
-        cursor: pointer;
-    }
-
     .search-button {
         margin-right: 0.5rem;
-    }
-
-    .search-button:hover {
-        color: var(--secondary-text-color);
-        transform: scale(1.05);
     }
 
     .divider {
         display: inline-block;
         width: 1px;
-        height: 24px; 
+        height: 24px;
         background-color: var(--secondary-text-color);
-        margin: 0 0.5rem; 
-        vertical-align: middle; 
+        margin: 0 0.5rem;
+        vertical-align: middle;
     }
 
     .mode-toggle {
@@ -244,8 +244,18 @@
         justify-self: center;
     }
 
-    .mode-toggle:hover {
-        color: var(--secondary-text-color);
-        cursor: pointer;
+    @media (hover: hover) { /* hover styles only for non-touch devices */
+        .icon:hover {
+            color: var(--secondary-text-color);
+            cursor: pointer;
+        }
+        .search-button:hover {
+            color: var(--secondary-text-color);
+            transform: scale(1.05);
+        }
+        .mode-toggle:hover {
+            color: var(--secondary-text-color);
+            cursor: pointer;
+        }
     }
 </style>

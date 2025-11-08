@@ -147,9 +147,17 @@
                         class:open={categoryDropdownOpen}
                         on:click={toggleCategoryDropdown}
                     >
-                        <svelte:component this={currentCategory?.icon} size="20" />
-                        <span class="category-label">{currentCategory?.label}</span>
-                        <ChevronDown size={16} class={categoryDropdownOpen ? "rotate" : ""} />
+                        <svelte:component
+                            this={currentCategory?.icon}
+                            size="20"
+                        />
+                        <span class="category-label"
+                            >{currentCategory?.label}</span
+                        >
+                        <ChevronDown
+                            size={16}
+                            class={categoryDropdownOpen ? "rotate" : ""}
+                        />
                     </button>
 
                     {#if categoryDropdownOpen}
@@ -157,10 +165,18 @@
                             {#each SEARCH_CATEGORIES as category}
                                 <button
                                     class="category-option"
-                                    class:selected={category.id === selectedCategory}
-                                    on:click={(event) => handleCategorySelect( category.id, event, )}
+                                    class:selected={category.id ===
+                                        selectedCategory}
+                                    on:click={(event) =>
+                                        handleCategorySelect(
+                                            category.id,
+                                            event,
+                                        )}
                                 >
-                                    <svelte:component this={category.icon} size="20" />
+                                    <svelte:component
+                                        this={category.icon}
+                                        size="20"
+                                    />
                                     <span>{category.label}</span>
                                 </button>
                             {/each}
@@ -197,10 +213,15 @@
                         {#each suggestions as suggestion}
                             <button
                                 class="suggestion-item"
-                                on:click={() => handleSuggestionClick(suggestion)}
+                                on:click={() =>
+                                    handleSuggestionClick(suggestion)}
                             >
-                                <svelte:component this={currentCategory?.icon} size="20" />
-                                <span class="suggestion-text">{suggestion}</span>
+                                <svelte:component
+                                    this={currentCategory?.icon}
+                                    size="20"
+                                />
+                                <span class="suggestion-text">{suggestion}</span
+                                >
                             </button>
                         {/each}
                     </div>
@@ -274,10 +295,6 @@
         height: 100%;
     }
 
-    .category-button:hover {
-        background-color: var(--hover-color);
-    }
-
     .category-button.open {
         background-color: var(--hover-color);
     }
@@ -315,10 +332,6 @@
         cursor: pointer;
         transition: background-color 0.2s ease;
         text-align: left;
-    }
-
-    .category-option:hover {
-        background-color: var(--hover-color);
     }
 
     .category-option.selected {
@@ -373,11 +386,6 @@
         transition: color 0.2s ease;
     }
 
-    .close-button:hover {
-        color: var(--primary-text-color);
-        background-color: var(--hover-color);
-    }
-
     .suggestions-container {
         border-bottom: 1px solid var(--border-color);
         flex: 1;
@@ -426,10 +434,6 @@
         text-align: left;
     }
 
-    .suggestion-item:hover {
-        background-color: var(--hover-color);
-    }
-
     .suggestion-text {
         font-size: 0.925rem;
     }
@@ -451,5 +455,23 @@
         padding: 0.125rem 0.25rem;
         font-size: 0.75rem;
         font-family: monospace;
+    }
+
+    @media (hover: hover) { /* hover styles only for non-touch devices */
+        .category-button:hover {
+            background-color: var(--hover-color);
+        }
+
+        .category-option:hover {
+            background-color: var(--hover-color);
+        }
+
+        .close-button:hover {
+            color: var(--primary-text-color);
+            background-color: var(--hover-color);
+        }
+        .suggestion-item:hover {
+            background-color: var(--hover-color);
+        }
     }
 </style>

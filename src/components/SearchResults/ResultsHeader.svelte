@@ -48,7 +48,7 @@
 </div>
 
 <style>
-     .results-header {
+    .results-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -71,10 +71,6 @@
         font-size: 0.875rem;
     }
 
-    .back-button:hover {
-        background-color: var(--hover-color);
-    }
-
     .search-info {
         display: flex;
         align-items: center;
@@ -87,7 +83,7 @@
         color: var(--muted-color);
     }
 
-        .search-details {
+    .search-details {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -118,12 +114,18 @@
         transition: color 0.2s ease;
     }
 
-    .close-button:hover {
-        color: var(--primary-text-color);
-        background-color: var(--hover-color);
+    @media (hover: hover) { /* hover styles only for non-touch devices */
+        .back-button:hover {
+            background-color: var(--hover-color);
+        }
+
+        .close-button:hover {
+            color: var(--primary-text-color);
+            background-color: var(--hover-color);
+        }
     }
 
-     @media (max-width: 768px) {
+    @media (max-width: 768px) {
         .results-header {
             padding: 1rem;
             flex-direction: column;
@@ -138,5 +140,5 @@
         .close-button {
             flex-shrink: 0;
         }
-    } 
+    }
 </style>

@@ -26,7 +26,10 @@
     <div class="results-summary">
         <h2>Search Results</h2>
         <p class="results-count">
-            {searchResult.projects.length} project{searchResult.projects.length !== 1 ? "s" : ""} found
+            {searchResult.projects.length} project{searchResult.projects
+                .length !== 1
+                ? "s"
+                : ""} found
             {#if searchResult.projects.length === 0}
                 matching your search.
             {:else}
@@ -40,7 +43,9 @@
         <div class="no-results">
             <div class="no-results-icon"><Search size={40} /></div>
             <h3>No projects found</h3>
-            <p>Try searching with different keywords or check another category.</p>
+            <p>
+                Try searching with different keywords or check another category.
+            </p>
             <button class="try-again-button" on:click={handleBackToSearch}>
                 Try Another Search
             </button>
@@ -121,11 +126,6 @@
         transition: background-color 0.2s ease;
     }
 
-    .try-again-button:hover {
-        background-color: var(--secondary-text-color, var(--secondary-text-color));
-        filter: brightness(110%);
-    }
-
     .projects-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -139,8 +139,15 @@
         transition: transform 0.2s ease;
     }
 
-    .projects-grid a:hover {
-        transform: translateY(-2px);
+    @media (hover: hover) {/* hover styles only for non-touch devices */
+        .try-again-button:hover {
+            background-color: var(--secondary-text-color,var(--secondary-text-color));
+            filter: brightness(110%);
+        }
+        
+        .projects-grid a:hover {
+            transform: translateY(-2px);
+        }
     }
 
     @media (max-width: 768px) {
