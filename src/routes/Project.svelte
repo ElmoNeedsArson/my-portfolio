@@ -345,6 +345,7 @@
   .section-text {
     line-height: 1.6;
     margin-bottom: 1rem;
+    margin-top: 3rem;
   }
 
   /* Style for links within text content */
@@ -395,18 +396,24 @@
   .gallery {
     display: flex;
     flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
     margin-top: 1rem;
+     /* align-items: stretch; */
   }
 
   .gallery-item {
-    max-width: 200px;
+    /* max-width: 200px; */
     width: 100%;
+    height: 100%;
+    /* overflow: hidden; */
+   
   }
 
   .gallery img {
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: cover;
     border-radius: 6px;
   }

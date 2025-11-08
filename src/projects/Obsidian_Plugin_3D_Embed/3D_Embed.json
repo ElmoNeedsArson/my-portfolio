@@ -23,10 +23,19 @@
             {
                 "title": "",
                 "text": "<a href=\"https://obsidian.md\" target=\"_blank\">Obsidian</a> is \"the private and flexible writing app that adapts to the way you think\". At least that is what they say on their website. But this application has made my notetaking to a whole new level, and made me into kind of a fanboy.\n\nIt uses markdown files, so no fancy additions like word and google docs, and is itself very barebones, allow for incredibly fast loading times, and linking together of notes. This produces a very easily navigable note environment. kind of like your own Wikipedia. An additional feature is the graph you see below, that allows for easy navigation between notes aswell.",
-                "image": {
-                    "src": "../assets/images/personal-obsidian-graph.png",
-                    "alt": "Obsidian Graph View",
-                    "caption": "Graph view of my Obsidian vault"
+                "gallery": {
+                    "images": [
+                        {
+                            "src": "../assets/images/obsidian-graph-2024.png",
+                            "alt": "Obsidian Graph View 2024",
+                            "caption": "Graph view of my Obsidian vault in 2024"
+                        },
+                        {
+                            "src": "../assets/images/obsidian-graph-2025.png",
+                            "alt": "Obsidian Graph View 2025",
+                            "caption": "Graph view of my Obsidian vault in 2025"
+                        }
+                    ]
                 }
             },
             {
