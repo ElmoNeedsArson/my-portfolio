@@ -28,4 +28,5 @@ SEARCH_ARCHITECTURE.md
 .pretierrc
 ToDo.md
 projects
-assets
+src/assets
+.gitignore
