@@ -30,3 +30,8 @@ ToDo.md
 projects
 src/assets
 .gitignore
+
+.vscode
+.pretierrc
+SEARCH_ARCHITECTURE.md
+package-lock.json
