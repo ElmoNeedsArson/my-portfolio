@@ -418,6 +418,8 @@
     .suggestions-list {
         flex: 1;
         overflow-y: auto;
+        scrollbar-color: var(--secondary-text-color) transparent;
+        scrollbar-width: auto;
     }
 
     .suggestion-item {
@@ -457,7 +459,8 @@
         font-family: monospace;
     }
 
-    @media (hover: hover) { /* hover styles only for non-touch devices */
+    @media (hover: hover) {
+        /* hover styles only for non-touch devices */
         .category-button:hover {
             background-color: var(--hover-color);
         }

@@ -111,12 +111,14 @@
     font-size: 2.2rem;
     margin: 0;
     font-weight: 800;
-    color: var(--primary-text-color);
+    /* color: var(--primary-text-color); */
+    color: #ffffff;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
   }
 
   .date {
-    color: var(--muted-color);
+    /* color: var(--muted-color); */
+    color: #A1A4AA;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
     font-weight: 500;
     font-size: 1.2rem;
@@ -139,7 +141,8 @@
     position: absolute;
     top: 8px;
     left: 12px;
-    color: var(--muted-color);
+    /* color: var(--muted-color); */
+    color: #A1A4AA;
   }
 
   .tag {
@@ -148,7 +151,8 @@
     padding: 0.2rem 0.6rem;
     font-size: 0.75rem;
     text-transform: lowercase;
-    color: var(--primary-text-color);
+    /* color: var(--primary-text-color); */
+    color: #ffffff;
     /* text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); */
     border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;

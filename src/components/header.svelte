@@ -9,6 +9,7 @@
         showSearchResultsStore,
         closeSearchResults,
     } from "../lib/searchNavigation";
+    import { fade, scale, fly } from "svelte/transition";
 
     // State variables for managing search functionality
     let showSearchModal = false; // Controls when the search modal is visible
@@ -30,19 +31,11 @@
         darkMode.update((v) => !v);
     }
 
-    /**
-     * Open the search modal
-     * Prevents event bubbling to avoid immediate closure by click-outside handlers
-     */
     function openSearch(event: MouseEvent) {
         event.stopPropagation(); // Prevent the click from bubbling up
         showSearchModal = true;
     }
 
-    /**
-     * Handle keyboard shortcuts for opening search
-     * Supports Ctrl+K and Ctrl+/ (common search shortcuts)
-     */
     function handleKeydown(event: KeyboardEvent) {
         // Check for Ctrl+K or Ctrl+/ (or Cmd on Mac)
         if (
@@ -54,27 +47,17 @@
         }
     }
 
-    /**
-     * Handle search results from the SearchModal component
-     * This is called when user performs a search in the modal
-     */
     function handleSearchResults(event: CustomEvent<SearchResult>) {
         searchResultStore.set(event.detail); // Store the search results
         showSearchModal = false; // Close the search modal
         showSearchResultsStore.set(true); // Show the results modal
     }
 
-    /**
-     * Close the results modal (called when user closes results)
-     */
     function handleResultsClose() {
         console.log("Closing search results");
         closeSearchResults(); // Use global function to close results
     }
 
-    /**
-     * Go back from results to search modal (allows user to refine search)
-     */
     function handleBackToSearch() {
         console.log("Going back to search modal");
         showSearchResultsStore.set(false); // Hide results
@@ -82,11 +65,6 @@
     }
 </script>
 
-<!--
-  Header markup
-  - Shows a small logo on the left and action icons on the right
-  - The mode toggle button reads `$darkMode` (auto-subscription) to pick the icon
--->
 <header>
     <!-- Brand/logo -->
     <!-- <img src={logo} alt="Logo" /> -->
@@ -102,10 +80,17 @@
             <Search />
         </button>
 
-        <button class="icon" on:click={() => handleClick("https://www.linkedin.com/in/jesse-strijker/")}>
+        <button
+            class="icon"
+            on:click={() =>
+                handleClick("https://www.linkedin.com/in/jesse-strijker/")}
+        >
             <Linkedin />
         </button>
-        <button class="icon" on:click={() => handleClick("https://github.com/ElmoNeedsArson")}>
+        <button
+            class="icon"
+            on:click={() => handleClick("https://github.com/ElmoNeedsArson")}
+        >
             <Github />
         </button>
         <div class="divider"></div>
@@ -196,7 +181,8 @@
         justify-self: center;
     }
 
-    @media (hover: hover) { /* hover styles only for non-touch devices */
+    @media (hover: hover) {
+        /* hover styles only for non-touch devices */
         .icon:hover {
             color: var(--secondary-text-color);
             cursor: pointer;

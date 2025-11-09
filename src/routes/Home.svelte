@@ -6,9 +6,21 @@
     import { link } from "svelte-spa-router";
     import type { Project } from "../types";
     import { loadAllProjects } from "../lib/searchUtils";
+    import { fade, scale } from "svelte/transition";
+    import { onMount } from "svelte";
 
     // Load all projects using the shared utility function
-    const projects: Project[] = loadAllProjects();
+    // const projects: Project[] = loadAllProjects();
+
+    let projects: Project[] = [];
+    let allProjects: Project[] = loadAllProjects();
+
+    onMount(() => {
+        // simulate delayed appearance (could be replaced with real async load)
+        setTimeout(() => {
+            projects = allProjects;
+        }, 50);
+    });
 
     console.log("Loaded projects:", projects);
     console.table(projects);
@@ -27,9 +39,14 @@
         </div>
         <!-- Projects grid: each project becomes a linked ProjectCard -->
         <section class="grid">
-            {#each projects as project}
+            {#each projects as project, i}
                 <!-- <a href={`/${project.slug}`} use:link> -->
-                    <ProjectCard {project} />
+                <div in:scale={{ start: 0.7, delay: i * 200, duration: 700 }}>
+                    <div in:fade={{ delay: i * 200, duration: 700 }}>
+                        <ProjectCard {project} />
+                    </div>
+                </div>
+
                 <!-- </a> -->
             {/each}
         </section>
