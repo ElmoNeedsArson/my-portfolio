@@ -1,9 +1,0 @@
-{
-  "tabWidth": 2,
-  "useTabs": false,
-  "printWidth": 120,
-  "svelteSortOrder": "scripts-markup-styles",
-  "svelteStrictMode": false,
-  "svelteAllowShorthand": true,
-  "svelteIndentScriptAndStyle": false
-}
