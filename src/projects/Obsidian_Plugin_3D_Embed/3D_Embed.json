@@ -1,15 +1,21 @@
 {
+    "pinned": true,
     "slug": "obsidian-plugin",
     "title": "Obsidian Plugin",
     "thumbnail": {
         "src": "../assets/images/Obsidian-Plugin3.png",
-        "alt": "",
+        "alt": "Promotional image I made for showcasing the plugin",
         "caption": "Promotional image I made for showcasing the plugin"
     },
     "thumbnailLight": {
         "src": "../assets/images/1.png",
         "alt": "",
         "caption": ""
+    },
+    "projectPageThumbnail": {
+        "src": "../assets/images/3D_Embed_1.png",
+        "alt": "Promotional image I made for showcasing the plugin",
+        "caption": "Promotional image I made for showcasing the plugin"
     },
     "date": "2024-10-10",
     "languages": [

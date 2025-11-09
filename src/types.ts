@@ -37,11 +37,13 @@ interface ProjectSection {
 }
 
 export interface Project {
+  pinned: boolean;
   slug: string;
   title: string;
   description: string;
   thumbnail: ImageObject;
   thumbnailLight?: ImageObject; // Optional: image for light mode
+  projectPageThumbnail?: ImageObject; // Optional: different image for project page header
   date: string;
   languages: string[];
   tools: string[];

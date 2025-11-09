@@ -53,9 +53,7 @@
     {:else}
         <div class="projects-grid">
             {#each searchResult.projects as project}
-                <a href={`/${project.slug}`} use:link on:click={handleClose}>
-                    <ProjectCard {project} />
-                </a>
+                <ProjectCard {project} showPinIcon={false} on:cardClick={handleClose} />
             {/each}
         </div>
     {/if}
@@ -133,21 +131,25 @@
         margin-top: 1rem;
     }
 
-    .projects-grid a {
+    /* .projects-grid a {
         text-decoration: none;
         color: inherit;
         transition: transform 0.2s ease;
-    }
+    } */
 
-    @media (hover: hover) {/* hover styles only for non-touch devices */
+    @media (hover: hover) {
+        /* hover styles only for non-touch devices */
         .try-again-button:hover {
-            background-color: var(--secondary-text-color,var(--secondary-text-color));
+            background-color: var(
+                --secondary-text-color,
+                var(--secondary-text-color)
+            );
             filter: brightness(110%);
         }
-        
-        .projects-grid a:hover {
+
+        /* .projects-grid a:hover {
             transform: translateY(-2px);
-        }
+        } */
     }
 
     @media (max-width: 768px) {

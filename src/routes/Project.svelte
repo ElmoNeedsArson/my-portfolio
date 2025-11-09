@@ -1,6 +1,12 @@
 <script lang="ts">
   import { params, link } from "svelte-spa-router";
-  import type { Project, GalleryObject, ImageObject, VideoObject, MediaObject } from "../types";
+  import type {
+    Project,
+    GalleryObject,
+    ImageObject,
+    VideoObject,
+    MediaObject,
+  } from "../types";
   import Header from "../components/header.svelte";
   import Footer from "../components/footer.svelte";
   import ProjectOutline from "../components/ProjectOutline.svelte";
@@ -40,7 +46,11 @@
   // Utility functions for media objects (images or videos)
   function isVideoObject(media: MediaObject): media is VideoObject {
     // Check if it has video-specific properties OR if the src is a video file
-    const hasVideoProps = 'autoplay' in media || 'loop' in media || 'muted' in media || 'controls' in media;
+    const hasVideoProps =
+      "autoplay" in media ||
+      "loop" in media ||
+      "muted" in media ||
+      "controls" in media;
     const isVideoFile = /\.(mp4|webm|ogg|mov|avi|mkv)$/i.test(media.src);
     return hasVideoProps || isVideoFile;
   }
@@ -51,10 +61,10 @@
     if (!gallery) return { media: [], caption: undefined, columns: 2 };
 
     if (Array.isArray(gallery)) {
-      return { 
+      return {
         media: gallery,
-        caption: undefined, 
-        columns: 2 
+        caption: undefined,
+        columns: 2,
       };
     }
 
@@ -66,15 +76,18 @@
     };
   }
 
-  function handleTagClick(tag: string) {
+  function handleTagClick(event: MouseEvent, tag: string) {
+    event.stopPropagation();
     navigateToSearch(tag, "tags");
   }
 
-  function handleLanguageClick(language: string) {
+  function handleLanguageClick(event: MouseEvent, language: string) {
+    event.stopPropagation();
     navigateToSearch(language, "languages");
   }
 
-  function handleToolClick(tool: string) {
+  function handleToolClick(event: MouseEvent, tool: string) {
+    event.stopPropagation();
     navigateToSearch(tool, "tools");
   }
 
@@ -93,7 +106,7 @@
   {#if project}
     <!-- Project outline component -->
     <ProjectOutline {project} />
-    
+
     <!-- Project detail layout. Renders when a matching project is found. -->
     <article class="project-page">
       <!-- Back link to the list page -->
@@ -102,21 +115,23 @@
       <p class="date">{project.date}</p>
 
       <!-- Project hero image (uses the default thumbnail) -->
-      <div class="thumbnail">
-        <img
-          src={getSrc(project.thumbnail)}
-          alt={getAlt(project.thumbnail, project.title)}
-        />
-        {#if getCaption(project.thumbnail)}
-          <p class="caption">{getCaption(project.thumbnail)}</p>
-        {/if}
-      </div>
+      {#if project.projectPageThumbnail}
+        <div class="thumbnail">
+          <img
+            src={getSrc(project.projectPageThumbnail)}
+            alt={getAlt(project.projectPageThumbnail, project.title)}
+          />
+          {#if getCaption(project.projectPageThumbnail)}
+            <p class="caption">{getCaption(project.projectPageThumbnail)}</p>
+          {/if}
+        </div>
+      {/if}
 
       <!-- Tag list -->
       {#if project.tags.length > 0}
         <div class="tags">
           {#each project.tags as tag}
-            <button class="tag" on:click={() => handleTagClick(tag)}>
+            <button class="tag" on:click={(e) => handleTagClick(e, tag)}>
               <svelte:component this={tagsCategory.icon} size="14" />
               {tag}
             </button>
@@ -127,39 +142,38 @@
       <!-- Languages and Tools -->
       {#if project.languages.length > 0 || project.tools.length > 0}
         <div class="meta-info">
-          <div class="languages">
-            {#if project.languages.length > 0}
+          {#if project.languages.length > 0}
+            <div class="languages">
               <h3>Languages</h3>
               <div class="chips">
                 {#each project.languages as language}
                   <button
                     class="chip language-chip"
-                    on:click={() => handleLanguageClick(language)}
+                    on:click={(e) => handleLanguageClick(e, language)}
                   >
                     <svelte:component this={languagesCategory.icon} size="16" />
                     {language}
                   </button>
                 {/each}
               </div>
-            {/if}
-          </div>
-
-          <div class="tools">
-            {#if project.tools.length > 0}
+            </div>
+          {/if}
+          {#if project.tools.length > 0}
+            <div class="tools">
               <h3>Tools</h3>
               <div class="chips">
                 {#each project.tools as tool}
                   <button
                     class="chip tool-chip"
-                    on:click={() => handleToolClick(tool)}
+                    on:click={(e) => handleToolClick(e, tool)}
                   >
                     <svelte:component this={toolsCategory.icon} size="16" />
                     {tool}
                   </button>
                 {/each}
               </div>
-            {/if}
-          </div>
+            </div>
+          {/if}
         </div>
       {/if}
 
@@ -278,6 +292,10 @@
     max-width: 55%;
     margin: 2rem auto;
     padding: 0 1rem;
+  }
+
+  .thumbnail {
+    justify-self: center;
   }
 
   img,

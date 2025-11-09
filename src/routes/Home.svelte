@@ -28,9 +28,9 @@
         <!-- Projects grid: each project becomes a linked ProjectCard -->
         <section class="grid">
             {#each projects as project}
-                <a href={`/${project.slug}`} use:link>
+                <!-- <a href={`/${project.slug}`} use:link> -->
                     <ProjectCard {project} />
-                </a>
+                <!-- </a> -->
             {/each}
         </section>
     </div>
@@ -83,5 +83,11 @@
 
     .titleIcon {
         color: var(--muted-color);
+    }
+
+    @media (max-width: 768px) {
+        .grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>

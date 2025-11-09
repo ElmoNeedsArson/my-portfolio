@@ -2,9 +2,16 @@
   import type { Project } from "../types";
   import { darkMode } from "../lib/darkModeStore";
   import { navigateToSearch } from "../lib/searchNavigation";
+  import { Pin } from "@lucide/svelte";
   import { link } from "svelte-spa-router";
+  import { createEventDispatcher } from "svelte";
 
   export let project: Project;
+  export let showPinIcon: boolean = true; // Default to true for backward compatibility
+
+  const dispatch = createEventDispatcher<{
+    cardClick: void;
+  }>();
 
   // Helpers: thumbnails may be a string or an object { src, alt, caption }
   function getSrc(img?: { src?: string }) {
@@ -30,27 +37,36 @@
     event.stopPropagation();
     navigateToSearch(tag, "tags");
   }
+
+  function handleCardClick() {
+    dispatch('cardClick');
+  }
 </script>
 
-<!-- <a href={`/${project.slug}`} use:link> -->
+<a href={`/${project.slug}`} use:link on:click={handleCardClick}>
   <article class="card">
     <!-- background image container; `imageUrl` is reactive to theme changes -->
     <div class="card-bg" style="background-image: url('{imageUrl}')">
       <span class="date">{project.date.slice(0, 4)}</span>
 
-      <div class="tags">
-        {#each project.tags.slice(0, 3) as tag}
-          <button class="tag" on:click={(e) => handleTagClick(e, tag)}>
-            {tag}
-          </button>
-        {/each}
-      </div>
       <div class="overlay-content">
-        <h2>{project.title}</h2>
+        <h1>{project.title}</h1>
+        <div class="tags">
+          {#each project.tags.slice(0, 3) as tag}
+            <button class="tag" on:click={(e) => handleTagClick(e, tag)}>
+              {tag}
+            </button>
+          {/each}
+        </div>
       </div>
+      {#if project.pinned && showPinIcon}
+        <div class="pinIcon">
+          <Pin />
+        </div>
+      {/if}
     </div>
   </article>
-<!-- </a> -->
+</a>
 
 <style>
   .card {
@@ -85,16 +101,16 @@
 
   .overlay-content {
     width: 100%;
-    padding: 1.2rem 1.4rem 1.4rem;
+    padding: 1.2rem 12px 12px 12px;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
-  h2 {
-    font-size: 1.1rem;
+  h1 {
+    font-size: 2.2rem;
     margin: 0;
-    font-weight: 600;
+    font-weight: 800;
     color: var(--primary-text-color);
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
   }
@@ -110,13 +126,20 @@
   }
 
   .tags {
-    position: absolute;
+    /* position: absolute;
     bottom: 8px;
-    right: 12px;
+    right: 12px; */
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.4rem;
     align-items: flex-end;
+  }
+
+  .pinIcon {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    color: var(--muted-color);
   }
 
   .tag {

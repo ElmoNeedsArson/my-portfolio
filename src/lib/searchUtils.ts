@@ -10,8 +10,31 @@ export interface SearchResult {
     category: SearchCategory;
 }
 
-// Load all projects dynamically using Vite's import.meta.glob
-export const loadAllProjects = (): Project[] => {
+// Sort projects by date, with pinned projects first
+const sortProjectsByDate = (projects: Project[]): Project[] => {
+    // Separate pinned and unpinned projects
+    const pinnedProjects = projects.filter(project => project.pinned);
+    const unpinnedProjects = projects.filter(project => !project.pinned);
+    
+    // Sort both groups by date (newest first)
+    const sortByDate = (a: Project, b: Project) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+    };
+    
+    pinnedProjects.sort(sortByDate);
+    unpinnedProjects.sort(sortByDate);
+    
+    // Return pinned projects first, then unpinned
+    return [...pinnedProjects, ...unpinnedProjects];
+};
+
+// Sort projects alphabetically by title (for search results)
+const sortProjectsAlphabetically = (projects: Project[]): Project[] => {
+    return [...projects].sort((a, b) => a.title.localeCompare(b.title));
+};
+
+// Load all projects without any sorting (raw data)
+const loadAllProjectsRaw = (): Project[] => {
     const jsonModules = import.meta.glob("../projects/*/*.json", {
         eager: true,
     }) as Record<string, { default: Project }>;
@@ -20,14 +43,21 @@ export const loadAllProjects = (): Project[] => {
     return Object.values(jsonModules).map(m => m.default);
 };
 
+// Load all projects dynamically using Vite's import.meta.glob (sorted for homepage)
+export const loadAllProjects = (): Project[] => {
+    const projects = loadAllProjectsRaw();
+    // Sort projects by date with pinned projects first
+    return sortProjectsByDate(projects);
+};
+
 export const findProjectBySlug = (slug: string): Project | undefined => {
-    const projects = loadAllProjects();
+    const projects = loadAllProjectsRaw();
     return projects.find(project => project.slug === slug);
 };
 
 //Get all unique values for a specific search category - used for suggestions in search
 export const getAllCategoryValues = (category: SearchCategory): string[] => {
-    const projects = loadAllProjects();
+    const projects = loadAllProjectsRaw();
 
     //Very cool js function gpt told me about, set makes it so you wont have duplicates
     const values = new Set<string>();
@@ -56,7 +86,7 @@ export const getAllCategoryValues = (category: SearchCategory): string[] => {
 
 // Filter projects based on search category and term
 export const searchProjects = (category: SearchCategory, searchTerm: string): SearchResult => {
-    const projects = loadAllProjects();
+    const projects = loadAllProjectsRaw();
     const normalizedSearch = searchTerm.toLowerCase().trim();
     
     const filteredProjects = projects.filter(project => {
@@ -81,9 +111,12 @@ export const searchProjects = (category: SearchCategory, searchTerm: string): Se
         }
     });
 
+    // Sort alphabetically for search results
+    const sortedProjects = sortProjectsAlphabetically(filteredProjects);
+
     // Return structured result object
     return {
-        projects: filteredProjects,
+        projects: sortedProjects,
         searchTerm,
         category
     };

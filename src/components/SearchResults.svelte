@@ -17,6 +17,8 @@
     function handleBackToSearch() {dispatch("backToSearch");}
 
     function handleClickOutside(event: MouseEvent) {
+        // event.stopPropagation();
+        // event.preventDefault();
         const target = event.target as HTMLElement;
         if (!target.closest(".results-container")) { handleClose(); }
     }

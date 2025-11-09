@@ -68,6 +68,7 @@
      * Close the results modal (called when user closes results)
      */
     function handleResultsClose() {
+        console.log("Closing search results");
         closeSearchResults(); // Use global function to close results
     }
 
@@ -75,6 +76,7 @@
      * Go back from results to search modal (allows user to refine search)
      */
     function handleBackToSearch() {
+        console.log("Going back to search modal");
         showSearchResultsStore.set(false); // Hide results
         showSearchModal = true; // Show search modal again
     }
