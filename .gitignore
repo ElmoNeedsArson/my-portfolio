@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-public
+public/assets
 SEARCH_ARCHITECTURE.md
 .pretierrc
 ToDo.md
