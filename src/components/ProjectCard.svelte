@@ -105,10 +105,11 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    background: linear-gradient(in oklch, transparent 0%, oklch(25.5% .021 279.29) 100%)
   }
 
   h1 {
-    font-size: 2.2rem;
+    font-size: 2.6rem;
     margin: 0;
     font-weight: 800;
     /* color: var(--primary-text-color); */
@@ -150,7 +151,7 @@
     border-radius: 999px;
     padding: 0.2rem 0.6rem;
     font-size: 0.75rem;
-    text-transform: lowercase;
+    /* text-transform: lowercase; */
     /* color: var(--primary-text-color); */
     color: #ffffff;
     /* text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); */

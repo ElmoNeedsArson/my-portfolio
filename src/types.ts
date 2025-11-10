@@ -40,6 +40,7 @@ export interface Project {
   pinned: boolean;
   slug: string;
   title: string;
+  type: 'card' | 'bar';
   description: string;
   thumbnail: ImageObject;
   thumbnailLight?: ImageObject; // Optional: image for light mode

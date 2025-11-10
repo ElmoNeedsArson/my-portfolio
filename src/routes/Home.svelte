@@ -1,58 +1,124 @@
 <script lang="ts">
-    import Header from "../components/header.svelte";
-    import Footer from "../components/footer.svelte";
-    import { ToyBrick } from "@lucide/svelte";
+    import Dock from "../components/Dock.svelte";
+    import { ToyBrick, Pin, MapPin } from "@lucide/svelte";
     import ProjectCard from "../components/ProjectCard.svelte";
-    import { link } from "svelte-spa-router";
+    import ProjectBar from "../components/ProjectBar.svelte";
+    import { link, location } from "svelte-spa-router";
     import type { Project } from "../types";
-    import { loadAllProjects } from "../lib/searchUtils";
-    import { fade, scale } from "svelte/transition";
+    import { loadCardProjects, loadBarProjects } from "../lib/searchUtils";
+    import { fade } from "svelte/transition";
     import { onMount } from "svelte";
+    import { useTabNavigation } from "../lib/navigationStore";
 
-    // Load all projects using the shared utility function
-    // const projects: Project[] = loadAllProjects();
+    // Global toggle for navigation style - can be changed to test both approaches
+    // Set to true for tabs, false for dock
+    const useTabs = true;
+    $useTabNavigation = useTabs;
 
+    // Determine page type based on current route or active tab
+    $: isExperimentsPage = $location === '/experiments';
+    $: isEindhovenPage = $location === '/eindhoven';
+    $: pageType = isExperimentsPage ? 'experiments' : isEindhovenPage ? 'eindhoven' : 'projects';
+    $: pageTitle = isExperimentsPage ? 'EXPERIMENTS' : isEindhovenPage ? 'EINDHOVEN' : 'PROJECTS';
+    $: IconComponent = isExperimentsPage ? Pin : isEindhovenPage ? MapPin : ToyBrick;
+
+    // Load appropriate projects based on page type
     let projects: Project[] = [];
-    let allProjects: Project[] = loadAllProjects();
+    let allProjects: Project[] = [];
 
-    onMount(() => {
-        // simulate delayed appearance (could be replaced with real async load)
-        setTimeout(() => {
-            projects = allProjects;
-        }, 50);
-    });
+    // Reactive statement to load projects when page type changes
+    $: {
+        if (isExperimentsPage) {
+            projects = loadBarProjects();
+        } else if (isEindhovenPage) {
+            projects = []; // Eindhoven has no projects, just placeholder content
+        } else {
+            projects = loadCardProjects();
+        }
+    }
 
-    console.log("Loaded projects:", projects);
-    console.table(projects);
+    // Debug: log page mapping when location changes
+    $: if ($location !== undefined) {
+        console.debug('[Home] route changed', { location: $location, pageType });
+    }
+
+    console.log(`[Home] Loaded ${pageType}:`, projects);
 </script>
 
-<Header />
 <main>
     <div class="container">
-        <div class="titleContainer">
-            <div class="pageTitle">
-                <div class="titleIcon">
-                    <ToyBrick size="48" class="titleElement" />
+        {#if !useTabs}
+            <!-- Traditional Title Container -->
+            <div class="titleContainer">
+                <div class="pageTitle">
+                    <div class="titleIcon">
+                        {#key pageType}
+                            <svelte:component 
+                                this={IconComponent} 
+                                size="48" 
+                                class="titleElement"
+                            />
+                        {/key}
+                    </div>
+                    {#key pageType}
+                        <h2 
+                            class="titleElement"
+                            
+                        >
+                            {pageTitle}
+                        </h2>
+                    {/key}
                 </div>
-                <h2 class="titleElement">PROJECTS</h2>
             </div>
-        </div>
-        <!-- Projects grid: each project becomes a linked ProjectCard -->
-        <section class="grid">
-            {#each projects as project, i}
-                <!-- <a href={`/${project.slug}`} use:link> -->
-                <div in:scale={{ start: 0.7, delay: i * 200, duration: 700 }}>
-                    <div in:fade={{ delay: i * 200, duration: 700 }}>
+        {/if}
+        
+        
+        {#if isEindhovenPage}
+            <!-- Eindhoven content -->
+            <section class="experiments-list">
+                {#if projects.length === 0}
+                    <div class="no-content">
+                        <p>Welcome to the Eindhoven section.</p>
+                        <p>This page is currently under construction.</p>
+                    </div>
+                {/if}
+            </section>
+        {:else if isExperimentsPage}
+            <!-- Experiments list -->
+            <section class="experiments-list">
+                {#each projects as project, i}
+                    <div>
+                        <ProjectBar {project} />
+                    </div>
+                {/each}
+                
+                {#if projects.length === 0}
+                    <div class="no-content">
+                        <p>No experiments available yet. Check back soon!</p>
+                    </div>
+                {/if}
+            </section>
+        {:else}
+            <!-- Projects grid -->
+            <section class="grid">
+                {#each projects as project, i}
+                    <div>
                         <ProjectCard {project} />
                     </div>
-                </div>
-
-                <!-- </a> -->
-            {/each}
-        </section>
+                {/each}
+                
+                {#if projects.length === 0}
+                    <div class="no-content">
+                        <p>No projects available yet. Check back soon!</p>
+                    </div>
+                {/if}
+            </section>
+        {/if}
     </div>
 </main>
-<Footer />
+{#if !useTabs}
+    <Dock />
+{/if}
 
 <style>
     main {
@@ -71,6 +137,32 @@
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         gap: 10px;
+    }
+
+    .experiments-list {
+        max-width: 100%;
+        margin: 0 auto;
+        padding-bottom: 6rem; /* Space for dock */
+    }
+
+    .no-content {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--muted-color);
+        font-size: 1.2rem;
+    }
+
+    .no-content p {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    /* removed unused .transition-placeholder and .loading-indicator */
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     .titleContainer {

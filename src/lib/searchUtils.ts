@@ -50,6 +50,23 @@ export const loadAllProjects = (): Project[] => {
     return sortProjectsByDate(projects);
 };
 
+// Load projects filtered by type
+export const loadProjectsByType = (type: 'card' | 'bar'): Project[] => {
+    const allProjects = loadAllProjectsRaw();
+    const filteredProjects = allProjects.filter(project => project.type === type);
+    return sortProjectsByDate(filteredProjects);
+};
+
+// Load projects for cards (Projects page)
+export const loadCardProjects = (): Project[] => {
+    return loadProjectsByType('card');
+};
+
+// Load projects for bars (Experiments page)
+export const loadBarProjects = (): Project[] => {
+    return loadProjectsByType('bar');
+};
+
 export const findProjectBySlug = (slug: string): Project | undefined => {
     const projects = loadAllProjectsRaw();
     return projects.find(project => project.slug === slug);

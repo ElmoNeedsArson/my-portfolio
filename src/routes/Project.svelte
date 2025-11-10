@@ -9,6 +9,7 @@
   } from "../types";
   import Header from "../components/header.svelte";
   import Footer from "../components/footer.svelte";
+  import Dock from "../components/Dock.svelte";
   import ProjectOutline from "../components/ProjectOutline.svelte";
   import { navigateToSearch } from "../lib/searchNavigation";
   import { findProjectBySlug } from "../lib/searchUtils";
@@ -43,16 +44,33 @@
     return img.caption;
   }
 
+  // URL utility functions
+  function isYouTubeUrl(url: string): boolean {
+    return /(?:youtube\.com\/watch\?v=|youtu\.be\/)/.test(url);
+  }
+
+  function getYouTubeEmbedUrl(url: string): string {
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+  }
+
+  function isVideoFile(url: string): boolean {
+    return /\.(mp4|webm|ogg|mov|avi|mkv)$/i.test(url);
+  }
+
   // Utility functions for media objects (images or videos)
   function isVideoObject(media: MediaObject): media is VideoObject {
-    // Check if it has video-specific properties OR if the src is a video file
+    // Check if it has video-specific properties
     const hasVideoProps =
       "autoplay" in media ||
       "loop" in media ||
       "muted" in media ||
       "controls" in media;
-    const isVideoFile = /\.(mp4|webm|ogg|mov|avi|mkv)$/i.test(media.src);
-    return hasVideoProps || isVideoFile;
+    
+    // Check if it's a YouTube URL or local video file
+    const isVideo = isYouTubeUrl(media.src) || isVideoFile(media.src);
+    
+    return hasVideoProps || isVideo;
   }
 
   function getGalleryData(
@@ -223,16 +241,28 @@
 
           {#if section.video}
             <div class="video-container">
-              <video
-                src={section.video.src}
-                autoplay={section.video.autoplay}
-                loop={section.video.loop}
-                muted={section.video.muted}
-                controls={section.video.controls}
-                playsinline
-              >
-                Your browser does not support the video tag.
-              </video>
+              {#if isYouTubeUrl(section.video.src)}
+                <!-- YouTube iframe -->
+                <iframe
+                  src={getYouTubeEmbedUrl(section.video.src)}
+                  title={section.video.caption || section.title || "Video"}
+                  allowfullscreen
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                ></iframe>
+              {:else}
+                <!-- Regular video element for local files -->
+                <video
+                  src={section.video.src}
+                  autoplay={section.video.autoplay}
+                  loop={section.video.loop}
+                  muted={section.video.muted}
+                  controls={section.video.controls}
+                  playsinline
+                >
+                  Your browser does not support the video tag.
+                </video>
+              {/if}
               {#if section.video.caption}
                 <p class="caption">{section.video.caption}</p>
               {/if}
@@ -248,17 +278,30 @@
               {#each galleryData.media as item}
                 <div class="gallery-item">
                   {#if isVideoObject(item)}
-                    <video
-                      src={item.src}
-                      autoplay={item.autoplay}
-                      loop={item.loop}
-                      muted={item.muted}
-                      controls={item.controls ?? true}
-                      playsinline
-                    >
-                      Your browser does not support the video tag.
-                    </video>
+                    {#if isYouTubeUrl(item.src)}
+                      <!-- YouTube iframe -->
+                      <iframe
+                        src={getYouTubeEmbedUrl(item.src)}
+                        title={item.caption || section.title || "Video"}
+                        allowfullscreen
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      ></iframe>
+                    {:else}
+                      <!-- Regular video element for local files -->
+                      <video
+                        src={item.src}
+                        autoplay={item.autoplay}
+                        loop={item.loop}
+                        muted={item.muted}
+                        controls={item.controls ?? true}
+                        playsinline
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                    {/if}
                   {:else}
+                    <!-- Image element for local images -->
                     <img src={item.src} alt={getAlt(item, section.title)} />
                   {/if}
                   {#if item.caption}
@@ -280,6 +323,7 @@
   {/if}
 </main>
 <Footer />
+<Dock />
 
 <style>
   main {
@@ -299,8 +343,15 @@
   }
 
   img,
-  video {
+  video,
+  iframe {
     max-width: 100%;
+  }
+
+  iframe {
+    width: 100%;
+    border-radius: 6px;
+    aspect-ratio: 16 / 9;
   }
 
   .back {
@@ -317,6 +368,7 @@
 
   .tags {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     margin: 1rem 0;
   }
@@ -487,12 +539,17 @@
   }
 
   .gallery-item img,
-  .gallery-item video {
+  .gallery-item video,
+  .gallery-item iframe {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
     border-radius: 6px;
+  }
+
+  .gallery-item iframe {
+    object-fit: unset; /* iframes don't need object-fit */
   }
 
   .caption {
@@ -520,5 +577,6 @@
 
   .video-container {
     margin: 1rem 0;
+    height: 100%;
   }
 </style>
