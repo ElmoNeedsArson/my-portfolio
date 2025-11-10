@@ -7,9 +7,6 @@
     VideoObject,
     MediaObject,
   } from "../types";
-  import Header from "../components/header.svelte";
-  import Footer from "../components/footer.svelte";
-  import Dock from "../components/Dock.svelte";
   import ProjectOutline from "../components/ProjectOutline.svelte";
   import { navigateToSearch } from "../lib/searchNavigation";
   import { findProjectBySlug } from "../lib/searchUtils";
@@ -119,9 +116,8 @@
   }
 </script>
 
-<Header />
 <main>
-  {#if project}
+{#if project}
     <!-- Project outline component -->
     <ProjectOutline {project} />
 
@@ -322,8 +318,6 @@
     <p>Project not found.</p>
   {/if}
 </main>
-<Footer />
-<Dock />
 
 <style>
   main {

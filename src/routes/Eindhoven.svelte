@@ -1,7 +1,6 @@
 <script lang="ts">
     import Header from "../components/header.svelte";
     import Footer from "../components/footer.svelte";
-    import Dock from "../components/Dock.svelte";
     import { MapPin } from "@lucide/svelte";
     import { fade } from "svelte/transition";
     import { onMount } from "svelte";
@@ -38,7 +37,6 @@
     </div>
 </main>
 <Footer />
-<Dock />
 
 <style>
     main {

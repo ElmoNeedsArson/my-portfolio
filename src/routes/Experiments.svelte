@@ -1,7 +1,6 @@
 <script lang="ts">
     import Header from "../components/header.svelte";
     import Footer from "../components/footer.svelte";
-    import Dock from "../components/Dock.svelte";
     import { FlaskConical } from "@lucide/svelte";
     import ProjectBar from "../components/ProjectBar.svelte";
     import type { Project } from "../types";
@@ -53,7 +52,6 @@
     </div>
 </main>
 <Footer />
-<Dock />
 
 <style>
     main {

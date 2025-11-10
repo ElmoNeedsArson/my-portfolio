@@ -7,11 +7,18 @@
 
 <a href={`/${project.slug}`} use:link class="project-bar">
   <div class="bar-content">
-    <div class="bar-title">
-      {project.title}
+    <div class="bar-left">
+      <div class="bar-title">
+        {project.title.toLocaleUpperCase()}
+      </div>
+      <div class="bar-shortdesc">
+        {#if project.shortDesc}
+          {project.shortDesc}
+        {/if}
+      </div>
     </div>
     <div class="bar-date">
-      {project.date}
+      {project.date.slice(0, 7)}
     </div>
   </div>
 </a>
@@ -42,13 +49,34 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    flex-wrap: nowrap;
+  }
+
+  .bar-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
   }
 
   .bar-title {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 600;
     color: white;
-    flex: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .bar-shortdesc {
+    font-size: 1.2rem;
+    color: var(--muted-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1 1 auto; 
+    min-width: 0;
   }
 
   .bar-date {
@@ -56,6 +84,8 @@
     color: var(--muted-color);
     font-weight: 400;
     margin-left: 2rem;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   /* Mobile responsiveness */
@@ -65,7 +95,7 @@
     }
 
     .bar-content {
-      flex-direction: column;
+      flex-wrap: nowrap;
       align-items: flex-start;
       gap: 0.5rem;
     }

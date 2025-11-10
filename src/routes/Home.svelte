@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Dock from "../components/Dock.svelte";
     import { ToyBrick, Pin, MapPin } from "@lucide/svelte";
     import ProjectCard from "../components/ProjectCard.svelte";
     import ProjectBar from "../components/ProjectBar.svelte";
@@ -9,11 +8,6 @@
     import { fade } from "svelte/transition";
     import { onMount } from "svelte";
     import { useTabNavigation } from "../lib/navigationStore";
-
-    // Global toggle for navigation style - can be changed to test both approaches
-    // Set to true for tabs, false for dock
-    const useTabs = true;
-    $useTabNavigation = useTabs;
 
     // Determine page type based on current route or active tab
     $: isExperimentsPage = $location === '/experiments';
@@ -47,7 +41,7 @@
 
 <main>
     <div class="container">
-        {#if !useTabs}
+        {#if !$useTabNavigation}
             <!-- Traditional Title Container -->
             <div class="titleContainer">
                 <div class="pageTitle">
@@ -116,9 +110,6 @@
         {/if}
     </div>
 </main>
-{#if !useTabs}
-    <Dock />
-{/if}
 
 <style>
     main {

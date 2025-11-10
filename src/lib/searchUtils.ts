@@ -35,7 +35,7 @@ const sortProjectsAlphabetically = (projects: Project[]): Project[] => {
 
 // Load all projects without any sorting (raw data)
 const loadAllProjectsRaw = (): Project[] => {
-    const jsonModules = import.meta.glob("../projects/*/*.json", {
+    const jsonModules = import.meta.glob("../projects/*.json", {
         eager: true,
     }) as Record<string, { default: Project }>;
     

@@ -5,7 +5,9 @@
   import Header from "./components/header.svelte";
   import Footer from "./components/footer.svelte";
   import TabNavigation from "./components/TabNavigation.svelte";
+  import Dock from "./components/Dock.svelte";
   import { useTabNavigation } from "./lib/navigationStore";
+  import { location } from "svelte-spa-router";
 
   // Route table: specific routes first, then catch-all for projects
   const routes = {
@@ -15,6 +17,18 @@
     "/eindhoven": Home,
     "/:slug": Project,
   };
+
+  // Control navigation style based on current route
+  $: {
+    const isHomePage = $location === "/" || 
+                      $location === "/projects" || 
+                      $location === "/experiments" || 
+                      $location === "/eindhoven";
+    $useTabNavigation = isHomePage;
+  }
+
+  // Manual toggle for dock (set to false to disable dock completely)
+  const showDock = false;
 </script>
 
 <Header />
@@ -25,6 +39,9 @@
 {/if}
 <Router {routes} />
 <Footer />
+{#if showDock}
+  <Dock />
+{/if}
 
 <style>
   .nav-container {

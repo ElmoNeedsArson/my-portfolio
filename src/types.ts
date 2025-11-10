@@ -41,6 +41,7 @@ export interface Project {
   slug: string;
   title: string;
   type: 'card' | 'bar';
+  shortDesc: string;
   description: string;
   thumbnail: ImageObject;
   thumbnailLight?: ImageObject; // Optional: image for light mode
