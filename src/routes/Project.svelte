@@ -1,16 +1,19 @@
 <script lang="ts">
-  import { params, link } from "svelte-spa-router";
+  import { params, link, push } from "svelte-spa-router";
   import type {
     Project,
     GalleryObject,
     ImageObject,
     VideoObject,
+    ThreeJSObject,
     MediaObject,
+    ContentBlock,
   } from "../types";
   import ProjectOutline from "../components/ProjectOutline.svelte";
   import { navigateToSearch } from "../lib/searchNavigation";
   import { findProjectBySlug } from "../lib/searchUtils";
   import { getCategoryById } from "../lib/searchCategories";
+  import { lastVisitedTab } from "../lib/navigationStore";
 
   // Reactive slug value derived from the router params. `$params` is provided
   // by svelte-spa-router and is reactive.
@@ -20,6 +23,90 @@
   // Reactive project lookup using the shared utility function
   let project: Project | undefined;
   $: project = findProjectBySlug(slug);
+
+  // Tabs setup: Support either project.tabs or top-level tab1/tab2/... keys
+  type TabDef = { id: string; label: string; content: ContentBlock };
+  let tabs: TabDef[] = [];
+  let activeTabIndex = 0;
+  let tabContainerEl: HTMLElement;
+  let tabRefs: HTMLElement[] = [];
+  let underlineEl: HTMLElement | null = null;
+
+  $: tabs = (() => {
+    if (!project) return [];
+    const result: TabDef[] = [];
+    // Prefer structured tabs object if present
+    const pAny: any = project as any;
+    const fromMap = project.tabs ?? undefined;
+    if (fromMap && typeof fromMap === "object") {
+      for (const [key, value] of Object.entries(fromMap)) {
+        if (value && typeof value === "object") {
+          const cb = value as ContentBlock;
+          result.push({ id: key, label: cb.name ?? key, content: cb });
+        }
+      }
+    }
+    // Also look for top-level tabN keys
+    for (const key of Object.keys(pAny)) {
+      if (/^tab\d+$/i.test(key)) {
+        const content = pAny[key] as ContentBlock;
+        if (content) {
+          const fallback = key.replace(/tab/i, "Tab ");
+          result.push({ id: key, label: content.name ?? fallback, content });
+        }
+      }
+    }
+    // Sort tabs by numeric suffix if using tabN
+    result.sort((a, b) => {
+      const na = parseInt(a.id.replace(/\D/g, "")) || 0;
+      const nb = parseInt(b.id.replace(/\D/g, "")) || 0;
+      return na - nb;
+    });
+    return result;
+  })();
+
+  // Ensure activeTabIndex stays in bounds
+  $: if (activeTabIndex >= tabs.length) activeTabIndex = 0;
+
+  // Active content is either selected tab or fallback to project.content
+  $: activeContent = (() => {
+    if (tabs.length > 0) return tabs[activeTabIndex].content;
+    return project?.content;
+  })();
+
+  // Underline positioning based on actual button sizes
+  function moveUnderline() {
+    if (!tabContainerEl || !underlineEl || tabs.length === 0) return;
+    const btn = tabRefs[activeTabIndex];
+    if (!btn) return;
+    const cRect = tabContainerEl.getBoundingClientRect();
+    const bRect = btn.getBoundingClientRect();
+    const left = bRect.left - cRect.left;
+    const width = bRect.width;
+    underlineEl.style.opacity = "1";
+    underlineEl.style.width = `${width}px`;
+    underlineEl.style.transform = `translateX(${left}px)`;
+  }
+
+  $: if (tabs && tabs.length) moveUnderline();
+  $: if (activeTabIndex >= 0) moveUnderline();
+
+  import { onMount } from "svelte";
+  onMount(() => {
+    const onResize = () => moveUnderline();
+    window.addEventListener("resize", onResize);
+    // small async to ensure layout
+    setTimeout(moveUnderline, 0);
+    return () => window.removeEventListener("resize", onResize);
+  });
+
+  // Get the back URL based on the last visited tab
+  $: backUrl =
+    $lastVisitedTab === "experiments"
+      ? "/experiments"
+      : $lastVisitedTab === "eindhoven"
+        ? "/eindhoven"
+        : "/projects";
 
   // Get category icons
   const languagesCategory = getCategoryById("languages");
@@ -47,7 +134,9 @@
   }
 
   function getYouTubeEmbedUrl(url: string): string {
-    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
+    const match = url.match(
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+    );
     return match ? `https://www.youtube.com/embed/${match[1]}` : url;
   }
 
@@ -55,20 +144,14 @@
     return /\.(mp4|webm|ogg|mov|avi|mkv)$/i.test(url);
   }
 
-  // Utility functions for media objects (images or videos)
-  function isVideoObject(media: MediaObject): media is VideoObject {
-    // Check if it has video-specific properties
-    const hasVideoProps =
-      "autoplay" in media ||
-      "loop" in media ||
-      "muted" in media ||
-      "controls" in media;
-    
-    // Check if it's a YouTube URL or local video file
-    const isVideo = isYouTubeUrl(media.src) || isVideoFile(media.src);
-    
-    return hasVideoProps || isVideo;
-  }
+  // Utility functions for media objects are no longer needed with explicit types
+  // function isVideoObject(media: MediaObject): media is VideoObject {
+  //   return media.type === 'video';
+  // }
+
+  // function isThreeJSObject(media: MediaObject): media is ThreeJSObject {
+  //   return media.type === 'threejs';
+  // }
 
   function getGalleryData(
     gallery: MediaObject[] | GalleryObject | undefined,
@@ -107,24 +190,65 @@
   }
 
   /**
-   * Process text with HTML links and convert line breaks
-   * Allows direct HTML <a> tags in JSON content while preserving line breaks
+   * Process text with markdown-style links and convert line breaks
+   * Converts [text](/slug) to proper router links with proper event handling
    */
   function renderTextWithLinks(text: string): string {
+    // Convert markdown-style links [text](/slug) to proper button elements for accessibility
+    let processed = text.replace(
+      /\[([^\]]+)\]\(\/([^)]+)\)/g,
+      '<button type="button" class="inline-link" data-slug="$2" tabindex="0" aria-label="Navigate to $1">$1</button>',
+    );
+
     // Convert \n line breaks to <br> tags for proper display
-    return text.replace(/\n/g, "<br>");
+    return processed.replace(/\n/g, "<br>");
+  }
+
+  // Svelte action to handle clicks on dynamically generated buttons
+  function contentLinkHandler(node: HTMLElement) {
+    function handleClick(event: MouseEvent) {
+      const target = event.target as HTMLElement;
+      if (target.tagName === "BUTTON" && target.hasAttribute("data-slug")) {
+        event.preventDefault();
+        const slug = target.getAttribute("data-slug");
+        if (slug) {
+          push(`/${slug}`);
+        }
+      }
+    }
+
+    node.addEventListener("click", handleClick);
+
+    return {
+      destroy() {
+        node.removeEventListener("click", handleClick);
+      },
+    };
+  }
+
+  // Handle back button functionality
+  function handleBackClick(event: MouseEvent) {
+    event.preventDefault();
+
+    // Check if we can go back in browser history
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      // Fallback to section page if no history
+      push(backUrl);
+    }
   }
 </script>
 
 <main>
-{#if project}
+  {#if project}
     <!-- Project outline component -->
-    <ProjectOutline {project} />
+    <ProjectOutline {project} contentOverride={activeContent} />
 
     <!-- Project detail layout. Renders when a matching project is found. -->
     <article class="project-page">
       <!-- Back link to the list page -->
-      <a href="/" class="back" use:link>← Back</a>
+      <button class="back" on:click={handleBackClick}>← Back</button>
       <h1>{project.title}</h1>
       <p class="date">{project.date}</p>
 
@@ -191,126 +315,181 @@
         </div>
       {/if}
 
+      {#if tabs.length > 0}
+        <nav class="tabs">
+          <div class="tab-container" bind:this={tabContainerEl}>
+            {#each tabs as tab, i}
+              <button
+                class="tab"
+                class:active={i === activeTabIndex}
+                on:click={() => {
+                  activeTabIndex = i;
+                  moveUnderline();
+                }}
+                bind:this={tabRefs[i]}
+              >
+                {tab.label}
+              </button>
+            {/each}
+            <div
+              class="underline"
+              bind:this={underlineEl}
+              style="opacity:0"
+            ></div>
+          </div>
+        </nav>
+      {/if}
+
       <!-- Content sections: overview, key features, and any additional sections -->
-      <div class="content">
-        {#if project.content.overview}
+      <div class="content" use:contentLinkHandler>
+        {#if activeContent?.overview}
           <div id="overview" class="overview-text">
-            {@html renderTextWithLinks(project.content.overview)}
+            {@html renderTextWithLinks(activeContent.overview)}
           </div>
         {/if}
 
-        {#if project.content.keyFeatures.length > 0}
+        {#if activeContent && activeContent.keyFeatures.length > 0}
           <h2 id="key-features">Key Features</h2>
           <ul class="features">
-            {#each project.content.keyFeatures as feature}
+            {#each activeContent.keyFeatures as feature}
               <li>{feature}</li>
             {/each}
           </ul>
         {/if}
 
-        {#each project.content.sections as section, index}
-          {#if section.title}
-            <h2 id="section-{index}"># {section.title}</h2>
-          {/if}
+        {#if activeContent}
+          {#each activeContent.sections as section, index}
+            {#if section.title}
+              <h2 id="section-{index}"># {section.title}</h2>
+            {/if}
 
-          {#if section.subtitle}
-            <h4 id="section-subtitle-{index}"># {section.subtitle}</h4>
-          {/if}
+            {#if section.subtitle}
+              <h4 id="section-subtitle-{index}"># {section.subtitle}</h4>
+            {/if}
 
-          {#if section.text}
-            <div class="section-text">
-              {@html renderTextWithLinks(section.text)}
-            </div>
-          {/if}
+            {#if section.text}
+              <div class="section-text">
+                {@html renderTextWithLinks(section.text)}
+              </div>
+            {/if}
 
-          {#if section.image}
-            <div class="image-container">
-              <img
-                src={getSrc(section.image)}
-                alt={getAlt(section.image, section.title)}
-              />
-              {#if getCaption(section.image)}
-                <p class="caption">{getCaption(section.image)}</p>
-              {/if}
-            </div>
-          {/if}
+            {#if section.image}
+              <div class="image-container">
+                <img
+                  src={getSrc(section.image)}
+                  alt={getAlt(section.image, section.title)}
+                />
+                {#if getCaption(section.image)}
+                  <p class="caption">{getCaption(section.image)}</p>
+                {/if}
+              </div>
+            {/if}
 
-          {#if section.video}
-            <div class="video-container">
-              {#if isYouTubeUrl(section.video.src)}
-                <!-- YouTube iframe -->
+            {#if section.video}
+              <div class="video-container">
+                {#if isYouTubeUrl(section.video.src)}
+                  <!-- YouTube iframe -->
+                  <iframe
+                    src={getYouTubeEmbedUrl(section.video.src)}
+                    title={section.video.caption || section.title || "Video"}
+                    allowfullscreen
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  ></iframe>
+                {:else}
+                  <!-- Regular video element for local files -->
+                  <video
+                    src={section.video.src}
+                    autoplay={section.video.autoplay}
+                    loop={section.video.loop}
+                    muted={section.video.muted}
+                    controls={section.video.controls}
+                    playsinline
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                {/if}
+                {#if section.video.caption}
+                  <p class="caption">{section.video.caption}</p>
+                {/if}
+              </div>
+            {/if}
+
+            {#if section.ThreeJSScene && section.ThreeJSScene.src != ""}
+              <div class="threejs-container">
+                <!-- Three.js Scene iframe -->
                 <iframe
-                  src={getYouTubeEmbedUrl(section.video.src)}
-                  title={section.video.caption || section.title || "Video"}
-                  allowfullscreen
+                  src={section.ThreeJSScene.src}
+                  title={section.ThreeJSScene.caption ||
+                    section.title ||
+                    "3D Scene"}
                   frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
                 ></iframe>
-              {:else}
-                <!-- Regular video element for local files -->
-                <video
-                  src={section.video.src}
-                  autoplay={section.video.autoplay}
-                  loop={section.video.loop}
-                  muted={section.video.muted}
-                  controls={section.video.controls}
-                  playsinline
-                >
-                  Your browser does not support the video tag.
-                </video>
-              {/if}
-              {#if section.video.caption}
-                <p class="caption">{section.video.caption}</p>
-              {/if}
-            </div>
-          {/if}
+                {#if section.ThreeJSScene.caption}
+                  <p class="caption">{section.ThreeJSScene.caption}</p>
+                {/if}
+              </div>
+            {/if}
 
-          {#if section.gallery}
-            {@const galleryData = getGalleryData(section.gallery)}
-            <div
-              class="gallery"
-              style={`grid-template-columns: repeat(${galleryData.columns ?? 2}, 1fr);`}
-            >
-              {#each galleryData.media as item}
-                <div class="gallery-item">
-                  {#if isVideoObject(item)}
-                    {#if isYouTubeUrl(item.src)}
-                      <!-- YouTube iframe -->
+            {#if section.gallery}
+              {@const galleryData = getGalleryData(section.gallery)}
+              <div
+                class="gallery"
+                style={`grid-template-columns: repeat(${galleryData.columns ?? 2}, 1fr);`}
+              >
+                {#each galleryData.media as item}
+                  <div class="gallery-item">
+                    {#if item.type === "video" && item.src != ""}
+                      {#if isYouTubeUrl(item.src)}
+                        <!-- YouTube iframe -->
+                        <iframe
+                          src={getYouTubeEmbedUrl(item.src)}
+                          title={item.caption || section.title || "Video"}
+                          allowfullscreen
+                          frameborder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        ></iframe>
+                      {:else}
+                        <!-- Regular video element for local files -->
+                        <video
+                          src={item.src}
+                          autoplay={item.autoplay}
+                          loop={item.loop}
+                          muted={item.muted}
+                          controls={item.controls ?? true}
+                          playsinline
+                        >
+                          Your browser does not support the video tag.
+                        </video>
+                      {/if}
+                    {:else if item.type === "threejs" && item.src != ""}
+                      <!-- Three.js Scene iframe -->
                       <iframe
-                        src={getYouTubeEmbedUrl(item.src)}
-                        title={item.caption || section.title || "Video"}
-                        allowfullscreen
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      ></iframe>
-                    {:else}
-                      <!-- Regular video element for local files -->
-                      <video
                         src={item.src}
-                        autoplay={item.autoplay}
-                        loop={item.loop}
-                        muted={item.muted}
-                        controls={item.controls ?? true}
-                        playsinline
-                      >
-                        Your browser does not support the video tag.
-                      </video>
+                        title={item.caption || section.title || "3D Scene"}
+                        frameborder="0"
+                        allowfullscreen
+                      ></iframe>
+                    {:else if item.type === "image" && item.src != ""}
+                      <!-- Image element for local images -->
+                      <img
+                        src={item.src}
+                        alt={item.alt || section.title || ""}
+                      />
                     {/if}
-                  {:else}
-                    <!-- Image element for local images -->
-                    <img src={item.src} alt={getAlt(item, section.title)} />
-                  {/if}
-                  {#if item.caption}
-                    <p class="caption">{item.caption}</p>
-                  {/if}
-                </div>
-              {/each}
-              {#if galleryData.caption}
-                <p class="gallery-caption">{galleryData.caption}</p>
-              {/if}
-            </div>
-          {/if}
-        {/each}
+                    {#if item.caption}
+                      <p class="caption">{item.caption}</p>
+                    {/if}
+                  </div>
+                {/each}
+                {#if galleryData.caption}
+                  <p class="gallery-caption">{galleryData.caption}</p>
+                {/if}
+              </div>
+            {/if}
+          {/each}
+        {/if}
       </div>
     </article>
   {:else}
@@ -353,6 +532,15 @@
     margin-bottom: 2rem;
     color: inherit;
     text-decoration: none;
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .back:hover {
+    text-decoration: underline;
   }
 
   .date {
@@ -485,6 +673,30 @@
     border-bottom-color: var(--secondary-text-color);
   }
 
+  /* Style for inline link buttons */
+  .overview-text :global(.inline-link),
+  .section-text :global(.inline-link) {
+    background: none;
+    border: none;
+    color: var(--secondary-text-color);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+    margin: 0;
+    display: inline;
+  }
+
+  .overview-text :global(.inline-link:hover),
+  .section-text :global(.inline-link:hover),
+  .overview-text :global(.inline-link:focus),
+  .section-text :global(.inline-link:focus) {
+    border-bottom-color: var(--secondary-text-color);
+    outline: none;
+  }
+
   /* Ensure paragraphs from markdown have proper spacing */
   .overview-text :global(p),
   .section-text :global(p) {
@@ -567,10 +779,69 @@
 
   .image-container {
     margin: 1rem 0;
+    justify-self: center;
   }
 
   .video-container {
     margin: 1rem 0;
     height: 100%;
+    justify-self: center;
+  }
+
+  .threejs-container {
+    margin: 1rem 0;
+    height: 100%;
+  }
+
+  .threejs-container iframe {
+    width: 100%;
+    height: 500px; /* Default height for 3D scenes */
+    border-radius: 6px;
+    border: none;
+  }
+
+  /* Tabs styling */
+  .tabs {
+    width: 100%;
+    margin: 1rem 0 1.5rem;
+  }
+  .tab-container {
+    display: flex;
+    /* Avoid gaps so underline aligns exactly */
+    gap: 0;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    width: 100%;
+  }
+  .tab {
+    background: transparent;
+    border: none;
+    color: var(--muted-color);
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.05rem;
+    flex: 1 1 0;
+    text-align: center;
+  }
+  .tab:hover {
+    color: var(--secondary-text-color);
+  }
+  .tab.active {
+    color: var(--primary-text-color);
+  }
+  .underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--primary-text-color);
+    width: calc(100% / var(--n, 1));
+    transform: translateX(calc(var(--i, 0) * (100% / var(--n, 1))));
+    transition:
+      transform 0.3s cubic-bezier(0.35, 0, 0.25, 1.2),
+      width 0.3s ease;
   }
 </style>

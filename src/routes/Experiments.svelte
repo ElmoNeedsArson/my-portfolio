@@ -4,18 +4,21 @@
     import { FlaskConical } from "@lucide/svelte";
     import ProjectBar from "../components/ProjectBar.svelte";
     import type { Project } from "../types";
-    import { loadBarProjects } from "../lib/searchUtils";
+    import { loadBarProjects, loadOldProjects  } from "../lib/searchUtils";
     import { fade, scale } from "svelte/transition";
     import { onMount } from "svelte";
 
     // Load bar-type projects for experiments
     let projects: Project[] = [];
+    let old_Uni_Projects: Project[] = [];
     let allProjects: Project[] = loadBarProjects();
+    let oldProjects: Project[] = loadOldProjects();
 
     onMount(() => {
         // simulate delayed appearance (could be replaced with real async load)
         setTimeout(() => {
             projects = allProjects;
+            old_Uni_Projects = oldProjects;
         }, 50);
     });
 
@@ -33,6 +36,7 @@
                 <h2 class="titleElement">EXPERIMENTS</h2>
             </div>
         </div>
+        test
         <!-- Experiments list: each bar-type project becomes a ProjectBar -->
         <section class="experiments-list">
             {#each projects as project, i}
@@ -48,6 +52,17 @@
                     <p>No experiments available yet. Check back soon!</p>
                 </div>
             {/if}
+        </section>
+Test
+        <section class= "old-projects-list">
+          <h2 class="titleElement">OLD UNIVERSITY PROJECTS</h2>
+          {#each old_Uni_Projects as project, i}
+              <div in:scale={{ start: 0.7, delay: i * 100, duration: 500 }}>
+                  <div in:fade={{ delay: i * 100, duration: 500 }}>
+                      <ProjectBar {project} />
+                  </div>
+              </div>
+          {/each}
         </section>
     </div>
 </main>
@@ -98,7 +113,7 @@
         color: var(--primary-text-color);
     }
 
-    .experiments-list {
+    .experiments-list, .old-projects-list {
         max-width: 100%;
         margin: 0 auto;
         padding-bottom: 6rem; /* Space for dock */

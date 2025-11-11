@@ -1,86 +1,40 @@
 <script lang="ts">
-  import type { Project, ContentBlock } from "../types";
-
-  export let project: Project;
-  // Optional: override which content to outline (useful for tabbed content)
-  export let contentOverride: ContentBlock | undefined = undefined;
+  export let sections = [];
+  export let isHeaderSticky = false; // New prop to track sticky state
 
   let isExpanded = false;
-
-  interface OutlineSection {
-    id: string;
-    title: string;
-    level: number; // 1 for main sections, 2 for subsections
-  }
-
-  // Extract sections from the project content or override
-  $: sections = extractSections(project, contentOverride);
-
-  function extractSections(project: Project, override?: ContentBlock): OutlineSection[] {
-    const sections: OutlineSection[] = [];
-    const content = override ?? project.content;
-    if (!content) return sections;
-
-    // Add overview if it exists
-    if (content.overview?.trim()) {
-      sections.push({
-        id: "overview",
-        title: "Overview",
-        level: 1,
-      });
-    }
-
-    // Add key features if they exist
-    if (content.keyFeatures?.length > 0) {
-      sections.push({
-        id: "key-features",
-        title: "Key Features",
-        level: 1,
-      });
-    }
-
-    // Add content sections
-    content.sections.forEach((section, index) => {
-      if (section.title?.trim()) {
-        sections.push({
-          id: `section-${index}`,
-          title: section.title,
-          level: 1,
-        });
-      }
-      if (section.subtitle?.trim()) {
-        sections.push({
-          id: `section-subtitle-${index}`,
-          title: section.subtitle,
-          level: 2,
-        });
-      }
-    });
-
-    return sections;
-  }
 
   function toggleOutline() {
     isExpanded = !isExpanded;
   }
 
-  function scrollToSection(sectionId: string) {
-    const element = document.getElementById(sectionId);
+  function scrollToSection(element: HTMLElement) {
     if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        inline: "nearest",
+      const elementRect = element.getBoundingClientRect();
+      const elementTop = elementRect.top + window.scrollY;
+      
+      // Different offsets based on section
+      const sectionId = element.closest('section')?.id;
+      let offset = 50; // Default offset for later sections
+      
+      if (sectionId === 'professional-identity') {
+        offset = 180; // Larger offset for first section to account for sticky header
+      }
+      
+      window.scrollTo({
+        top: elementTop - offset,
+        behavior: "smooth"
       });
     }
   }
 
-  function handleSectionClick(sectionId: string) {
+  function handleSectionClick(sectionId: HTMLElement) {
+    console.log(`Scrolling to section: ${sectionId}`);
     scrollToSection(sectionId);
   }
 </script>
 
-<div class="outline-container" class:expanded={isExpanded}>
+<div class="outline-container" class:expanded={isExpanded} class:header-not-sticky={!isHeaderSticky}>
   <button class="outline-toggle" on:click={toggleOutline}>
     <span class="outline-header">
       {#if isExpanded}
@@ -100,7 +54,7 @@
           <li class="section-item level-{section.level}">
             <button
               class="section-link"
-              on:click={() => handleSectionClick(section.id)}
+              on:click={() => handleSectionClick(section.element)}
             >
               {section.title}
             </button>
@@ -115,7 +69,7 @@
   .outline-container {
     position: fixed;
     top: 50%;
-    right: 2rem;
+    left: 10.5rem;
     transform: translateY(-50%);
     background: var(--background-color);
     border: 1px solid var(--border-color, #ddd);
@@ -126,6 +80,13 @@
     max-height: 70vh;
     overflow-y: auto;
     transition: all 0.3s ease;
+    z-index: 100;
+  }
+
+  .outline-container.header-not-sticky {
+    top: calc(50% + 80px) !important; /* More visible movement when header is not sticky */
+    left: calc(10.5rem - 1rem); /* Move 1rem to the left when at top */
+    transform: translateY(-50%);
   }
 
   .outline-container.expanded {
@@ -221,6 +182,7 @@
 
   @media (max-width: 768px) {
     .outline-container {
+      display: none;
       position: relative;
       top: auto;
       right: auto;

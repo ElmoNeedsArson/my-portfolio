@@ -1,18 +1,41 @@
 <script lang="ts">
   import type { Project } from "../types";
   import { link } from "svelte-spa-router";
+  import { Pin } from "@lucide/svelte";
+  import { createEventDispatcher } from "svelte";
 
   export let project: Project;
+  export let showPinIcon: boolean = true;
+  // export let showTags: boolean = false;
+  export let showDescription: boolean = true;
+
+   const dispatch = createEventDispatcher<{
+    cardClick: void;
+  }>();
+
+  function handleCardClick() {
+    dispatch("cardClick");
+  }
 </script>
 
-<a href={`/${project.slug}`} use:link class="project-bar">
+<a
+  href={`/${project.slug}`}
+  use:link
+  class="project-bar"
+  on:click={handleCardClick}
+>
   <div class="bar-content">
     <div class="bar-left">
+      {#if project.pinned && showPinIcon}
+        <div class="pinIcon">
+          <Pin />
+        </div>
+      {/if}
       <div class="bar-title">
         {project.title.toLocaleUpperCase()}
       </div>
       <div class="bar-shortdesc">
-        {#if project.shortDesc}
+        {#if project.shortDesc && showDescription}
           {project.shortDesc}
         {/if}
       </div>
@@ -30,8 +53,8 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    padding: 1.5rem 2rem;
-    margin-bottom: 1rem;
+    padding: 1rem 2rem;
+    margin-bottom: 0.75rem;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -61,6 +84,11 @@
     overflow: hidden;
   }
 
+  .pinIcon {
+    /* color: var(--muted-color); */
+    color: #a1a4aa;
+  }
+
   .bar-title {
     font-size: 1.7rem;
     font-weight: 600;
@@ -75,7 +103,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    flex: 1 1 auto; 
+    flex: 1 1 auto;
     min-width: 0;
   }
 

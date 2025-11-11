@@ -51,7 +51,7 @@ export const loadAllProjects = (): Project[] => {
 };
 
 // Load projects filtered by type
-export const loadProjectsByType = (type: 'card' | 'bar'): Project[] => {
+export const loadProjectsByType = (type: 'card' | 'bar' | 'old'): Project[] => {
     const allProjects = loadAllProjectsRaw();
     const filteredProjects = allProjects.filter(project => project.type === type);
     return sortProjectsByDate(filteredProjects);
@@ -65,6 +65,10 @@ export const loadCardProjects = (): Project[] => {
 // Load projects for bars (Experiments page)
 export const loadBarProjects = (): Project[] => {
     return loadProjectsByType('bar');
+};
+
+export const loadOldProjects = (): Project[] => {
+    return loadProjectsByType('old');
 };
 
 export const findProjectBySlug = (slug: string): Project | undefined => {

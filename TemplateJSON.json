@@ -5,16 +5,19 @@
     "type": "card",
     "shortDesc": "",
     "thumbnail": {
+        "type": "image",
         "src": "",
         "alt": "",
         "caption": ""
     },
     "thumbnailLight": {
+        "type": "image",
         "src": "",
         "alt": "",
         "caption": ""
     },
     "projectPageThumbnail": {
+        "type": "image",
         "src": "",
         "alt": "",
         "caption": ""
@@ -34,15 +37,31 @@
                     "columns": 0,
                     "media": [
                         {
+                            "type": "image",
                             "src": "",
                             "alt": "",
+                            "caption": ""
+                        },
+                        {
+                            "type": "video",
+                            "src": "",
                             "caption": "",
                             "autoplay": false,
                             "loop": false,
                             "muted": false,
-                            "controls": false
+                            "controls": true
+                        },
+                        {
+                            "type": "threejs",
+                            "src": "",
+                            "caption": ""
                         }
                     ],
+                    "caption": ""
+                },
+                "ThreeJSScene": {
+                    "type": "threejs",
+                    "src": "",
                     "caption": ""
                 }
             }

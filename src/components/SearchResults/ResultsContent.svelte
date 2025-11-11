@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Search } from "@lucide/svelte";
     import ProjectCard from "../ProjectCard.svelte";
+    import ProjectBar from "../ProjectBar.svelte";
     import { link } from "svelte-spa-router";
     import { getCategoryById } from "../../lib/searchCategories";
     import type { SearchResult } from "../../lib/searchUtils";
@@ -51,9 +52,14 @@
             </button>
         </div>
     {:else}
-        <div class="projects-grid">
+        <!-- <div class="projects-grid">
             {#each searchResult.projects as project}
                 <ProjectCard {project} showPinIcon={false} on:cardClick={handleClose} />
+            {/each}
+        </div> -->
+        <div class="projects-list">
+            {#each searchResult.projects as project}
+                <ProjectBar {project} showPinIcon={false} showDescription={false} on:cardClick={handleClose} />
             {/each}
         </div>
     {/if}
@@ -64,6 +70,8 @@
         flex: 1;
         overflow-y: auto;
         padding: 1.5rem;
+        scrollbar-color: var(--secondary-text-color) transparent;
+        scrollbar-width: auto;
     }
 
     .results-summary {
@@ -124,11 +132,16 @@
         transition: background-color 0.2s ease;
     }
 
-    .projects-grid {
+    /* .projects-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 1.5rem;
         margin-top: 1rem;
+    } */
+
+    .projects-list {
+        max-width: 100%;
+        margin: 0 auto;
     }
 
     /* .projects-grid a {
@@ -153,10 +166,10 @@
     }
 
     @media (max-width: 768px) {
-        .projects-grid {
+        /* .projects-grid {
             grid-template-columns: 1fr;
             gap: 1rem;
-        }
+        } */
 
         .results-content {
             padding: 1rem;

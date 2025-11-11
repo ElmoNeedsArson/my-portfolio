@@ -1,10 +1,12 @@
 export interface ImageObject {
+  type: 'image';
   src: string;
   alt?: string;
   caption?: string;
 }
 
 export interface VideoObject {
+  type: 'video';
   src: string;
   caption?: string;
   autoplay?: boolean;
@@ -13,7 +15,13 @@ export interface VideoObject {
   controls?: boolean;
 }
 
-export type MediaObject = ImageObject | VideoObject;
+export interface ThreeJSObject {
+  type: 'threejs';
+  src: string;
+  caption?: string;
+}
+
+export type MediaObject = ImageObject | VideoObject | ThreeJSObject;
 
 export interface GalleryObject {
   media: Array<MediaObject>;
@@ -21,7 +29,7 @@ export interface GalleryObject {
   caption?: string;
 }
 
-interface ProjectSection {
+export interface ProjectSection {
   title: string;
   // subtitle for the section
   subtitle?: string;
@@ -30,17 +38,26 @@ interface ProjectSection {
   // single image (string path or object with alt/caption)
   image?: ImageObject;
   // gallery of images with optional overall caption
-  gallery?: ImageObject[] | GalleryObject;
+  gallery?: GalleryObject;
   // video object with src, type, and optional caption
   video?: VideoObject;
+  // Path to a Three.js scene file
+  ThreeJSScene?: ThreeJSObject; 
+}
 
+export interface ContentBlock {
+  // Optional display name for tabbed content
+  name?: string;
+  overview: string;
+  keyFeatures: string[];
+  sections: ProjectSection[];
 }
 
 export interface Project {
   pinned: boolean;
   slug: string;
   title: string;
-  type: 'card' | 'bar';
+  type: 'card' | 'bar' | 'old';
   shortDesc: string;
   description: string;
   thumbnail: ImageObject;
@@ -53,9 +70,8 @@ export interface Project {
   repoUrl?: string;
   demoLink?: string;
   featured?: boolean;
-  content: {
-    overview: string;
-    keyFeatures: string[];
-    sections: ProjectSection[];
-  };
+  // Main content (optional when using tabbed content)
+  content?: ContentBlock;
+  // Optional structured tabs container (alternative to top-level tab1/tab2...)
+  tabs?: Record<string, ContentBlock>;
 }
