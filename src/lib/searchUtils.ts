@@ -51,7 +51,7 @@ export const loadAllProjects = (): Project[] => {
 };
 
 // Load projects filtered by type
-export const loadProjectsByType = (type: 'card' | 'bar' | 'old'): Project[] => {
+export const loadProjectsByType = (type: 'card' | 'bar' | 'twente'): Project[] => {
     const allProjects = loadAllProjectsRaw();
     const filteredProjects = allProjects.filter(project => project.type === type);
     return sortProjectsByDate(filteredProjects);
@@ -68,7 +68,7 @@ export const loadBarProjects = (): Project[] => {
 };
 
 export const loadOldProjects = (): Project[] => {
-    return loadProjectsByType('old');
+    return loadProjectsByType('twente');
 };
 
 export const findProjectBySlug = (slug: string): Project | undefined => {
@@ -121,7 +121,8 @@ export const searchProjects = (category: SearchCategory, searchTerm: string): Se
                 );
             case 'languages':
                 return project.languages.some(lang => 
-                    lang.toLowerCase().includes(normalizedSearch)
+                    //lang.toLowerCase().includes(normalizedSearch) //changed out to not show javascript projects for java projects
+                    lang.toLowerCase() === normalizedSearch
                 );
             case 'tools':
                 return project.tools.some(tool => 
@@ -150,10 +151,10 @@ export const getSuggestions = (category: SearchCategory, partialInput: string): 
     const normalizedInput = partialInput.toLowerCase().trim();
     
     // if no input just show first 12 items
-    if (!normalizedInput) return allValues.slice(0, 12);
+    if (!normalizedInput) return allValues;
     
     // otherwise show filtered suggestions
     return allValues.filter(value => 
         value.toLowerCase().includes(normalizedInput)
-    ).slice(0, 12); // max 12
+    ) // max 12
 };

@@ -1,6 +1,5 @@
 <script lang="ts">
   export let sections = [];
-  export let isHeaderSticky = false; // New prop to track sticky state
 
   let isExpanded = false;
 
@@ -34,7 +33,7 @@
   }
 </script>
 
-<div class="outline-container" class:expanded={isExpanded} class:header-not-sticky={!isHeaderSticky}>
+<div class="outline-container" class:expanded={isExpanded}>
   <button class="outline-toggle" on:click={toggleOutline}>
     <span class="outline-header">
       {#if isExpanded}
@@ -67,26 +66,19 @@
 
 <style>
   .outline-container {
-    position: fixed;
-    top: 50%;
-    left: 10.5rem;
-    transform: translateY(-50%);
-    background: var(--background-color);
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    background: transparent;
     border: 1px solid var(--border-color, #ddd);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    min-width: 200px;
-    max-width: 300px;
-    max-height: 70vh;
-    overflow-y: auto;
+    box-shadow: none;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
     transition: all 0.3s ease;
     z-index: 100;
-  }
-
-  .outline-container.header-not-sticky {
-    top: calc(50% + 80px) !important; /* More visible movement when header is not sticky */
-    left: calc(10.5rem - 1rem); /* Move 1rem to the left when at top */
-    transform: translateY(-50%);
   }
 
   .outline-container.expanded {
@@ -128,16 +120,20 @@
   .outline-content {
     border-top: 1px solid var(--border-color, #ddd);
     padding: 0.5rem 0;
+    width: 100%;
+    overflow: hidden;
   }
 
   .section-list {
     list-style: none;
     margin: 0;
     padding: 0;
+    width: 100%;
   }
 
   .section-item {
     margin: 0;
+    width: 100%;
   }
 
   .section-link {
@@ -152,6 +148,10 @@
     font-size: 0.9rem;
     line-height: 1.4;
     transition: background-color 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
   }
 
   .section-link:hover {
@@ -175,7 +175,7 @@
   /* Responsive design */
   @media (max-width: 1200px) {
     .outline-container {
-      right: 1rem;
+      /* right: 1rem; */
       max-width: 250px;
     }
   }

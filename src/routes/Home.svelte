@@ -126,7 +126,7 @@
             </section>
             {#if oldProjects.length > 0}
                 <section class="old-projects-list">
-                    <h2 class="subtitleElement">OLD UNIVERSITY PROJECTS</h2>
+                    <h2 class="subtitleElement">TWENTE - UNIVERSITY PROJECTS</h2>
                     {#each oldProjects as project, i}
                         <div>
                             <div>
