@@ -14,7 +14,7 @@
       
       // Different offsets based on section
       const sectionId = element.closest('section')?.id;
-      let offset = 50; // Default offset for later sections
+      let offset = 40; // Default offset for later sections
       
       if (sectionId === 'professional-identity') {
         offset = 180; // Larger offset for first section to account for sticky header

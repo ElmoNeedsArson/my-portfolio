@@ -24,10 +24,16 @@
             subtitles: [
                 { id: "short-term", title: "Short Term" },
                 { id: "long-term", title: "Long Term" },
-                { id: "specialization-track", title: "Specialization Track" },
-                { id: "courses-and-electives-year-1", title: "Courses and Electives Year 1" },
-                { id: "courses-and-electives-year-2", title: "Courses and Electives Year 2" },
-                { id: "beyond-education", title: "Beyond Education" }
+                { id: "specialization-tracks", title: "Specialization Track" },
+                {
+                    id: "courses-and-electives-year-1",
+                    title: "Courses and Electives Year 1",
+                },
+                {
+                    id: "courses-and-electives-year-2",
+                    title: "Courses and Electives Year 2",
+                },
+                { id: "beyond-education", title: "Beyond Education" },
             ],
         },
     ];
@@ -64,7 +70,7 @@
                     const elementTop = rect.top + scrollY;
 
                     // Trigger 1px earlier than scroll position for immediate switching
-                    let threshold = 51; // 1px more than scroll offset (50px)
+                    let threshold = 41; // 1px more than scroll offset (50px)
                     if (section.id === "professional-identity") {
                         threshold = 181; // 1px more than scroll offset (180px)
                     }
@@ -120,6 +126,7 @@
     <div class="sidebar" class:sticky={stickyTitle}>
         <div class="sticky-content">
             <h1>{currentSection}</h1>
+            <div class="insert"></div>
             {#if currentSubtitle}
                 <h2>{currentSubtitle}</h2>
             {/if}
@@ -284,7 +291,7 @@
                 transparency and accountability. On the other hand, my personal
                 projects often follow a more spontaneous path driven by
                 curiosity and exploration, allowing me to experiment freely and
-                learn by doing.<br><br>
+                learn by doing.<br /><br />
 
                 What drives me in my work is a focus on solving problems. Over
                 time, I've grown more confident in my ability to tackle
@@ -316,7 +323,7 @@
                 to maintain momentum. I'm aware that this tendency could hinder
                 team dynamics, and I aim to improve my ability to navigate these
                 situations, as it will likely also be part of future
-                professional settings.<br><br>
+                professional settings.<br /><br />
 
                 In summary, I am a designer dedicated to leveraging technology
                 thoughtfully and responsibly, balancing creativity, technical
@@ -324,6 +331,8 @@
                 meaningful impact.
             </p>
         </section>
+
+        <div class="rounded"></div>
 
         <section id="vision">
             <h1 id="vision-title" class="hidden-title">Vision</h1>
@@ -341,7 +350,8 @@
                 have a tendency to look for digital solutions, therefor my
                 vision is partly dedicated to finding the right balance between
                 leveraging technology and recognizing when no technology, or
-                physical forms of technology might be a better choice.<br><br>
+                physical forms of technology might be a better choice.<br /><br
+                />
 
                 Two areas of interest that nicely touch upon this are human
                 computer interaction (HCI) and embodied design. I want to be a
@@ -359,7 +369,7 @@
                 familiarizing myself and deepening my knowledge on diverse
                 technologies and actively engaging with users, I aim to create
                 solutions that enhance user adoption, satisfaction, and overall
-                impact and provide real value to the user.<br><br>
+                impact and provide real value to the user.<br /><br />
 
                 An example of this balance was in my bachelor graduation project
                 I aimed to improve educational digital games with a focus on
@@ -382,7 +392,7 @@
                 have an interest in applying this knowledge in education, but it
                 might not be the thing that interests me the most, a part of my
                 future development would be to find out what does, “which area
-                of application interests me”.<br><br>
+                of application interests me”.<br /><br />
 
                 As this designer I have a responsibility to shape the
                 meaningfulness of technology in our lives. Each design decision
@@ -396,6 +406,8 @@
                 small the choices I make
             </p>
         </section>
+
+        <div class="rounded"></div>
 
         <section id="future-development">
             <h1 id="future-development-title" class="hidden-title">
@@ -445,7 +457,7 @@
                         confirmation as much as possible, and reflect on the
                         (dis)advantages of this.
                     </p>
-                    <div class="expertise_area">Math, Data and Computing</div>
+                    <div class="expertise_area">Professional Development</div>
                 </div>
 
                 <div class="goal">
@@ -478,7 +490,7 @@
                         to confirm I reached out, and attempted to gather
                         participants outside of the “easy way”.
                     </p>
-                    <div class="expertise_area">Math, Data and Computing</div>
+                    <div class="expertise_area">User & Society</div>
                 </div>
 
                 <div class="goal">
@@ -525,9 +537,12 @@
                         linkedIn profile and CV, and get feedback on it, by
                         people currently in the work field.
                     </p>
+                    <div class="expertise_area">Professional Development</div>
                     <!-- <div class="expertise_area">Math, Data and Computing</div> -->
                 </div>
             </div>
+
+            <div class="insert"></div>
 
             <h2 id="long-term" class="hidden-title">Long Term</h2>
             <p>
@@ -548,6 +563,8 @@
                 impact of my designs, fostering a holistic approach to design.
             </p>
 
+            <div class="insert"></div>
+
             <h2 id="specialization-tracks" class="hidden-title">
                 Specialization Track
             </h2>
@@ -560,8 +577,9 @@
                 of the person related to this track does suit me rather well,
                 this model as described here, is very often the role that I take
                 in any university or personal projects, and I identify with. The
-                connector role, and my motivation behind projects, as described
-                in my Professional identity relates to this as well.<br /><br />
+                <mark>connector role</mark>, and my motivation behind projects,
+                as described in my Professional identity relates to this as
+                well.<br /><br />
 
                 “Industrial designers that develop a start-up; based on a
                 product or a service or aim at implementing a design vision
@@ -574,6 +592,8 @@
                 even pleasantly. This will also create a useful skillset for
                 ventures after my master's.
             </p>
+
+            <div class="insert"></div>
 
             <h2 id="courses-and-electives-year-1" class="hidden-title">
                 Courses and Electives - Year 1
@@ -598,6 +618,8 @@
                 Computing (MDC) and Technology and Realization (T&R) while
                 connecting them to creative, real-world applications.
             </p>
+
+            <div class="insert"></div>
 
             <h2 id="courses-and-electives-year-2" class="hidden-title">
                 Courses and Electives - Year 2
@@ -624,6 +646,8 @@
                 creating meaningful, user-centered solutions that balance
                 technological innovation with human .
             </p>
+
+            <div class="insert"></div>
 
             <h2 id="beyond-education" class="hidden-title">Beyond Education</h2>
             <p>
@@ -655,6 +679,8 @@
                 similar projects are things I enjoy undertaking in my spare
                 time, and hope to continue doing so far beyond my master.
             </p>
+
+            <div class="insert"></div>
 
             <h1 id="sources" class="hidden-title">Sources</h1>
             <ol type="1">
@@ -727,6 +753,12 @@
 </article>
 
 <style>
+    mark {
+        background-color: transparent;
+        color: var(--secondary-text-color);
+        font-weight: 800;
+    }
+
     ol li {
         margin-bottom: 12px; /* increase or decrease for more/less spacing */
     }
@@ -791,8 +823,26 @@
     }
 
     section {
-        margin-bottom: 4rem;
+        /* margin-bottom: 4rem; */
         scroll-margin-top: 120px; /* Adjusted to work with improved sticky logic */
+    }
+
+    /* #vision{
+        background-color: var(--inverted-bg-color);
+    }
+
+    #vision p {
+        color: var(--inverted-text-color);
+    } */
+
+    .rounded {
+        border-top: 2px solid var(--secondary-text-color);
+        border-radius: 100%;
+    }
+
+    .insert {
+        width: 10%;
+        border-top: 2px solid var(--secondary-text-color);
     }
 
     h1 {
@@ -841,16 +891,20 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
-        margin-bottom: 2rem;
+        margin: 2rem 0;
         text-align: center;
     }
 
     .goals {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         gap: 1.5rem;
         row-gap: 4rem;
         margin-bottom: 2rem;
+    }
+
+    .goal p, .goal{
+        font-size: 0.8rem;
     }
 
     .expertise_area {
@@ -861,7 +915,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
-        margin: 2rem 0;
+        margin: 0rem 0;
         align-items: stretch;
     }
 
@@ -905,6 +959,10 @@
             background: transparent;
             box-shadow: none;
             padding: 0;
+        }
+
+        p {
+            margin-right: 1.5rem;
         }
     }
 </style>

@@ -7,7 +7,8 @@
     import {
         loadCardProjects,
         loadBarProjects,
-        loadOldProjects,
+        loadTwenteProjects,
+        loadEindhovenProjects,
     } from "../lib/searchUtils";
     import { fade } from "svelte/transition";
     import { onMount } from "svelte";
@@ -48,13 +49,15 @@
     let projects: Project[] = [];
     let old_Uni_Projects: Project[] = [];
     let allProjects: Project[] = [];
-    let oldProjects: Project[] = [];
+    let twenteProjects: Project[] = [];
+    let eindhovenProjects: Project[] = [];
 
     // Reactive statement to load projects when page type changes
     $: {
         if (isExperimentsPage) {
             projects = loadBarProjects();
-            oldProjects = loadOldProjects();
+            twenteProjects = loadTwenteProjects();
+            eindhovenProjects = loadEindhovenProjects();
         } else if (isEindhovenPage) {
             projects = []; // Eindhoven has no projects, just placeholder content
         } else {
@@ -98,16 +101,6 @@
         {/if}
 
         {#if isEindhovenPage}
-            <!-- Eindhoven content -->
-            <!-- <section class="experiments-list">
-                {#if projects.length === 0}
-                    <div class="no-content">
-                        <p>Welcome to the Eindhoven section.</p>
-                        <p>This page is currently under construction.</p>
-                        
-                    </div>
-                {/if}
-            </section> -->
             <Eindhoven />
         {:else if isExperimentsPage}
             <!-- Experiments list -->
@@ -124,10 +117,22 @@
                     </div>
                 {/if}
             </section>
-            {#if oldProjects.length > 0}
-                <section class="old-projects-list">
+            {#if eindhovenProjects.length > 0}
+                <section class="eindhoven-projects-list uni-projects-list">
+                    <h2 class="subtitleElement">EINDHOVEN - UNIVERSITY PROJECTS</h2>
+                    {#each eindhovenProjects as project, i}
+                        <div>
+                            <div>
+                                <ProjectBar {project} showDescription={true} />
+                            </div>
+                        </div>
+                    {/each}
+                </section>
+            {/if}
+            {#if twenteProjects.length > 0}
+                <section class="twente-projects-list uni-projects-list">
                     <h2 class="subtitleElement">TWENTE - UNIVERSITY PROJECTS</h2>
-                    {#each oldProjects as project, i}
+                    {#each twenteProjects as project, i}
                         <div>
                             <div>
                                 <ProjectBar {project} showDescription={true} />
@@ -174,7 +179,7 @@
         gap: 10px;
     }
 
-    .experiments-list {
+    .experiments-list, .uni-projects-list {
         max-width: 100%;
         margin: 0 auto;
         padding-bottom: 2rem; /* Space for dock */

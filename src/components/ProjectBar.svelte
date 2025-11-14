@@ -50,7 +50,8 @@
   .project-bar {
     display: block;
     text-decoration: none;
-    background: rgba(255, 255, 255, 0.05);
+    /* background: rgba(255, 255, 255, 0.05); */
+    background: var(--bar-background-color);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 1rem 2rem;
@@ -85,14 +86,14 @@
   }
 
   .pinIcon {
-    /* color: var(--muted-color); */
-    color: #a1a4aa;
+    color: var(--muted-color);
+    /* color: #a1a4aa; */
   }
 
   .bar-title {
     font-size: 1.7rem;
     font-weight: 600;
-    color: white;
+    color: var(--primary-text-color);
     white-space: nowrap;
     flex-shrink: 0;
   }

@@ -9,8 +9,13 @@
   --border-color: #525252;
   --hover-color: #2A2D35;
 
+  --bar-background-color: rgba(255, 255, 255, 0.05);
+
   --transparent-overlay: rgba(0, 0, 0, 0.5);
   --box-shadow: rgba(0, 0, 0, 0.15);
+
+  --inverted-bg-color: #ffffff;
+  --inverted-text-color: #141414;
 }
 
 [data-theme="light"] {
@@ -23,6 +28,11 @@
   --border-color: #dddddd;
   --accent-color: #F96743;
   --hover-color: #f1f3f4;
+
+  --bar-background-color: rgba(200, 200, 200, 0.5);
+
+  --inverted-bg-color: #010409;
+  --inverted-text-color: #ffffff;
 }
 
 body {

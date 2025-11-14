@@ -348,13 +348,15 @@
           </div>
         {/if}
 
-        {#if activeContent && activeContent.keyFeatures.length > 0}
-          <h2 id="key-features">Key Features</h2>
-          <ul class="features">
-            {#each activeContent.keyFeatures as feature}
-              <li>{feature}</li>
-            {/each}
-          </ul>
+        {#if activeContent.keyFeatures}
+          {#if activeContent && activeContent.keyFeatures.length > 0}
+            <h2 id="key-features">Key Features</h2>
+            <ul class="features">
+              {#each activeContent.keyFeatures as feature}
+                <li>{feature}</li>
+              {/each}
+            </ul>
+          {/if}
         {/if}
 
         {#if activeContent}
