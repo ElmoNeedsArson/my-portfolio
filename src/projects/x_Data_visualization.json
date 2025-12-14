@@ -1,0 +1,104 @@
+{
+  "pinned": false,
+  "slug": "data-visualization",
+  "title": "Data Visualization",
+  "type": "twente",
+  "shortDesc": "3D data visualization using Tableau",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2022-06-02",
+  "languages": [],
+  "tools": ["Tableau"],
+  "tags": ["Data Visualization", "Tableau", "3D Projection"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 7,
+      "reason": "Implemented data visualization techniques, and added additional 3D projection mathematics within Tableau's 2D environment, analyzing multi-variable racing datasets to create 3D circuit visualizations using coordinate transformations"
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 3,
+      "reason": "Creative visualization design with 3D projections"
+    },
+    {
+      "area": "User and Society",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 0,
+      "reason": ""
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "",
+        "text": "This module a new subject was introduced; Data Visualization. This subject, as one might guess, is about the visualizing of Data. Take variables and plot them against each other. This subject included 2 assignments. \n\nBoth assignments where really interesting, and of quite some value, we got introduced with the software tableau. This is data visualization tool, one imports datasets, and plots them on all kinds of different graphs. The assignment was about datasets we received from the UTwente E-sports lab. They ran a simulation with different types of amateur or professional drivers and stored a lot of relevant variables. Our job was to discover the dependencies between variables and differences between drivers and show it graphically. The concluding part of the assignment gave you a lot of freedom however. So…I tried to see whether i could take it to the next level. \n\nTableau on its own, is a 2 dimensional plotter. This means you have a y and x-axis. So you plot 2 variables against axis and maybe visualize more variables in the graph itself with the use of color or size. Here is an examples of a graphs made with tableau:",
+        "image": {
+          "type": "image",
+          "src": "/assets/images/data_vis/example_tableau.png",
+          "alt": "",
+          "caption": ""
+        }
+      },
+      {
+        "text": "Me and my partner wanted to figure out whether it would be possible to plot 3 dimensional graphs within tableau. Since tableau allows for calculations within its graphs. This allows you to take a 3 dimensional coordinate and calculate how it would be represented on a 2 dimensional plane. This process is called 3D projection:",
+        "image": {
+          "type": "image",
+          "src": "/assets/images/data_vis/wiki_3D.jpg",
+          "alt": "",
+          "caption": ""
+        }
+      },
+      {
+        "text": "This allowed me and my partner to take the coordinates of the wheels of the cars, average them and plot a 3D graph within tableau. And thus taking multiple rounds, and multiple drivers, create a 3d model of the circuit the drivers where driving on. ",
+        "gallery": {
+          "columns": 2,
+          "media": [
+            {
+              "type": "image",
+              "src": "/assets/images/data_vis/3D-Temp-map.png",
+              "alt": "",
+              "caption": "3D Temperature map"
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/data_vis/3D-Speed-map.png",
+              "alt": "",
+              "caption": "3D Speed map"
+            }
+          ]
+        }
+      },
+      {
+        "text": "And now we can very clearly see, that the drivers were riding on Zandvoort circuit. This was ofcourse not at all relevant for the project, but still shows how you can achieve advanced things with simple tools."
+      }
+    ]
+  }
+}

@@ -67,6 +67,11 @@ export interface Project {
   languages: string[];
   tools: string[];
   tags: string[];
+  expertise?: Array<{
+    area: string;
+    rating: number;
+    reason: string;
+  }>;
   repoUrl?: string;
   demoLink?: string;
   featured?: boolean;

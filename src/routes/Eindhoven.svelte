@@ -1,11 +1,22 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
     import Outline from "../components/eindhovenOutline.svelte";
+    import EindhovenModal from "../components/EindhovenModal.svelte";
 
     let headings = [];
     let currentSection = "Professional Identity";
     let currentSubtitle = ""; // Track current subtitle
     let stickyTitle = false;
+    let isModalOpen = false;
+
+    function openModal(event: MouseEvent) {
+        event.stopPropagation();
+        isModalOpen = true;
+    }
+
+    function closeModal() {
+        isModalOpen = false;
+    }
 
     const sections = [
         {
@@ -135,6 +146,10 @@
     </div>
     <div class="content">
         <section id="professional-identity">
+            <button class="open-modal-button" on:click={openModal}>
+                Open Modal
+            </button>
+
             <h1 id="professional-identity-title" class="hidden-title">
                 Professional Identity
             </h1>
@@ -965,4 +980,27 @@
             margin-right: 1.5rem;
         }
     }
+
+    .open-modal-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1.5rem;
+        background-color: var(--button-background);
+        color: var(--primary-text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .open-modal-button:hover {
+        background-color: var(--hover-color);
+        border-color: var(--primary-text-color);
+    }
 </style>
+
+<EindhovenModal bind:isOpen={isModalOpen} title="Project Visualizations" on:close={closeModal} />

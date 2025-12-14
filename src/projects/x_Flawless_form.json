@@ -1,0 +1,78 @@
+{
+  "pinned": false,
+  "slug": "flawless-form",
+  "title": "Flawless Form",
+  "type": "twente",
+  "shortDesc": "OpenCV exercise form correction system",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2022-04-09",
+  "languages": ["Python"],
+  "tools": ["OpenCV"],
+  "tags": ["Computer Vision", "OpenCV", "Python", "Health"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 4,
+      "reason": "Body position comparison algorithms"
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 6,
+      "reason": "Implementing OpenCV computer vision to detect body parts and validate exercise form through comparison with hardcoded exercise data"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 3,
+      "reason": "Visual feedback system design"
+    },
+    {
+      "area": "User and Society",
+      "rating": 5,
+      "reason": "Designing system to improve user health and prevent injuries during exercise, addressing physical wellbeing through technology"
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 1,
+      "reason": "Fitness technology market"
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "",
+        "text": "This module also had a main project about intelligent interaction design. With a general focus on sports. With my group of 5 people we came up with the idea that advanced feedback while performing exercises might be really valuable. For either the reason of preventing injuries or to make sure people their trainings are actually effective. This was done with the use of a camera identifying main body parts and running them through some 'hardcoded' data of a certain exercise. This means that we put some data in the system about a squat and that the program checks whether that data resembles what the camera sees. If not some feedback was coded in, such as “straighten your back” or “raise your arms”. This would allow the user to actually perform the exercise correctly. We used a camera and google's openCV software to recognize body parts and other important elements. The end result was rather effective, except our report wasn't as appreciated with the main feedback being that we should have evaluated other similar systems more intensely, and focus our report on improving upon these systems, instead of developing a new one. I still disagree with the grading of this project, but after a repair our grade to be around a 7, which is sufficient I guess. I enjoyed working on the project, the closing not really, since it went rather subjective in my eyes. Which if you ask me about i'll gladly expand upon.",
+        "video": {
+          "type": "video",
+          "src": "/assets/videos/flawless-form.mp4",
+          "caption": "Demo video showcasing the project",
+          "autoplay": true,
+          "loop": true,
+          "muted": true,
+          "controls": false
+        }
+      },
+      {
+        "text": "This project learnt us alot about the easy capabilities of google's openCV and how usefull it is."
+      }
+    ]
+  }
+}

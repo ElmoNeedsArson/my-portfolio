@@ -1,0 +1,108 @@
+{
+  "pinned": false,
+  "slug": "modulamp",
+  "title": "Modulamp",
+  "type": "twente",
+  "shortDesc": "Sustainable modular bicycle lighting business plan",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2022-04-25",
+  "languages": [],
+  "tools": ["Blender"],
+  "tags": ["Business", "Marketing", "Sustainability", "Animation"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 2,
+      "reason": "Financial modeling and business calculations"
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 3,
+      "reason": "Modular product design concepts"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 5,
+      "reason": "Created marketing video using Blender to promote product, demonstrating aesthetic quality in visual communication"
+    },
+    {
+      "area": "User and Society",
+      "rating": 5,
+      "reason": "Sustainability focus and cyclist safety"
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 7,
+      "reason": "Developed comprehensive business plan including financial models, market analysis, value proposition, and sustainability-focused business case for ModuLamp bicycle lighting"
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "video": {
+          "type": "video",
+          "src": "/assets/videos/Business_Modulamp.mp4",
+          "caption": "Marketing video created for the Modulamp project",
+          "autoplay": false,
+          "loop": false,
+          "muted": false,
+          "controls": true
+        }
+      },
+      {
+        "title": "",
+        "text": "So this module, the main focus was on learning how to set up a business, and how to look at all the ethics and physics behind it. We had to devise a business plan/model, and work out all the financial plans behind our product. A marketing pitch and video also had to be created to promote our product. Of which you can see the marketing video above. Our general introduction and summary is pasted below, aswell as our report. Enjoy! 🙂\n\n“ModuLamp is a dutch start-up company founded in 2022 by 5 students. We designed an affordable and sustainable alternative to bicycle lighting and accessories. Our product tackles consumer's inconveniences and we strive to create a greener society. Our mission is to reduce electronic waste by for example omitting the need for batteries and ensure better safety for cyclists and other road users. \n\nOur target audience is cyclists and we expect mainly students. We designed our product with every type of user in mind but took our time to cater it to adolescents as can be seen in our marketing plan. \n\nAs a company we find it important to be accessible, therefore we are open to partnerships and cooperations with other companies to be able to bring the best possible product to the market. ModuLamp was founded in Enschede, where the office space will be located as well. At first we will distribute and market our product throughout the Netherlands, but we would like to share our affordable sustainability globally. \n\nOur innovative bicycle lighting that makes use of modular parts and connections allow for a lot of options and opportunities. Consumers and partners are able to customize ModuLamp to fit with their own accessories and bicycles. It is compatible with every type of bicycle since it is easily attachable to different places. Whether you have panniers or a crate on your bike, you can place your lamp wherever it's visible to maximize safety. \n\nModuLamp is easy and quick to install, there are no skills needed to use. When a part breaks or gets lost you can easily repurchase that single module and replace it at home with a simple click and slide. It will be available on our website, other webshops and retail stores such as bol.com and action.\n\nWith the increased durability, affordable sustainability, and ease of use of ModuLamp our users save money, time, and effort. With our marketing and image we help users become aware of their situations and guide them to a more sustainable lifestyle. We are happy to try and help create a better future by tackling everyday problems users are not aware exist.\n\nCurrently we are hoping to build on this product and enter the market with new views and solutions on sustainability. We will continue on our product development to make the products even better and to design more accessories that can be used with our product. On behalf of ModuLamp, we'd like to thank you for showing interest in our business and hope to hear from you in the near future about this investment opportunity.”",
+        "gallery": {
+          "columns": 0,
+          "media": [
+            {
+              "type": "image",
+              "src": "",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "video",
+              "src": "",
+              "caption": "",
+              "autoplay": false,
+              "loop": false,
+              "muted": false,
+              "controls": true
+            },
+            {
+              "type": "threejs",
+              "src": "",
+              "caption": ""
+            }
+          ],
+          "caption": ""
+        },
+        "ThreeJSScene": {
+          "type": "threejs",
+          "src": "",
+          "caption": ""
+        }
+      }
+    ]
+  }
+}

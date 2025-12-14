@@ -1,0 +1,91 @@
+{
+  "pinned": false,
+  "slug": "wordbond",
+  "title": "WordBond",
+  "type": "eindhoven",
+  "shortDesc": "Empowering blind parents to share reading with their children.",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2024-12",
+  "languages": ["Python", "JavaScript", "HTML", "CSS"],
+  "tools": [
+    "easyOCR",
+    "gemini-1.5-flash",
+    "openCV",
+    "yaseenUOM-TTS",
+    "pywebview",
+    "Buildozer",
+    "Android Debug Bridge / ADB"
+  ],
+  "tags": ["AI", "Accessibility", "HCI", "Assistive Technology", "Computer Vision", "User Study"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 6,
+      "reason": "Implementing OCR data processing pipeline with LLM-based error correction and text segmentation, using computer vision algorithms for gesture detection and contextual support"
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 8,
+      "reason": "Integrating multiple AI technologies (easyOCR, Gemini LLM, TTS, openCV hand tracking) into cohesive assistive reading system, building Android application with pywebview"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 5,
+      "reason": "User interface design for accessibility"
+    },
+    {
+      "area": "User and Society",
+      "rating": 9,
+      "reason": "Conducting user studies with blindfolded participants, empathizing with visually impaired parents, using quantitative methods (NASA TLX, UEQ) to evaluate and iteratively improve accessibility"
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 0,
+      "reason": ""
+    }
+  ],
+  "content": {
+    "overview": "WordBond is an AI-powered shared reading tool designed to support visually impaired parents when reading physical children's books with their sighted children. Combining OCR, LLM-based correction, hand-tracking, and text-to-speech, WordBond allows parents to narrate stories with their own voice while receiving contextual support during shared reading.",
+    "keyFeatures": [],
+    "sections": [
+        {
+                "text": "Github Repository: <a href=\"https://github.com/ElmoNeedsArson/pywebview-api-variant\" target=\"_blank\">Here</a>"
+        },
+      {
+        "title": "System Overview",
+        "text": "WordBond enables visually impaired parents to scan books in advance and read them aloud naturally with real-time support. The system uses easyOCR and gemini-1.5-flash to produce clean audio snippets, while openCV hand tracking supports pointing gestures during shared reading."
+      },
+      {
+        "title": "Technical Pipeline",
+        "text": "The technical pipeline has two phases. Phase 1 uses easyOCR to read the page, gemini-1.5-flash to correct OCR errors and segment text, and yaseenUOM to produce MP3 audio files. Phase 2 uses openCV to track pointing gestures, triggering contextual support and interactive feedback for parent-child shared reading.",
+        "image": {
+          "type": "image",
+          "src": "/assets/images/wordbond.png",
+          "alt": "",
+          "caption": ""
+        }
+      },
+      {
+        "title": "User Studies",
+        "text": "A pilot study and a formal user study evaluated usability, cognitive load, and interaction patterns using blindfolded participants simulating visually impaired parents. Findings revealed high engagement but highlighted the need for clearer cues and refined segmentation. Iterative improvements significantly reduced cognitive load, validated using NASA TLX and UEQ metrics."
+      }
+    ]
+  }
+}

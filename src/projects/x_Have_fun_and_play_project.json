@@ -1,0 +1,78 @@
+{
+  "pinned": false,
+  "slug": "have-fun-and-play-project",
+  "title": "Have fun and play project",
+  "type": "twente",
+  "shortDesc": "VR installation about social media bubbles",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2021-06-11",
+  "languages": ["C#"],
+  "tools": ["Unity", "Maya"],
+  "tags": ["3D Modeling", "Unity", "VR"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 3,
+      "reason": "Filter bubble simulation logic"
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 6,
+      "reason": "Building VR environment in Unity to create immersive experience demonstrating information filtering effects"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 5,
+      "reason": "VR environment and installation design"
+    },
+    {
+      "area": "User and Society",
+      "rating": 7,
+      "reason": "Creating VR installation to raise awareness about social media filter bubbles and their societal impact on polarization, demonstrating sensitivity to cultural implications of design"
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 0,
+      "reason": ""
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "",
+        "text": "",
+        "video": {
+          "type": "video",
+          "src": "/assets/videos/Have_Fun_Play.mp4",
+          "caption": "Trailer video for the project (listen with audio on!)",
+          "autoplay": false,
+          "loop": false,
+          "muted": false,
+          "controls": true
+        }
+      },
+      {
+        "text": "This module we had a separate project to work on. This project was about building and designing an installation for the Gogbot festival. This project was/is really focused on putting down an actual working prototype or working end result, so that makes the project a whole new challenge, we had to spend less time designing and thinking and more time doing. Which is something I really enjoy in a project.\n\nThe group I'm working with is a really awesome group that is putting a lot of effort in. We decided we wanted to display the effects of a social media bubble/filter. A quick definition of this would be that the filter pushes you in only one direction and doesn't show contradicting or opposing views regarding anything because it only recommends what you like, that is how social media filters work. Think for example of Youtube recommending only the content you find interesting. This often leads to more extremism or more polarized views because people aren't aware enough of opposing views and therefor cant form a nuanced opinion on things, this is most strongly seen in political views but also in other issues. These filters can in de big scenario lead to a more polarized community/population. \n\nWe decided that we would build a VR room where the users is shown a subject and then the user is pushed in one direction with the opinions shown to him on this subject. So say the user chooses climate change, every view the user will see is a view opposing climate change and saying it isn't real. This of course happens very obviously and we hope the user realizes what is happening and therefor makes the user think about how this happens in real life, and becomes more conscious about it."
+      }
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+{
+    "pinned": false,
+    "slug": "physical-data",
+    "title": "Physical Data",
+    "type": "card",
+    "shortDesc": "A project on visualizing data through physical installations.",
+    "thumbnail": {
+        "type": "image",
+        "src": "../assets/images/Physical_Data.png",
+        "alt": "",
+        "caption": "Thumbnail image for Physical Data project showcasing the installation we created."
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "../assets/images/Physical_Data.png",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2022-06-01",
+    "languages": [
+        "C++ (Arduino)",
+        "Python"
+    ],
+    "tools": [
+        "Arduino",
+        "3D Printing",
+        "Laser Cutting",
+        "Raspberry Pi"
+    ],
+    "tags": [
+        "Data",
+        "Data Physicalization",
+        "Data visualization",
+        "Space"
+    ],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 7,
+            "reason": "Translating complex astronaut characteristic data into physical representations, structuring multi-variable datasets for interactive physical visualization"
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 7,
+            "reason": "Building functional physical installation using Arduino, Raspberry Pi, 3D printing, and laser cutting to realize data physicalization concept"
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 8,
+            "reason": "Designed interactive lego-like astronaut building system focusing on aesthetic quality and physical materiality of data representation"
+        },
+        {
+            "area": "User and Society",
+            "rating": 5,
+            "reason": "Interactive installation for public engagement"
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 0,
+            "reason": ""
+        }
+    ],
+    "content": {
+        "overview": "This Project, in module 8 is the Crown Piece of my Bachelor Creative Technology. Here you work with a wonderful team of 12 people, that all have very different skillsets. I'd Reccomend watching this video about it which really explains the project in a clear way!",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "title": "",
+                "video": {
+                    "type": "video",
+                    "src": "https://www.youtube.com/watch?v=ao8XCi6PU90",
+                    "alt": "Physical Data Project Video",
+                    "caption": "Documentary video showcasing the Physical Data project (You can see me as the first person in the video, and a large part of the voiceover!)",
+                    "autoplay": false,
+                    "loop": false,
+                    "muted": false,
+                    "controls": true
+                }
+            },
+            {
+                "text": "This project was by far the most fun and the most stressful a project has ever been for me. Working together with 12 people and having complete freedom, creates a lot of ideas but thereby of course a lot of stress. "
+            },
+            {
+                "text": "An interesting element of this project with regards to human computer interaction was the lego-like concept of building different astronauts. Each astronaut had different characteristics, and by combining them you could create a new astronaut with combined characteristics. This was a fun way of exploring combinations and seeing how different characteristics influenced the data physicalization."
+            }
+        ]
+    }
+}

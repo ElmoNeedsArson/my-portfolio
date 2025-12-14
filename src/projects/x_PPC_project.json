@@ -1,0 +1,78 @@
+{
+  "pinned": false,
+  "slug": "ppc-project",
+  "title": "PPC Project",
+  "type": "twente",
+  "shortDesc": "Arduino-based smart room assistant system",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2021-01-20",
+  "languages": ["C++ (Arduino)", "Java"],
+  "tools": ["Arduino", "Processing"],
+  "tags": ["Arduino", "IoT", "Hardware"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 4,
+      "reason": "Sensor data processing"
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 6,
+      "reason": "Building Arduino-based smart room assistant with sensors and Processing visualization, integrating hardware and software components"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 5,
+      "reason": "Jarvis-inspired visual design"
+    },
+    {
+      "area": "User and Society",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 0,
+      "reason": ""
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "",
+        "text": "This module we had to make a arduino based final assignment, including all the skills learned in the module. My idea was to make a smart room assistant looking somewhat like jarvis, the AI from iron man. Below here you can find a video that shows exactly what i made. My microphone at the beginning is a bit scuffed so don't mind it. ",
+        "video": {
+          "type": "video",
+          "src": "/assets/videos/PPC2.mp4",
+          "caption": "",
+          "autoplay": false,
+          "loop": false,
+          "muted": false,
+          "controls": true
+        }
+      },
+      {
+        "text": "So as you can that is what i made for this project, I really enjoyed it, we got a lot of freedom in the assignment and we got to make whatever we wanted as long as it sufficed some basic requirements. My final grade for this assignment then again was around an 8 so I'm very content with however it turned out. I hope a similar project comes along that also gives us such freedom on a technical design plane."
+      }
+    ]
+  }
+}

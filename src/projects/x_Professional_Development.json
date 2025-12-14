@@ -1,0 +1,142 @@
+{
+  "pinned": false,
+  "slug": "professional-development",
+  "title": "Professional Development",
+  "type": "twente",
+  "shortDesc": "3D modeling skills in Maya and Blender",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2021-06-11",
+  "languages": [],
+  "tools": [
+    "Maya",
+    "Blender"
+  ],
+  "tags": [
+    "3D Modeling",
+    "Design"
+  ],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 4,
+      "reason": "Maya and Blender technical skills"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 8,
+      "reason": "Developing 3D modeling skills in Maya and Blender across vehicles, architecture, and landscapes, focusing on aesthetic quality and mastery of creative tools"
+    },
+    {
+      "area": "User and Society",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 2,
+      "reason": "Teaching assistant role"
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "2021-2022",
+        "text": "This module I also worked on my Professional development, however there were a lot of options I found myself most motivated for developing my 3d skills further. I discovered that Maya has hundreds if not thousands of functions which are all very use full in different ways, so after watching many hours of tutorials and following them I also started doing things on my own. I will put a few pictures below this text. But I wanted to work on 3 main themes, vehicles, architecture and landscapes. So I built 1 for each of them, not all of them have the equal amount of effort but I want to try more things of course and will expand later on I hope. I build an X-wing for vehicle(an science fiction spacecraft from the star wars universe, even though star trek is better, so ill be working on that after this) i build a cabin for architecture and built a landscape around it, or am working on a landscape. Hope you enjoy:",
+        "gallery": {
+          "columns": 2,
+          "media": [
+            {
+              "type": "image",
+              "src": "/assets/images/prof_dev/house.jpg",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/prof_dev/tree.jpg",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/prof_dev/x-wing.jpg",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/prof_dev/houserender2.jpg",
+              "alt": "",
+              "caption": ""
+            }
+          ],
+          "caption": ""
+        }
+      },
+      {
+        "title": "2022-2023",
+        "text": "This module, I have made the switch from MAYA to Blender, this was a doubtful choice since Maya is way more used in the Professional world, but this unfortunately also means that it is really expensive. Blender on the other hand is free. Besides that I have had a job as a TA, for the subject of interactive visualization which is given in year 1 module 3 of CreaTe. In this subject where previously MAYA was used they have now decided to switch to blender. My base knowledge of all subjects still came in handy, and I, along with other TA’s, where still a valuable asset. So during this module I have taught myself blender and gotten rather proficient at it. I have been doing projects of my own as well as projects for school with the use of blender. This was also all done for Professional development to develop/deepen and widen my skills around 3d modeling more and more. Because this is really just a skill where you get better at it the more you do it. Some of my work I plan to put on this portfolio site as well, to maybe use in my cv later, but I want to develop my site a bit further to actually support stuff like this.",
+        "gallery": {
+          "columns": 3,
+          "media": [
+            {
+              "type": "image",
+              "src": "/assets/images/prof_dev/tower.jpg",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/prof_dev/tower2.jpg",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/prof_dev/SwordRender.png",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/prof_dev/SwordRender2.png",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/prof_dev/RoomRender.png",
+              "alt": "",
+              "caption": ""
+            }
+          ],
+          "caption": ""
+        }
+      }
+    ]
+  }
+}

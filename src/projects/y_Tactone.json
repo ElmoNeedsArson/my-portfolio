@@ -1,0 +1,68 @@
+{
+    "pinned": false,
+    "slug": "tactone",
+    "title": "Tactone",
+    "type": "eindhoven",
+    "shortDesc": "A modular, multi-sensorial perception tool that helps designers explore the aesthetics of soft robotics through touch, sound, and interaction.",
+    "thumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2024-12",
+    "languages": ["C++ (Arduino)"],
+    "tools": ["Arduino", "Teensy", "Fusion 360", "3D Printing", "Laser Cutting"],
+    "tags": ["Soft Robotics", "Haptics", "Sound Design", "Interaction Design", "Tooling"],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 6,
+            "reason": "Processing real-time sensor data streams from LDRs, transforming measurable input variables (light levels, coverage patterns, duration) into audio modulation parameters, calibrating environmental thresholds"
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 8,
+            "reason": "Building modular soft robotics system with Teensy microcontroller, integrating LDR sensors, pneumatic pumps, and real-time audio processing with documented codebase"
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 7,
+            "reason": "Creating tool for designers to explore aesthetic qualities of soft robotics through tactile and auditory materiality, each pad designed to evoke different emotional responses"
+        },
+        {
+            "area": "User and Society",
+            "rating": 7,
+            "reason": "Exploring how material behavior and multi-sensorial interaction influence emotional response and user perception in soft robotics design"
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 2,
+            "reason": "Creation of a manual for usage and potential applications in design studios and educational settings"
+        }
+    ],
+    "content": {
+        "overview": "The design of soft robots is often driven by functional requirements, but their aesthetics—how they look, feel, and sound—play an equally important role in shaping user perception. Tactone addresses this gap by giving designers a hands-on, sensory tool to explore the perceptual qualities of soft robotics.\n\nTactone is a modular, multi-sensorial interactive pad system. Each silicone pad inflates when touched, while audio responds dynamically based on coverage and duration. By combining tactile feedback with adaptive sound, designers can investigate how material behavior influences emotional response.\n\nThe system runs on a Teensy 4.1 microcontroller and includes a customizable codebase. Designers can swap pads, adjust sensitivity, and experiment with audio mappings—making Tactone a flexible tool for crafting the aesthetic experience of soft robots.",
+        "sections": [
+            {
+                "text": "Github Repository: <a href=\"https://github.com/ElmoNeedsArson/SensoryMatters_Tactone_Codebase\" target=\"_blank\">Here</a>"
+            },
+            {
+                "title": "How Tactone Works",
+                "text": "Tactone consists of four interactive silicone pads, each designed to evoke a different emotional response. When a pad is covered, the system detects light changes via LDRs, triggers inflation through pumps, and modulates audio playback in real time. Designers use headphones to experience the full tactile-auditory interaction.\n\nThe codebase allows tuning parameters such as environmental light thresholds, audio file mappings, and actuation behavior. Alternative actuators can be integrated by adjusting the switch-case logic in the main loop."
+            }
+        ]
+    }
+}

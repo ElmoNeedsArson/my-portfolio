@@ -1,0 +1,173 @@
+{
+    "pinned": false,
+    "slug": "minecraft-game-datapack",
+    "title": "Minecraft Game Datapack",
+    "type": "bar",
+    "shortDesc": "Making a game within Minecraft using datapacks",
+    "description": "Prototype of a custom mini-game implemented purely with Minecraft datapacks.",
+    "thumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2024-02",
+    "languages": ["McFunctions","JavaScript"],
+    "tools": ["Datapacks", "Minecraft","node.js","Blockbench"],
+    "tags": ["game","prototype","3D Modeling"],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 2,
+            "reason": "Mana system calculations"
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 7,
+            "reason": "Writing JavaScript scripts to generate McFunction files, working around datapack limitations by automating code generation for complex game mechanics like mana-based weapon swapping and cutscene systems"
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 6,
+            "reason": "Creating custom 3D models with Blockbench, designing level architecture (village houses, gate entrances), developing lore and narrative, crafting cutscenes for immersive visual storytelling"
+        },
+        {
+            "area": "User and Society",
+            "rating": 3,
+            "reason": "Collaborative team gameplay design"
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 2,
+            "reason": "Project management with team of 5 outside of a school or deadline driven environment"
+        }
+    ],
+    "tab1": {
+        "name": "Project Management",
+        "overview": "",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "title": "",
+                "text": "One of the largest projects I will be embarking on during this half year is the development of a 'video game'. A couple of friends showed an interest in developing a video game as a side project. Them not having a lot of experience with game development as a whole, we decided on starting small with an accessible platform for creating assets and gameplay: Minecraft! Regardless of experience, everyone can built in Minecraft, and everyone can play it.\n\nThe decision was made to make a roguelite. Which possesses some qualities of a roguelike. These type of games usually signify some sort of role playing game with (procedurally) generated dungeon-esque type levels.",
+                "image": {
+                    "type": "image",
+                    "src": "/assets/images/mc_datapack/mc_datapack_miro.png",
+                    "alt": "",
+                    "caption": "Miro board used for project management and inspiration"
+                }
+            },
+            {
+                "text": "A grand division of work and tasks was made, since we have a team of 5 people working on it. Here I take the lead of the code that has to be written, so custom generation, interactions and level control. I also lead the inclusion of external models to be made, so custom weapons and items. I furthermore take part in level building. Other roles in the team are lore and background story, level design, and ofcourse more building. \n\nTo manage all what needs to be built, a huge Miro board and a dedicated discord server are used. With plotline lineouts, inspiration, lists of items and buildings, etc."
+            },
+            {
+                "text": "At the time of writing little progress has yet been made on the building. This will also be updated as part of the weekly project updates. Below are a few sneak peaks of the current progress already.",
+                "gallery": {
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "/assets/images/mc_datapack/village_house.png",
+                            "alt": "",
+                            "caption": ""
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/mc_datapack/village_house_night.png",
+                            "alt": "",
+                            "caption": ""
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/mc_datapack/gate_entrance.png",
+                            "alt": "",
+                            "caption": ""
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/mc_datapack/gate_entrance2.png",
+                            "alt": "",
+                            "caption": ""
+                        }
+                    ],
+                    "columns": 2
+                }
+            }
+        ]
+    },
+    "tab2": {
+        "name": "Scripting for Datapacks",
+        "overview": "",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "title": "",
+                "text": "After two weeks of programming minecraft datapacks, one can realise that datapacks dont really have an effective programming language. The programming you do are Minecraft commands and can be limited in nature. As per last week where I explained the inability to have variables in most commands.\n\nA prime example was encountered this week. For the game's magic system a mana system is used. Based on if you have high mana or low mana, a weapons function and visuals should swap. Example: A low mana sword, steals hearts, and a high mana sword steals mana. \n\nThis requires for each player, for each swapable weapon for each inventory and hotbar slot to be checked for a weapon and if it needs to be swapped when the player reaches the threshold for low or high mana. Normally you would do this with a few loops in code. To loop through all players, then through weapons there are, and lastly through all slots in players inventory checking for a weapon to replace. This is not possible in mc functions however. Simply altering the variable of the slot number to be checked is not possible. So this needs be done with a lot, but i mean a lot of if statements, all cases have to be written out. If the player has high mana, run this function, and in that function all inventory slots are checked for a specific weapon and replaced. This means for each weapon 35 slots to be checked for high mana and 35 slots to be checked for low mana. E.g. a lot of slots and a lot of copy pasting if done manually. \n\nLuckily that is not what was opted for. I wrote a script to write my mcfunctions file. So basically a script for a script. In javascript i generate a file, and loop through all inv slots and generate a Minecraft command for it which is placed in the mc functions file. This file can be placed in the datapack and ran in either the loop function or based on a mana change and it works. Below is an image of such a file it generates.",
+                "image": {
+                    "type": "image",
+                    "src": "/assets/images/mc_datapack/mc_datapack.png",
+                    "alt": "",
+                    "caption": "Part of the generated mcfunction file for swapping weapons based on mana"
+                }
+            },
+            {
+                "text": "Quite repetative as you can see. The script was written in JS with node.js. \n\nAn example of it working in game:",
+                "video": {
+                    "type": "video",
+                    "src": "/assets/videos/swap_datapack.mp4",
+                    "caption": "Demo video showcasing the mana based weapon swapping",
+                    "autoplay": true,
+                    "loop": true,
+                    "muted": true,
+                    "controls": false
+                }
+            }
+        ]
+    },
+    "tab3": {
+        "name": "Implemented Components!",
+        "overview": "An overview of sections currently implemented",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "title": "Cutscenes?",
+                "video": {
+                    "type": "video",
+                    "src": "/assets/videos/mc_cutscene.mp4",
+                    "caption": "Demo video showcasing the cutscene implementation",
+                    "autoplay": false,
+                    "loop": false,
+                    "muted": false,
+                    "controls": true
+                }
+            },
+            {
+                "text": "To give a game a more complete look, nice visuals can always be a large part. Thus the inclusion of simple cutscenes in our datapack seemed obvious. \n\nHow to make cutscenes in minecraft however is less obvious. Below I included a somewhat technical explanation of how it is done.\n\nAs opposed to Minecraft bedrock edition, the java edition, what we are developing on, does not allow for extra cameras. So a cutscene has to be done in a different way. We have to user the player themselves as a cutscene camera. The player character has to follow a set path and look at set positions for it to function as a cutscene.\n\nFortunately Minecraft has a usefull mechanic that allows entities to spectate other entities. So a player can spectate a cow or a pig for example. A player can also spectate an ‘item display’. This is a relatively new entity added to Minecraft that allows items to be displayed, as the name conveniently spoils. These item displays have a usefull feature called ‘teleport duration’. As one expects, this function gives a time window for a teleportation command, and interpolates the position of the entity with each frame. So you get a moving entity from one point to another. If we let the user spectate this point in spectator mode we get a nice camera.\n\nThis unfortunately is not all. To have a more complete cutscene, the user, preferably, gets put back to their original location. But oh boy, that is not as simple as it seems. The regular teleport command in minecraft only allows for integers. So /tp 9 9 9. One can not use stored coordinates for this. So if you want to work with variables in minecraft datapacks you have to store them in a scoreboard. If i collect the data of a player and save their positions in a scoreboard, I am consequently not able to teleport to this data by saying /tp variable1 variable2 variable3. \n\nNo we have to find a workaround. What we can do is modify entity data with scoreboard variables. Great, we dont teleport the player to coordinates, but we just modify player data! \n\nExcept, no! Minecraft does not allow you to modify player data. why? No clue. So how do we solve it now? Now we cannot edit player data but we can edit other entities their data. So we summon an entity (say an armorstand), we modify its position to the scoreboard data. And lastly we teleport the player to the correct entity. Because teleportation between entities is still possible.\n\nSo after all that work we have a cutscene where the user experiences it correctly, and gets put back in the correct spot after the scene is done."
+            },
+            {
+                "title": "Custom Enemies?",
+                "text": "The video you see below is one of the mobs you will be having to fight in this dungeon. This mob spawns at the place of a characters death. Offering them the ability to get their stuff back by killing it. But that might not be as easy as it seems. ",
+                "video": {
+                    "type": "video",
+                    "src": "/assets/videos/mc_custom_mob.mp4",
+                    "caption": "Demo video showcasing the custom mob",
+                    "autoplay": false,
+                    "loop": false,
+                    "muted": false,
+                    "controls": true
+                }
+            }
+        ]
+    }
+}

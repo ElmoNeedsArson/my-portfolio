@@ -1,0 +1,102 @@
+{
+  "pinned": true,
+  "slug": "interactive-visualization",
+  "title": "Interactive Visualization",
+  "type": "twente",
+  "shortDesc": "3D watch modeling with Maya and Unity",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2021-04-07",
+  "languages": ["C#"],
+  "tools": ["Maya", "Unity"],
+  "tags": ["3D Modeling", "Animation", "Unity"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 6,
+      "reason": "Maya and Unity technical implementation, coding interaction and animation"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 9,
+      "reason": "Creating high-quality 3D watch model with complex animations and lighting in Maya/Unity, demonstrating aesthetic quality and attention to form"
+    },
+    {
+      "area": "User and Society",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 0,
+      "reason": ""
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "",
+        "text": "This module we learned how to model in maya and render images, but also how to animate and use lighting in unity. This was in my opinion one of the most fun subjects we've had this year thus far. For the final assignment you had to model an object of your choice and import it to unity for lighting. You could also choose to animate it, and you would be judged on the complexity and originality of your model. I chose to model a watch and make some animations alongside with it, including a disassembly animation you can see in the video below.",
+        "video": {
+          "type": "video",
+          "src": "/assets/videos/Watch-model.mp4",
+          "caption": "",
+          "autoplay": true,
+          "loop": true,
+          "muted": true,
+          "controls": false
+        }
+      },
+      {
+        "text": "So as you can that is what i made for this project, I really enjoyed it, and I'm still modeling to this day. I'm currently working on an X-wing from star wars. Below here you'll find some HQ renders of my watch.",
+                "gallery": {
+          "columns": 3,
+          "media": [
+            {
+              "type": "image",
+              "src": "/assets/images/HQ-600x600.png",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/HQ1-600x600.png",
+              "alt": "",
+              "caption": ""
+            },
+            {
+              "type": "image",
+              "src": "/assets/images/HQ2.jpg",
+              "alt": "",
+              "caption": ""
+            }
+          ],
+          "caption": ""
+        }
+      }
+    ]
+  }
+}

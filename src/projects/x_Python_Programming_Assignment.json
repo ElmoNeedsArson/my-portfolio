@@ -1,0 +1,66 @@
+{
+  "pinned": false,
+  "slug": "python-programming",
+  "title": "Python Programming",
+  "type": "twente",
+  "shortDesc": "Maze game with Arduino accelerometer controller",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "/assets/images/Python_Project_cover.png",
+    "alt": "",
+    "caption": "Game over menu of the python game (Pixel art by me)"
+  },
+  "date": "2022-04-09",
+  "languages": ["Python", "C++ (Arduino)"],
+  "tools": ["PyGame", "Arduino"],
+  "tags": ["Game Development", "Arduino"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 6,
+      "reason": "Implementing maze generation algorithms and pathfinding search algorithms (A*) for enemy AI behavior, applying algorithmic theory to create procedurally generated game environments"
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 7,
+      "reason": "Integrating Arduino accelerometer as custom physical game controller, creating sensor-based interface for game interaction"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 4,
+      "reason": "Space ship themed pixel art and game design"
+    },
+    {
+      "area": "User and Society",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 0,
+      "reason": ""
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "",
+        "text": "This module had a subject focused on maze generation and solving with the use of algorithms, this was all taught during the module and to close of this subject we needed to make an end game or interactive interface that implemented the theory taught, with the use of coding in python and using a real life interface, so no mouse or keyboard but an actual controller. Either self-made or an already existing one. For this we made a space ship scene with robots gone evil, where you, the player, need to get to the safe rooms within the space ship. The implementation of the theory was shown in this project through the use of self generating mazes, and the enemies tracking the player down with an search algorithm. The real life controller was made with an accelerometer chip that detected the movements to left right front and back, this would in turn control the player on the screen by tilting the chip. The difficulty also increased per success full run. This was a very brief project but still some fun to figure out. This project took about 16 hours, with the largest part of the time being spent on just troubleshooting."
+      }
+    ]
+  }
+}

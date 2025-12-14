@@ -1,0 +1,81 @@
+{
+    "pinned": false,
+    "slug": "obsidian-local-transcription",
+    "title": "Local Transcription Plugin",
+    "type": "bar",
+    "shortDesc": "An obsidian plugin for local and private transcription of audio notes",
+    "thumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2025-09",
+    "languages": [],
+    "tools": [],
+    "tags": [],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 2,
+            "reason": "AI model integration and data processing"
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 7,
+            "reason": "Integrating local AI transcription model (Whisper) into Obsidian plugin environment, prioritizing privacy by implementing offline processing solution"
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 0,
+            "reason": ""
+        },
+        {
+            "area": "User and Society",
+            "rating": 5,
+            "reason": "Privacy-focused design for personal reflections"
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 0,
+            "reason": ""
+        }
+    ],
+    "content": {
+        "overview": "",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "text": "Github Repository: <a href=\"https://github.com/ElmoNeedsArson/local_transcription\" target=\"_blank\">Here</a>"
+            },
+            {
+                "title": "",
+                "text": "As can be seen from my other project, I have been using obsidian, for the past year. Now I have a habit of recording weekly reflection audio notes. But listening back is sometimes not really worth it for me. So I wanted to transcribe them. However nearly all of the obsidian plugins for audio transcription run through online services. Which is something that for personal reflection voice notes, is not something I want. Now there is no guarantee that locally ran models are a 100% safe, but it is a better guess of privacy than transcribing them through a service. So using whisper (a local transcription model from openAI) I created an obsidian plugin that allows for local transcription of audio notes within obsidian. ",
+                "gallery": {
+                    "columns": 0,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "",
+                            "alt": "",
+                            "caption": ""
+                        }
+                    ],
+                    "caption": ""
+                }
+            }
+        ]
+    }
+}

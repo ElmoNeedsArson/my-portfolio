@@ -1,0 +1,79 @@
+{
+  "pinned": false,
+  "slug": "Smart Environments",
+  "title": "Smart Environments",
+  "type": "twente",
+  "shortDesc": "Child anxiety monitoring smartwatch system",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2021-01-20",
+  "languages": [],
+  "tools": ["Android Studio"],
+  "tags": ["Health"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 4,
+      "reason": "Sensor data analysis for anxiety detection"
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 5,
+      "reason": "Smartwatch and app development with Android Studio"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 4,
+      "reason": "Child-friendly wearable design"
+    },
+    {
+      "area": "User and Society",
+      "rating": 7,
+      "reason": "Demonstrating awareness of child psychology and ethical sensitivity by designing non-invasive anxiety monitoring system that respects children's wellbeing and privacy"
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 1,
+      "reason": "Health technology market"
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "",
+        "text": "This module we had a separate project to work on. This project was about using smart environments in a context of disasters. My group and I first looked in the direction of trauma that can be caused on children because of disasters. However our limited knowledge on children's psychology might have an impact we don't want to have when building a product that would help with trauma. So we decided on a more neutral stance of monitoring a child with anxiety attacks or trauma. We wanted to do this in a subtle form where it doesn't affect the child at all but can only be of help. So our idea was a watch. since children love watches or bracelets. This watch will just collect data that is important to know whether the child might be having a panic attack or immense stress so the parents or a therapist can help. All the data the watch collects will be send to an app that either the parents or a therapist has access to. ",
+        "video": {
+          "type": "video",
+          "src": "https://youtu.be/bn009eTe7dA",
+          "alt": "",
+          "caption": "Worst video ever made but here is our presentation of the project.",
+          "autoplay": false,
+          "loop": false,
+          "muted": false,
+          "controls": true
+        }
+      }, 
+      {
+        "text": "I would love to expand this project and explain more, but since we are not finished yet I will have to wait until after the coming 2 weeks. Then I will add more pictures and explanatory comments… - This is clearly a lie, since its been 4 years since I did this project… but I will leave it like this for authenticity."
+      }
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+{
+    "pinned": false,
+    "slug": "interactive-media-project",
+    "title": "Interactive Media",
+    "type": "card",
+    "shortDesc": "",
+    "thumbnail": {
+        "type": "image",
+        "src": "../assets/images/Game_Planet.png",
+        "alt": "",
+        "caption": ""
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2021-11-04",
+    "languages": [
+        "C#"
+    ],
+    "tools": [
+        "Unity",
+        "Blender",
+        "Maya"
+    ],
+    "tags": [
+        "Interactive",
+        "3D",
+        "Animation",
+        "Sound Design"
+    ],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 4,
+            "reason": "Game logic and algorithms"
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 6,
+            "reason": "Developing 3D game in Unity with integrated gameplay mechanics, combining C# programming with game logic implementation"
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 8,
+            "reason": "Creating consistent visual style across all 3D models, animations, shaders, particle systems, and sound design for immersive game environment"
+        },
+        {
+            "area": "User and Society",
+            "rating": 3,
+            "reason": "Interactive gameplay experience design"
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 0,
+            "reason": ""
+        }
+    ],
+    "content": {
+        "overview": "This Interactive Media project showcases a 3D game environment built with Unity, featuring interactive elements and immersive gameplay mechanics. The project demonstrates the integration of 3D modeling, game programming, and user interaction design.",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "title": "Project Gallery",
+                "text": "Below you can see a video showcasing this project",
+                "video": {
+                    "type": "video",
+                    "src": "https://youtu.be/8mMa9XohWBk",
+                    "alt": "Interactive Media Project Video",
+                    "caption": "Demo video showcasing the interactive 3D environment",
+                    "autoplay": false,
+                    "loop": false,
+                    "muted": false,
+                    "controls": true
+                }
+            },
+            {
+                "text": "This module was one of the best worked out and enjoyable modules thusfar. We got a lot of freedom as students to work on a project And make it out own. The goal of the project this module was to design your own game, including all the audio, models, animations and game logic. Me and my groupmate started work on our game immediately. We started off with all the assets that we would require for the game. So all 3D models. We wanted to do this all ourselves in order to keep a consistent style throughout the game. We found the visuals of the game to be very important. We spend a lot of time on them looking at making shaders, particle systems and actual good looking models and animations. \n\nFor this project a total of 270 hours between me and my groupmate were spend on making the game and report. We really enjoyed the project however we wished that we took on a smaller project."
+            }
+        ]
+    }
+}

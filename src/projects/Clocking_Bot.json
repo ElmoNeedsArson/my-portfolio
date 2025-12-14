@@ -1,0 +1,78 @@
+{
+    "pinned": false,
+    "slug": "discord-clocking-bot",
+    "title": "Discord Clocking Bot",
+    "type": "bar",
+    "shortDesc": "A discord bot, for clocking work hours and generating reports",
+    "thumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2023-12",
+    "languages": ["JavaScript"],
+    "tools": ["Discord.js", "Google Sheets API"],
+    "tags": ["personal-project", "productivity", "automation","business"],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 3,
+            "reason": "Time tracking data management"
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 6,
+            "reason": "Discord bot development with Google Sheets API integration"
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 2,
+            "reason": "Basic bot interface design"
+        },
+        {
+            "area": "User and Society",
+            "rating": 3,
+            "reason": "Productivity tool for team workflows"
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 6,
+            "reason": "Developed productivity automation tool for business operations, tracking work hours and generating reports for startup management"
+        }
+    ],
+    "content": {
+        "overview": "",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "title": "Work in Progress",
+                "text": "",
+                "gallery": {
+                    "columns": 0,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "",
+                            "alt": "",
+                            "caption": ""
+                        }
+                    ],
+                    "caption": ""
+                }
+            }
+        ]
+    }
+}

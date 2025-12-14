@@ -27,7 +27,6 @@ public/assets
 SEARCH_ARCHITECTURE.md
 .pretierrc
 ToDo.md
-projects
 src/assets
 .gitignore
 
@@ -35,3 +34,4 @@ src/assets
 .pretierrc
 SEARCH_ARCHITECTURE.md
 package-lock.json
+Experiments.md

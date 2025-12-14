@@ -1,0 +1,77 @@
+{
+  "pinned": false,
+  "slug": "first-programming-course",
+  "title": "First Programming Course",
+  "type": "twente",
+  "shortDesc": "Interactive creature 'Eve' in Processing",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2020-09-21",
+  "languages": ["Java"],
+  "tools": ["Processing"],
+  "tags": ["Education", "Creative Coding"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 4,
+      "reason": "Animation logic and coordinate systems"
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 5,
+      "reason": "Processing and Java creative coding implementation"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 5,
+      "reason": "Interactive creature design with animations"
+    },
+    {
+      "area": "User and Society",
+      "rating": 1,
+      "reason": "Interactive user input design"
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 0,
+      "reason": ""
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "",
+        "text": "",
+        "video": {
+          "type": "video",
+          "src": "/assets/videos/evemain-1.mp4",
+          "autoplay": true,
+          "loop": true,
+          "muted": true,
+          "controls": false
+        }
+      }, 
+      {
+        "text": "So for the subject of programming we have an end assignment which was due the end of september. The assignment basicly asks you to make a creature of any sort in 'Processsing'. In Processing you use a form of javascript to make certain shapes or make code do certain stuff. Part of the assignment was to make our creature interactive, meaning it does certain actions when it is clicked or when another action is performed, like a keypress for example. \n\nEve is the interactive creature I had been working on. She moves according to keypresses, and gets happy when you click on her. This is shown by her eyes changing appearance. She can be controlled by <code>wasd</code> keys or the arrows on your keyboard. She has a nice hovering animation aswell. Not shown in the video, but the creature also has a background, and multiple friends to accompany her. \n\nIf you want to learn more about processing, feel free to visit their <a href=”https://processing.org/”>site</a> or contact me via any of the platforms listed below on my page"
+      }
+    ]
+  }
+}

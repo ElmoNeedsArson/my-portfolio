@@ -1,0 +1,85 @@
+{
+    "pinned": true,
+    "slug": "discord-quotes-bot",
+    "title": "Discord Quotes Bot",
+    "type": "bar",
+    "shortDesc": "A discord bot that stores and retrieves quotes for daily voting and leaderboards",
+    "thumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2025-06",
+    "languages": ["JavaScript", "SQL"],
+    "tools": ["Discord.js", "SQLite"],
+    "tags": ["Discord Bot", "JavaScript", "SQLite"],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 6,
+            "reason": "Data scraping, sanitization, SQL database management, and leaderboard algorithms"
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 7,
+            "reason": "Built Discord bot with SQLite database integration, implementing data scraping, sanitization, voting system, and leaderboard functionality using Discord.js"
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 2,
+            "reason": "Bot commands and interaction design"
+        },
+        {
+            "area": "User and Society",
+            "rating": 3,
+            "reason": "Community engagement tool for friend group"
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 0,
+            "reason": ""
+        }
+    ],
+    "content": {
+        "overview": "",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "text": "Github Repo: <a href=\"https://github.com/ElmoNeedsArson/Quotes_bot\" target=\"_blank\">Here</a>"
+            },
+            {
+                "title": "Background",
+                "text": "In our friendgroup we have a discord server with a channel where we collect funny quotes from eachother. This has been a process starting since the beginning of highschool and is currently over 11 years old. Leading us to currently have over 1500 quotes collected. Now every once and a while i scroll through this channel to look at fun quotes, but this gets old after scrolling back 2 years, while there are some real gems in there."
+            },
+            {
+                "subtitle": "Motivation",
+                "text": "To give myself a side project to do, I decided to make a discord bot for this purpose. I scraped the entire channel clean, and got a 7 year old document from the first 2 years when we did it in a whatsapp group. And transformed/sanitized all the data into one type of format. See the repo for the code I used here. After unicoding all data I generated an SQlite db, containing all the quotes, authors, dates, and other relevant information." 
+            },
+            {
+                "subtitle": "Functionality",
+                "text": "The bot itself is made with discord.js. Its main features are the addition of new quotes to the database, and a daily quote. The bot will select a quote at random from the database (as long as it hasnt already been sent). And posts it in the discord. Everyone can then vote on this quote with emoji reactions 1-5. Which gets stored in a votes database. As of writing this the bot has handled 280+ quotes, and has built up a pretty solid leaderboard and database."
+            },
+            {
+                "subtitle": "Commands",
+                "text": "Its commands are:\n- <code>/quotes-add</code>\n- <code>/quotes-leaderboard</code>\n- <code>/quotes-by-name</code>\n- <code>/quotes-myranking</code>\nThese commands allow you to add quotes, see the leaderboard, see quotes by a specific person, and see your personal ranking respectively."
+            },
+            {
+                "subtitle": "Usage",
+                "text": "If you want to use this bot in your own server, you can do with relative ease. You only need to host the bot yourself on a vps, or local server. And add the bot to your server, and it will work automatically. Because it sets up a local database, wherever you host it. Just make sure to invite the bot with the right permissions, so it can read messages and post messages. \n\nIf you want to customize the bot, you can fork the repo and change the code to your liking. If you have any questions about setting it up, feel free to reach out to me!"
+            }
+        ]
+    }
+}

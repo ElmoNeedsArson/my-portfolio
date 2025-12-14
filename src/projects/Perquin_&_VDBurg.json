@@ -1,0 +1,81 @@
+{
+    "pinned": false,
+    "slug": "student-management-tool",
+    "title": "Student Management Tool",
+    "type": "bar",
+    "shortDesc": "A learning management system for my tutoring job",
+    "thumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2024-08",
+    "languages": ["JavaScript", "HTML", "CSS"],
+    "tools": ["Electron.js", "Google Sheets API"],
+    "tags": ["personal-project", "productivity", "education","business"],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 4,
+            "reason": "Data management and API integration"
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 6,
+            "reason": "Desktop application with Electron.js and Google Sheets API"
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 4,
+            "reason": "User interface design for efficiency"
+        },
+        {
+            "area": "User and Society",
+            "rating": 5,
+            "reason": "Learned importance of stakeholder involvement through reflection on missing obvious features, demonstrating understanding of inclusive design processes"
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 7,
+            "reason": "Developed desktop application to streamline tutoring business operations, replacing inefficient Google Drive system with faster API-based solution"
+        }
+    ],
+    "content": {
+        "overview": "",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "title": "Background",
+                "text": "During my time as a tutor at <code>redacted</code>, I identified the need for a more efficient way to manage student information and track progress. To address this, I developed a Student Management Tool using web technologies. This tool allows tutors to easily add and manage student profiles, record session notes, and monitor academic progress over time. By implementing this tool, I aimed to streamline administrative tasks, allowing tutors to focus more on teaching and less on paperwork."
+            },
+            {
+                "title": "Motivation",
+                "text": "The primary motivation was the inneficiencies in the existing system, which relied on google drive. Where each location, had their own folder, each daypart, each student, and per student 2 different types of files. One for the student themselves to see a planner, and one for the tutor to write notes and assess the students progress. Using this system during work was incredibly time consuming, google drive does not neccesarily load very fast, pair this with navigating through a lot of folders, and opening multiple files, you might build some frustration."
+            },
+            {
+                "title": "Solution",
+                "text": "Due to having experience with the google sheets api for my discord clocking bot, i knew there was a way for me to do this faster, without all the slow page loading. I decided to create a desktop application that interfaces with the current google drive system, but provides a much faster and more user friendly interface. \n\nThe application is built using Electron.js for the desktop environment and plain js,html and css for the frontend. It connects to Google Sheets API to fetch and update student data in real-time. The user interface is designed to be intuitive, allowing tutors to quickly access student profiles, add notes, and track progress with minimal clicks."
+            },
+            {
+                "text": "This project taught me a lot about working with APIs, desktop application development, and user interface design. It was rewarding to see how technology can be leveraged to improve educational processes and make a tangible difference in the day-to-day operations of tutoring."
+            },
+            {
+                "subtitle": "Learning Elements",
+                "text": "It would be a shame not to mention, that while for employees this was indeed faster, I did not involve the \"stakeholder\" in the development process. So when I eventually showcased it, they where enthousiastic, but also mentioned elements which I did not include which where fairly obvious elements to add. This experience revealed the value of including stakeholders in the design, where they showed me multiple elements they valued I did not expect, reinforcing my commitment to inclusive, iterative processes."
+            }
+        ]
+    }
+}

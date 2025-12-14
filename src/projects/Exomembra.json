@@ -1,0 +1,66 @@
+{
+    "pinned": false,
+    "slug": "Exomembra",
+    "title": "Exomembra",
+    "type": "card",
+    "shortDesc": "",
+    "thumbnail": {
+        "type": "image",
+        "src": "../assets/images/Exomembra-showcase2.png",
+        "alt": "",
+        "caption": "Image of Exomembra costume piece"
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "../assets/images/Exomembra-showcase2.png",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2023",
+    "languages": [],
+    "tools": ["Wordpress", "Midjourney", "Blender"],
+    "tags": ["Start-up", "Branding", "Web Design", "Business"],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 0,
+            "reason": ""
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 3,
+            "reason": "Exoskeleton prototyping and iteration"
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 5,
+            "reason": "Branding, web design with Midjourney and Blender"
+        },
+        {
+            "area": "User and Society",
+            "rating": 6,
+            "reason": "Cosplay and LARP community engagement"
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 8,
+            "reason": "Co-founded startup developing business strategy for exoskeleton market entry, using cosplay/LARP as validation pathway to avoid medical regulations while enabling rapid prototyping"
+        }
+    ],
+    "content": {
+        "overview": "In 2023, together with 2 friends, we founded Exomembra. The eventual mission of the startup was to find out comfortability for exoskeletons as an entry in to the medical market. The angle we found for rapidly being able to prototype while aiming for a medical market was to create costume pieces for the cosplay and larp community. The eliminates the hassle of medical regulations and allow for rapid prototyping and iteration.\n\nAnother project I did related to this startup can be found [here](/discord-clocking-bot)",
+        "keyFeatures": [],
+        "sections": [
+            {
+                "title": "",
+                "text": ""
+            }
+        ]
+    }
+}

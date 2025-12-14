@@ -1,0 +1,69 @@
+{
+  "pinned": false,
+  "slug": "living-and-working-tomorrow",
+  "title": "Living and Working Tomorrow",
+  "type": "twente",
+  "shortDesc": "Smart food dispenser technology concept",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2021-04-07",
+  "languages": [],
+  "tools": ["Windows Movie Maker"],
+  "tags": ["Human Centered Design"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 3,
+      "reason": "Smart dispenser technology concept and app design"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 3,
+      "reason": "Display and interaction design"
+    },
+    {
+      "area": "User and Society",
+      "rating": 6,
+      "reason": "Working directly with client stakeholder, designing technology concept for food dispenser community, addressing societal sustainability challenges in food packaging"
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 4,
+      "reason": "Client project for growing brand interest"
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "",
+        "text": "This module we had a separate project to work on. This project was about the food industry. The goal of this project was to complete a project at the hand of a client. The client would be proposed by the university and the groups would be connected to them. The client proposed to our group was Wim van Dijk. He owns a company that produces and distributes food dispensers. Wim explained that he wanted to make a community around his products and thereby wanting the help of our group. After exploring the possibilities, the conclusion was made that our group could best look at possible technological additions or improvements for the food dispensers, and thereby sparking interest of people making them interested in the product. \n\nAs regards to our module name 'Living and working tomorrow' this project falls right in its place by suggesting an alternative way of food packaging bringing along a lot less pollution and plastic litter. A very future oriented but needed advancement.\n\nSo in short we want to give the dispensers a technological improvement and thereby gaining interest amongst customers so Wim can grow his brand. \n\nOur final design includes a concept idea for the entirety of an app and display and how they are connected, but also entails a design for the display and all it's interactivity thought out. Below here you'll find a movie that explains our product in a user case scenario and a edge case scenario(a scenario where something goes wrong)."
+      },
+      {
+        "text": "Unfortunately the video is no longer available"
+      }
+    ]
+  }
+}

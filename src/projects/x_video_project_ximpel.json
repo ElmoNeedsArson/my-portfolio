@@ -1,0 +1,66 @@
+{
+  "pinned": false,
+  "slug": "video-project-ximpel",
+  "title": "Video Project Ximpel",
+  "type": "twente",
+  "shortDesc": "Interactive time-loop video puzzle",
+  "thumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "thumbnailLight": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "projectPageThumbnail": {
+    "type": "image",
+    "src": "",
+    "alt": "",
+    "caption": ""
+  },
+  "date": "2020-11-05",
+  "languages": ["HTML"],
+  "tools": ["Ximpel"],
+  "tags": ["Video", "Interactive Media"],
+  "expertise": [
+    {
+      "area": "Math, Data and Computing",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Technology and Realization",
+      "rating": 4,
+      "reason": "HTML-based interactive video with Ximpel"
+    },
+    {
+      "area": "Creativity and Aesthetics",
+      "rating": 4,
+      "reason": "Time-loop narrative design and video production"
+    },
+    {
+      "area": "User and Society",
+      "rating": 0,
+      "reason": ""
+    },
+    {
+      "area": "Business and Entrepreneurship",
+      "rating": 0,
+      "reason": ""
+    }
+  ],
+  "content": {
+    "overview": "",
+    "keyFeatures": [],
+    "sections": [
+      {
+        "title": "",
+        "text": "For intro to CreaTe we had an interesting assignment this module. We had to make an interactive video using a video editor called Ximpel. An interactive video, is a video where the audience get to interact with the video, which you might have guessed from the name. Interactivity can include a lot of things, for example choices. You can make the audience play your main character by making them decide on choices your main character can make. “should i go left or right?”. \n\nThe editor we had to use for this was called Ximpel, a generally unknown video editor, where u use html to code your video. This allows you to implement choices into your video. There is very little to no documentation on Ximpel to be found on the internet, so it was an interesting editor to figure out how everything works. Eventually we got everything figured out, unfortunately, does this website editor not allow for Ximpel videos. \n\nWithout spoiling to much, the video is about a day looping over and over again until you figure out the right thing to do. Go give it a try if you think u are smart enough :). Hope you enjoy!"
+      }
+    ]
+  }
+}
