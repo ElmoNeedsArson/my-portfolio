@@ -1,13 +1,24 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import { ChevronDown } from "@lucide/svelte";
     import Outline from "../components/eindhovenOutline.svelte";
     import EindhovenModal from "../components/EindhovenModal.svelte";
+    import ExpertiseProjectRankings from "../components/visualizations/ExpertiseProjectRankings.svelte";
+    import { loadAllProjects } from "../lib/searchUtils";
+    import type { Project } from "../types";
 
     let headings = [];
     let currentSection = "Professional Identity";
     let currentSubtitle = ""; // Track current subtitle
     let stickyTitle = false;
     let isModalOpen = false;
+    let isRankingsExpanded = false;
+    let projects: Project[] = [];
+
+    // Load all projects for visualizations
+    onMount(() => {
+        projects = loadAllProjects();
+    });
 
     function openModal(event: MouseEvent) {
         event.stopPropagation();
@@ -146,9 +157,9 @@
     </div>
     <div class="content">
         <section id="professional-identity">
-            <button class="open-modal-button" on:click={openModal}>
+            <!-- <button class="open-modal-button" on:click={openModal}>
                 Open Modal
-            </button>
+            </button> -->
 
             <h1 id="professional-identity-title" class="hidden-title">
                 Professional Identity
@@ -346,6 +357,29 @@
                 meaningful impact.
             </p>
         </section>
+
+        <!-- Collapsible Project Rankings Section -->
+        <div class="rankings-section">
+            <button
+                class="rankings-toggle"
+                on:click={() => (isRankingsExpanded = !isRankingsExpanded)}
+                aria-expanded={isRankingsExpanded}
+            >
+                <span class="rankings-toggle-text"
+                    >Browse Projects by Expertise Area</span
+                >
+                <ChevronDown
+                    size={20}
+                    class="chevron-icon {isRankingsExpanded ? 'expanded' : ''}"
+                />
+            </button>
+
+            {#if isRankingsExpanded}
+                <div class="rankings-content">
+                    <ExpertiseProjectRankings {projects} />
+                </div>
+            {/if}
+        </div>
 
         <div class="rounded"></div>
 
@@ -594,13 +628,18 @@
                 in any university or personal projects, and I identify with. The
                 <mark>connector role</mark>, and my motivation behind projects,
                 as described in my Professional identity relates to this as
-                well.<br /><br />
+                well.
+            </p>
+            <div class="quote">
+                <p>
+                    “Industrial designers that develop a start-up; based on a
+                    product or a service or aim at implementing a design vision
+                    within companies and organizations, they need to take the
+                    lead to implement their vision”
+                </p>
+            </div>
 
-                “Industrial designers that develop a start-up; based on a
-                product or a service or aim at implementing a design vision
-                within companies and organizations, they need to take the lead
-                to implement their vision”<br /><br />
-
+            <p>
                 This track might allow me to fill that role with even better
                 knowledge and skills, thereby allowing the role that I like
                 most, to be executed more smoothly and efficiently, and perhaps
@@ -610,93 +649,106 @@
 
             <div class="insert"></div>
 
-            <h2 id="courses-and-electives-year-1" class="hidden-title">
-                Courses and Electives - Year 1
-            </h2>
-            <p>
-                The selected courses align with my vision as a designer to
-                thoughtfully integrate advanced technologies in meaningful,
-                human-centered ways. Courses like Interactional Morality and
-                Values-Based Leadership (DLE track course) strengthen my ability
-                to critically evaluate the societal and ethical impact of my
-                designs, by fostering a deep understanding of the broader
-                implications of design decisions on users, organizations, and
-                society.<br /><br />
+            <div class="education-timeline">
+                <div class="timeline-section">
+                    <h2 id="courses-and-electives-year-1">
+                        Courses and Electives - Year 1
+                    </h2>
+                    <p>
+                        The selected courses align with my vision as a designer to
+                        thoughtfully integrate advanced technologies in meaningful,
+                        human-centered ways. Courses like Interactional Morality and
+                        Values-Based Leadership (DLE track course) strengthen my ability
+                        to critically evaluate the societal and ethical impact of my
+                        designs, by fostering a deep understanding of the broader
+                        implications of design decisions on users, organizations, and
+                        society.
+                    </p>
+                    <p>
+                        In addition, courses such as Creativity and Aesthetics of Data &
+                        AI, Designing with Advanced AI, and Designing with and for
+                        Digital Twins will deepen my technical expertise in machine
+                        learning, digital twins, and other advanced technologies while
+                        exploring their creative and expressive potential. These
+                        subjects directly support my short- and long-term goals of
+                        expanding technical skills in areas like Math, Data, and
+                        Computing (MDC) and Technology and Realization (T&R) while
+                        connecting them to creative, real-world applications.
+                    </p>
+                </div>
 
-                In addition, courses such as Creativity and Aesthetics of Data &
-                AI, Designing with Advanced AI, and Designing with and for
-                Digital Twins will deepen my technical expertise in machine
-                learning, digital twins, and other advanced technologies while
-                exploring their creative and expressive potential. These
-                subjects directly support my short- and long-term goals of
-                expanding technical skills in areas like Math, Data, and
-                Computing (MDC) and Technology and Realization (T&R) while
-                connecting them to creative, real-world applications.
-            </p>
+                <div class="timeline-section">
+                    <h2 id="courses-and-electives-year-2">
+                        Courses and Electives - Year 2
+                    </h2>
+                    <p>
+                        In the second year of my master's program, I plan to broaden my
+                        design perspective by studying abroad at either Aalto University
+                        or the Technical University of Copenhagen. Both institutions
+                        offer opportunities to complement my current skillset: Aalto's
+                        focus on practical, hands-on design approaches will enhance my
+                        ability to prototype and iterate effectively, while Copenhagen's
+                        emphasis on more technical subjects will allow me to deepen my
+                        expertise in areas like artificial intelligence, digital
+                        systems, and data-driven design. I think in addition that this
+                        experience will contribute to me potentially growing as a person
+                        by creating more and broader experiences.
+                    </p>
+                    <p>
+                        For my Final Master Project (FMP), I aim to integrate advanced
+                        technologies, such as AI, digital twins, or interactive systems,
+                        into educational settings to explore how these tools can enhance
+                        learning experiences. Building on my prior experience in
+                        educational digital games and my coursework in advanced AI and
+                        digital design tools, my FMP will reflect my dedication to
+                        creating meaningful, user-centered solutions that balance
+                        technological innovation with human .
+                    </p>
+                </div>
+
+                <div class="timeline-section">
+                    <h2 id="beyond-education">Beyond Education</h2>
+                    <p>
+                        After/during my current master, I am tempted to address my
+                        interest for education with the double education master TU/E
+                        offers, I want to gather some more information about the options
+                        and possibilities in this regard (With an information session on
+                        the 10th of March). However, another way to address this
+                        interest is by pursuing another master's program after my
+                        current master. Scandinavia being my preferred destination due
+                        to the availability of tuition-free education in Sweden. I've
+                        already looked into the duration and associated costs, and I'm
+                        considering programs such as the master's in education or
+                        Serious Games (educational games) offered at the University of
+                        Skövde.
+                    </p>
+                    <p>
+                        Lifelong learning is really an approach that aligns with my
+                        interests. And if I come to work somewhere eventually, I feel
+                        like my curiosity and determination will prove valuable and
+                        useful. These attributes also help me in my personal projects I
+                        like to undertake beside my master.
+                    </p>
+                    <p>
+                        For instance, I am currently developing a plugin [6] for the
+                        note-taking application Obsidian [7]. The plugin has been
+                        accepted into the platform's official plugin list, allowing
+                        others to download and use it. This project has taught / is
+                        teaching me a big deal on dealing with bigger code repositories
+                        and writing code according to external standards. This and
+                        similar projects are things I enjoy undertaking in my spare
+                        time, and hope to continue doing so far beyond my master.
+                    </p>
+                </div>
+            </div>
 
             <div class="insert"></div>
+        </section>
 
-            <h2 id="courses-and-electives-year-2" class="hidden-title">
-                Courses and Electives - Year 2
-            </h2>
-            <p>
-                In the second year of my master's program, I plan to broaden my
-                design perspective by studying abroad at either Aalto University
-                or the Technical University of Copenhagen. Both institutions
-                offer opportunities to complement my current skillset: Aalto's
-                focus on practical, hands-on design approaches will enhance my
-                ability to prototype and iterate effectively, while Copenhagen's
-                emphasis on more technical subjects will allow me to deepen my
-                expertise in areas like artificial intelligence, digital
-                systems, and data-driven design. I think in addition that this
-                experience will contribute to me potentially growing as a person
-                by creating more and broader experiences.<br /><br />
-
-                For my Final Master Project (FMP), I aim to integrate advanced
-                technologies, such as AI, digital twins, or interactive systems,
-                into educational settings to explore how these tools can enhance
-                learning experiences. Building on my prior experience in
-                educational digital games and my coursework in advanced AI and
-                digital design tools, my FMP will reflect my dedication to
-                creating meaningful, user-centered solutions that balance
-                technological innovation with human .
-            </p>
-
-            <div class="insert"></div>
-
-            <h2 id="beyond-education" class="hidden-title">Beyond Education</h2>
-            <p>
-                After/during my current master, I am tempted to address my
-                interest for education with the double education master TU/E
-                offers, I want to gather some more information about the options
-                and possibilities in this regard (With an information session on
-                the 10th of March). However, another way to address this
-                interest is by pursuing another master's program after my
-                current master. Scandinavia being my preferred destination due
-                to the availability of tuition-free education in Sweden. I've
-                already looked into the duration and associated costs, and I'm
-                considering programs such as the master's in education or
-                Serious Games (educational games) offered at the University of
-                Skövde.<br /><br />
-
-                Lifelong learning is really an approach that aligns with my
-                interests. And if I come to work somewhere eventually, I feel
-                like my curiosity and determination will prove valuable and
-                useful. These attributes also help me in my personal projects I
-                like to undertake beside my master.<br /><br />
-
-                For instance, I am currently developing a plugin [6] for the
-                note-taking application Obsidian [7]. The plugin has been
-                accepted into the platform's official plugin list, allowing
-                others to download and use it. This project has taught / is
-                teaching me a big deal on dealing with bigger code repositories
-                and writing code according to external standards. This and
-                similar projects are things I enjoy undertaking in my spare
-                time, and hope to continue doing so far beyond my master.
-            </p>
-
-            <div class="insert"></div>
-
+        <section id="sources">
+            <h1 id="future-development-title" class="hidden-title">
+                Future Development
+            </h1>
             <h1 id="sources" class="hidden-title">Sources</h1>
             <ol type="1">
                 <p>
@@ -767,7 +819,45 @@
     </div>
 </article>
 
+<EindhovenModal bind:isOpen={isModalOpen} {projects} on:close={closeModal} />
+
 <style>
+    :root {
+        --professional-identity-border-color: rgba(74, 144, 226, 0.3);
+        --vision-border-color: rgba(155, 89, 182, 0.3);
+        --future-development-border-color: rgba(230, 126, 34, 0.3);
+    }
+
+    #professional-identity {
+        border-left: 4px solid var(--professional-identity-border-color);
+        padding-left: 1rem;
+        background: linear-gradient(
+            to bottom,
+            transparent,
+            rgba(74, 144, 226, 0.08)
+        );
+    }
+
+    #vision {
+        border-left: 4px solid var(--vision-border-color);
+        padding-left: 1rem;
+        background: linear-gradient(
+            to bottom,
+            rgba(155, 89, 182, 0.08),
+            rgba(155, 89, 182, 0.08)
+        );
+    }
+
+    #future-development {
+        background: linear-gradient(
+            to bottom,
+            rgba(230, 126, 34, 0.08),
+            transparent
+        );
+        border-left: 4px solid var(--future-development-border-color);
+        padding-left: 1rem;
+    }
+
     mark {
         background-color: transparent;
         color: var(--secondary-text-color);
@@ -781,7 +871,7 @@
     .project-page {
         color: var(--primary-text-color);
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 4fr; /* Prevent column from expanding beyond 1fr */
+        grid-template-columns: minmax(0, 1fr) 5fr; /* Prevent column from expanding beyond 1fr */
         gap: 2rem;
         position: relative;
     }
@@ -835,11 +925,16 @@
 
     .content {
         position: relative;
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: hidden;
     }
 
     section {
         /* margin-bottom: 4rem; */
         scroll-margin-top: 120px; /* Adjusted to work with improved sticky logic */
+        min-width: 0;
+        max-width: 100%;
     }
 
     /* #vision{
@@ -895,9 +990,17 @@
         padding: 0;
     }
 
+    .quote {
+        border-left: 4px solid var(--border-color);
+        /* margin: 1.5rem 0; */
+        padding-left: 1rem;
+        color: var(--muted-color);
+        font-style: italic;
+    }
+
     p {
         text-align: justify;
-        font-size: 1rem;
+        font-size: 0.9rem;
         line-height: 1.6;
         margin-bottom: 1.5rem;
     }
@@ -918,12 +1021,60 @@
         margin-bottom: 2rem;
     }
 
-    .goal p, .goal{
-        font-size: 0.8rem;
+    .goal p,
+    .goal {
+        font-size: 0.7rem;
     }
 
     .expertise_area {
         text-align: end;
+    }
+
+    /* Education Timeline 3-column layout */
+    .education-timeline {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .timeline-section {
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        background: rgba(0, 0, 0, 0.02);
+        transition: all 0.3s ease;
+    }
+
+    .timeline-section:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .timeline-section h2 {
+        /* font-size: 1.1rem; */
+        font-weight: 600;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        color: var(--secondary-text-color);
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 0.5rem;
+    }
+
+    .timeline-section p {
+        margin-bottom: 1rem;
+    }
+
+    .timeline-section p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Responsive: stack on medium screens */
+    @media (max-width: 1024px) {
+        .education-timeline {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
     }
 
     .gallery {
@@ -976,6 +1127,11 @@
             padding: 0;
         }
 
+        .goals {
+            grid-template-columns: 1fr;
+            row-gap: 2rem;
+        }
+
         p {
             margin-right: 1.5rem;
         }
@@ -1001,6 +1157,55 @@
         background-color: var(--hover-color);
         border-color: var(--primary-text-color);
     }
-</style>
 
-<EindhovenModal bind:isOpen={isModalOpen} title="Project Visualizations" on:close={closeModal} />
+    /* Collapsible Rankings Section */
+    .rankings-section {
+        margin: 2rem 0;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--background-color);
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .rankings-toggle {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        background: var(--background-color);
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--primary-text-color);
+        transition: all 0.2s ease;
+    }
+
+    .rankings-toggle:hover {
+        background: var(--hover-color);
+    }
+
+    .rankings-toggle-text {
+        font-size: 1.1rem;
+    }
+
+    .rankings-toggle :global(.chevron-icon) {
+        transition: transform 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .rankings-toggle :global(.chevron-icon.expanded) {
+        transform: rotate(180deg);
+    }
+
+    .rankings-content {
+        border-top: 2px solid var(--border-color);
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 0 0.25rem 0.75rem 0.25rem;
+    }
+</style>

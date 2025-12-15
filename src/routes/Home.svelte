@@ -13,6 +13,7 @@
     import { fade } from "svelte/transition";
     import { onMount } from "svelte";
     import { useTabNavigation, lastVisitedTab } from "../lib/navigationStore";
+    import { showRadarChart } from "../lib/radarChartStore";
     import Eindhoven from "./Eindhoven.svelte";
 
     // Determine page type based on current route or active tab
@@ -96,6 +97,17 @@
                             {pageTitle}
                         </h2>
                     {/key}
+                </div>
+                
+                <!-- Radar Chart Toggle -->
+                <div class="controls">
+                    <label class="radar-toggle">
+                        <input 
+                            type="checkbox" 
+                            bind:checked={$showRadarChart}
+                        />
+                        <span>Show Expertise Radar</span>
+                    </label>
                 </div>
             </div>
         {/if}
@@ -240,6 +252,37 @@
         font-weight: 500;
         margin: 0px;
         margin-left: 2rem;
+    }
+
+    .controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .radar-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--muted-color);
+        transition: color 0.2s ease;
+    }
+
+    .radar-toggle:hover {
+        color: var(--primary-text-color);
+    }
+
+    .radar-toggle input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--primary-text-color);
+    }
+
+    .radar-toggle span {
+        user-select: none;
     }
 
     .titleIcon {

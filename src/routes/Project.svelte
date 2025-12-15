@@ -10,10 +10,12 @@
     ContentBlock,
   } from "../types";
   import ProjectOutline from "../components/ProjectOutline.svelte";
+  import ExpertiseRadarChart from "../components/ExpertiseRadarChart.svelte";
   import { navigateToSearch } from "../lib/searchNavigation";
   import { findProjectBySlug } from "../lib/searchUtils";
   import { getCategoryById } from "../lib/searchCategories";
   import { lastVisitedTab } from "../lib/navigationStore";
+  import { showRadarChart } from "../lib/radarChartStore";
 
   // Reactive slug value derived from the router params. `$params` is provided
   // by svelte-spa-router and is reactive.
@@ -244,6 +246,11 @@
   {#if project}
     <!-- Project outline component -->
     <ProjectOutline {project} contentOverride={activeContent} />
+    
+    <!-- Expertise radar chart -->
+    {#if $showRadarChart && project.expertise && project.expertise.length > 0}
+      <ExpertiseRadarChart {project} />
+    {/if}
 
     <!-- Project detail layout. Renders when a matching project is found. -->
     <article class="project-page">

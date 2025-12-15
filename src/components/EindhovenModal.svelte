@@ -1,13 +1,17 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import { X } from "@lucide/svelte";
+    import type { Project } from "../types";
+    
+    // Import visualization
+    import LanguageSunburst from "./visualizations/LanguageSunburst.svelte";
 
     const dispatch = createEventDispatcher<{
         close: void;
     }>();
 
     export let isOpen = false;
-    export let title = "Modal Title";
+    export let projects: Project[] = [];
 
     function handleClose() {
         dispatch("close");
@@ -30,16 +34,26 @@
 
 {#if isOpen}
     <div class="modal-overlay">
-        <div class="modal-container" on:click={handleModalClick}>
+        <div 
+            class="modal-container" 
+            on:click={handleModalClick}
+            on:keydown={(e) => e.key === 'Escape' && handleClose()}
+            role="dialog"
+            aria-modal="true"
+            tabindex="-1"
+        >
             <div class="modal-header">
-                <h3>{title}</h3>
+                <h3>Language Sunburst</h3>
                 <button class="close-button" on:click={handleClose}>
                     <X size={20} />
                 </button>
             </div>
 
+            <!-- Visualization content -->
             <div class="modal-content">
-                <slot />
+                <div class="visualization-view">
+                    <LanguageSunburst {projects} />
+                </div>
             </div>
         </div>
     </div>
@@ -66,6 +80,7 @@
         border: 1px solid var(--border-color);
         border-radius: 12px;
         width: 90%;
+        max-width: 1400px;
         height: 90%;
         box-shadow: 0 20px 40px var(--box-shadow);
         display: flex;
@@ -110,8 +125,12 @@
 
     .modal-content {
         flex: 1;
-        padding: 1.5rem;
         overflow-y: auto;
+        position: relative;
+    }
+
+    .visualization-view {
+        min-height: 100%;
     }
 
     @media (max-width: 768px) {
