@@ -3,6 +3,7 @@
     import { ChevronDown } from "@lucide/svelte";
     import Outline from "../components/eindhovenOutline.svelte";
     import EindhovenModal from "../components/EindhovenModal.svelte";
+    import EindhovenHero from "../components/EindhovenHero.svelte";
     import ExpertiseProjectRankings from "../components/visualizations/ExpertiseProjectRankings.svelte";
     import { loadAllProjects } from "../lib/searchUtils";
     import type { Project } from "../types";
@@ -143,6 +144,8 @@
         };
     });
 </script>
+
+<EindhovenHero />
 
 <article class="project-page">
     <div class="sidebar" class:sticky={stickyTitle}>
