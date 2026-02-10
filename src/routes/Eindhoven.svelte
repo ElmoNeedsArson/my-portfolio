@@ -1000,9 +1000,10 @@
 
     p {
         text-align: justify;
-        font-size: 0.9rem;
-        line-height: 1.6;
+        font-size: 0.94rem;
+        line-height: 1.5rem;
         margin-bottom: 1.5rem;
+        letter-spacing: 0.5px;
     }
 
     .past_present_future {
