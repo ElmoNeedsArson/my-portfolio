@@ -26,7 +26,7 @@
                 rgba(249, 103, 67, 0.08),
                 rgba(74, 144, 226, 0.12)
             );
-        border-radius: 0;
+        border-radius: 9px;
         overflow: hidden;
         margin-bottom: 2.5rem;
     }

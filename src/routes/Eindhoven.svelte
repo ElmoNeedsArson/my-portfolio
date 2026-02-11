@@ -3,7 +3,7 @@
     import { ChevronDown } from "@lucide/svelte";
     import Outline from "../components/eindhovenOutline.svelte";
     import EindhovenModal from "../components/EindhovenModal.svelte";
-    import EindhovenHero from "../components/EindhovenHero.svelte";
+    import InfiniteCanvas from "../components/InfiniteCanvas.svelte";
     import ExpertiseProjectRankings from "../components/visualizations/ExpertiseProjectRankings.svelte";
     import { loadAllProjects } from "../lib/searchUtils";
     import type { Project } from "../types";
@@ -145,7 +145,11 @@
     });
 </script>
 
-<EindhovenHero />
+<p>
+Left click and drag to move around the canvas. Or use the navigation in the bottom right.
+</p>
+
+<InfiniteCanvas />
 
 <article class="project-page">
     <div class="sidebar" class:sticky={stickyTitle}>
@@ -873,7 +877,8 @@
 
     .project-page {
         color: var(--primary-text-color);
-        display: grid;
+        /* display: grid; */
+        display: none;
         grid-template-columns: minmax(0, 1fr) 5fr; /* Prevent column from expanding beyond 1fr */
         gap: 2rem;
         position: relative;
