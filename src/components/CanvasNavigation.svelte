@@ -19,7 +19,7 @@
     
     // Start in bottom right
     let rightOffset = 20;
-    let bottomOffset = 20;
+    let bottomOffset = 80;
     
     const DRAG_THRESHOLD = 5; // Minimum pixels to move before considered a drag
     
@@ -116,7 +116,7 @@
     class="canvas-navigation"
     class:dragging={isDragging}
     class:expanded={isExpanded}
-    style="{posX !== null ? `left: ${posX}px;` : `right: ${rightOffset}px;`} {posY !== null ? `top: ${posY}px;` : `bottom: ${bottomOffset}px;`}"
+    style="{posX !== null ? `left: ${posX}px;` : `right: ${rightOffset}px;`} {posY !== null ? `top: ${posY}px;` : `top: ${bottomOffset}px;`}"
     on:mousedown={handleMouseDown}
     on:wheel={handleWheel}
     role="navigation"

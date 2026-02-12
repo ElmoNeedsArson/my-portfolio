@@ -146,7 +146,7 @@
 </script>
 
 <p>
-Left click and drag to move around the canvas. Or use the navigation in the bottom right.
+Left click and drag to move around the canvas. Or use the navigation in the top right.
 </p>
 
 <InfiniteCanvas />
