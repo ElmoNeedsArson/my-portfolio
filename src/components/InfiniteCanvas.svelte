@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
+  import { onMount, onDestroy, tick } from "svelte";
   import CanvasCard from "./CanvasCard.svelte";
   import CanvasArrow from "./CanvasArrow.svelte";
   import CanvasNavigation from "./CanvasNavigation.svelte";
@@ -9,12 +9,14 @@
 
   let isFullscreen = false;
   let canvasElement: HTMLElement;
-  let zoom = 0.58; // Start at better zoom level for readability with wider cards
+  let canvasContentElement: HTMLElement;
+  let zoom = 0.58;
   let panX = 800;
   let panY = 4;
   let isPanning = false;
   let startX = 0;
   let startY = 0;
+  let cardsMounted = false;
 
   // Touch interaction state
   let touchStartDistance = 0;
@@ -280,8 +282,8 @@
       to: "vision",
       toSide: "left" as const,
       waypoints: [
-        { x: 1350, y: 1260 },
-        { x: 1350, y: 632 },
+        { x: 1350, y: 1312 },
+        { x: 1350, y: 611 },
       ],
     },
 
@@ -291,7 +293,7 @@
       to: "future-development",
       toSide: "top" as const,
       waypoints: [
-        { x: 3300, y: 632 },
+        { x: 3300, y: 611 },
       ],
     },
     // Future Development → Long Term (vertical, same column)
@@ -343,6 +345,12 @@
       waypoints: [],
     },
   ];
+
+  // Reactive arrow points - recalculate when cards are mounted
+  $: arrowData = cardsMounted && connections.map(connection => ({
+    connection,
+    points: getArrowPoints(connection)
+  }));
 
   function handleWheel(e: WheelEvent) {
     e.preventDefault();
@@ -494,55 +502,34 @@
     const card = cards.find((c) => c.id === cardId);
     if (!card) return { x: 0, y: 0 };
 
-    // Improved height estimation
-    const headerHeight = 60; // Card header
-    const contentPadding = 48; // Top and bottom padding in content area
-
-    // Estimate height based on sections
-    let totalContentHeight = 0;
-    
-    if (card.sections) {
-      for (const section of card.sections) {
-        if (section.type === 'content' && section.content) {
-          // Check if it's a goals grid section
-          const hasGoalsGrid = section.content.includes("**Independence:**") ||
-                                (section.content.match(/\*\*[^*]+:\*\*/g) || []).length >= 4;
-          
-          if (hasGoalsGrid) {
-            // Goals grid: roughly 6 items in 3 columns = 2 rows
-            // Each goal item ~200px height
-            totalContentHeight += 2 * 220; // 2 rows with gap
-          } else {
-            // Estimate text content height
-            // For 1200px width cards with ~1.05rem font and 1.7 line height:
-            // Approximate 120 characters per line, ~28px per line
-            const lines = Math.ceil(section.content.length / 120);
-            totalContentHeight += lines * 28;
-          }
-        } else if (section.type === 'images' && section.images) {
-          // Each image gallery: 250px (fixed height) + 1.5rem margin + caption (~40px)
-          totalContentHeight += 250 + 24 + (section.caption ? 40 : 0);
-        }
-      }
+    // Get actual height from DOM (offsetHeight is not affected by CSS transforms)
+    const cardElement = cardsMounted ? canvasContentElement?.querySelector(`[data-card-id="${cardId}"]`) as HTMLElement : null;
+    const actualHeight = cardElement?.offsetHeight || 300;
+    if (cardElement) {
+      console.log(`Card ${cardId}:`, {
+        offsetHeight: cardElement.offsetHeight,
+        clientHeight: cardElement.clientHeight,
+        scrollHeight: cardElement.scrollHeight,
+        boundingRect: cardElement.getBoundingClientRect().height,
+        usingHeight: actualHeight
+      });
     }
-
-    const totalHeight = headerHeight + contentPadding + totalContentHeight;
-    const estimatedHeight = Math.max(300, totalHeight);
+    const headerHeight = 60; // Card header
 
     switch (side) {
       case "top":
         return { x: card.x + card.width / 2, y: card.y };
       case "bottom":
-        return { x: card.x + card.width / 2, y: card.y + estimatedHeight };
+        return { x: card.x + card.width / 2, y: card.y + actualHeight };
       case "left":
         return {
           x: card.x,
-          y: card.y + headerHeight + (estimatedHeight - headerHeight) / 2,
+          y: card.y + actualHeight / 2,
         };
       case "right":
         return {
           x: card.x + card.width,
-          y: card.y + headerHeight + (estimatedHeight - headerHeight) / 2,
+          y: card.y + actualHeight / 2,
         };
     }
   }
@@ -615,19 +602,20 @@
     if (!card || !canvasElement) return;
 
     const rect = canvasElement.getBoundingClientRect();
-    const estimatedHeight = Math.max(
-      200,
-      Math.ceil(card.content.length / 6) + 100,
-    );
+    
+    // Get actual height from DOM if available
+    const cardElement = canvasContentElement?.querySelector(`[data-card-id="${cardId}"]`) as HTMLElement;
+    const actualHeight = cardElement?.offsetHeight || 600;
 
-    // Calculate target position to center the card
+    // Calculate target position to show the top of the card
     const targetZoomLevel = 0.6; // Zoom level to view the card
     const cardCenterX = card.x + card.width / 2;
-    const cardCenterY = card.y + estimatedHeight / 2;
+    const cardTopY = card.y;
 
-    // Calculate pan to center the card in viewport
+    // Calculate pan to center horizontally, but show from the top vertically
     targetPanX = rect.width / 2 - cardCenterX * targetZoomLevel;
-    targetPanY = rect.height / 2 - cardCenterY * targetZoomLevel;
+    targetPanY = rect.height * 0.15 - cardTopY * targetZoomLevel; // 15% from top for some padding
+
     targetZoom = targetZoomLevel;
 
     // Start animation if not already running
@@ -636,7 +624,11 @@
     }
   }
 
-  onMount(() => {
+  onMount(async () => {
+    // Wait for cards to be in DOM
+    await tick();
+    cardsMounted = true;
+    
     // Anchor to top-left showing Professional Identity card
     if (isPreview && canvasElement) {
       const rect = canvasElement.getBoundingClientRect();
@@ -696,19 +688,23 @@
 
     <!-- Canvas content with transformation -->
     <div
+      bind:this={canvasContentElement}
       class="canvas-content"
       style="transform: translate({panX}px, {panY}px) scale({zoom})"
     >
       <!-- Arrows (rendered first so they appear below cards) -->
       <svg class="arrows-layer">
-        {#each connections as connection}
-          <CanvasArrow points={getArrowPoints(connection)} />
-        {/each}
+        {#if arrowData}
+          {#each arrowData as {points}}
+            <CanvasArrow {points} />
+          {/each}
+        {/if}
       </svg>
 
       <!-- Cards -->
       {#each cards as card (card.id)}
         <CanvasCard
+          cardId={card.id}
           x={card.x}
           y={card.y}
           width={card.width}
@@ -856,5 +852,36 @@
 
   .infinite-canvas:active {
     cursor: grabbing;
+  }
+
+  /* Print styles for PDF export */
+  @media print {
+    .canvas-wrapper {
+      position: static;
+      margin: 0;
+    }
+
+    .infinite-canvas {
+      height: auto !important;
+      min-height: 0 !important;
+      overflow: visible !important;
+      border-radius: 0;
+      transform: scale(0.6);
+      transform-origin: top left;
+    }
+
+    .canvas-content {
+      position: static !important;
+      transform: none !important;
+    }
+
+    .dot-grid {
+      display: none;
+    }
+
+    .canvas-action-button,
+    :global(.canvas-navigation) {
+      display: none !important;
+    }
   }
 </style>

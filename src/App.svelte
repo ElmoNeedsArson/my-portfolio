@@ -48,4 +48,13 @@
     max-width: 80%;
     margin: 6rem auto 0; /* push down beneath header area */
   }
+
+  /* Hide header and navigation in print when canvas is fullscreen */
+  @media print {
+    :global(header),
+    :global(footer),
+    .nav-container {
+      display: none !important;
+    }
+  }
 </style>

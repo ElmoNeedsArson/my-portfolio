@@ -97,4 +97,13 @@
     .arrow:hover path {
         stroke: rgba(255, 255, 255, 0.5);
     }
+
+    /* Print styles for PDF export */
+    @media print {
+        .arrow path,
+        .arrow polygon {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
 </style>

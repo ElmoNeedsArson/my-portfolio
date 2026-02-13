@@ -1,4 +1,5 @@
 <script lang="ts">
+    export let cardId: string;
     export let x: number;
     export let y: number;
     export let width: number;
@@ -40,6 +41,7 @@
 
 <div
     class="canvas-card"
+    data-card-id={cardId}
     style="
         left: {x}px;
         top: {y}px;

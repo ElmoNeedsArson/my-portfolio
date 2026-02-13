@@ -47,3 +47,22 @@ body {
   color: var(--primary-text-color);
   min-height: 100vh;
 }
+
+/* Print styles - Note: @page size may require manual selection in print dialog */
+@media print {
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* @page rules have limited browser support - you may need to manually select A2 Landscape in print dialog */
+@page {
+  size: A2 landscape;
+  margin: 10mm;
+}
