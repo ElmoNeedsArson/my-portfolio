@@ -1146,7 +1146,7 @@ Left click and drag to move around the canvas. Or use the navigation in the top 
         }
     }
 
-    .open-modal-button {
+    /* .open-modal-button {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
@@ -1165,7 +1165,7 @@ Left click and drag to move around the canvas. Or use the navigation in the top 
     .open-modal-button:hover {
         background-color: var(--hover-color);
         border-color: var(--primary-text-color);
-    }
+    } */
 
     /* Collapsible Rankings Section */
     .rankings-section {

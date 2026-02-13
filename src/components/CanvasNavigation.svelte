@@ -102,11 +102,71 @@
         // Stop wheel events from reaching the canvas (prevent zoom)
         event.stopPropagation();
     }
+
+    function handleTouchStart(event: TouchEvent) {
+        // Stop event from reaching canvas (prevent canvas pan)
+        event.stopPropagation();
+        
+        if ((event.target as HTMLElement).closest('.nav-item')) {
+            return; // Don't drag when touching nav items
+        }
+        
+        const touch = event.touches[0];
+        isDragging = true;
+        hasDragged = false;
+        initialClickX = touch.clientX;
+        initialClickY = touch.clientY;
+        
+        if (!navElement) return;
+        
+        const rect = navElement.getBoundingClientRect();
+        const parent = navElement.parentElement?.getBoundingClientRect();
+        if (!parent) return;
+        
+        // Convert to left/top positioning for dragging
+        posX = rect.left - parent.left;
+        posY = rect.top - parent.top;
+        
+        dragStartX = touch.clientX - posX;
+        dragStartY = touch.clientY - posY;
+    }
+
+    function handleTouchMove(event: TouchEvent) {
+        if (!isDragging || event.touches.length === 0) return;
+        
+        const touch = event.touches[0];
+        
+        // Check if moved beyond threshold
+        const deltaX = Math.abs(touch.clientX - initialClickX);
+        const deltaY = Math.abs(touch.clientY - initialClickY);
+        
+        if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
+            event.preventDefault(); // Prevent scrolling
+            
+            if (!hasDragged) {
+                // First time exceeding threshold - collapse menu
+                isExpanded = false;
+                hasDragged = true;
+            }
+            
+            if (posX !== null && posY !== null) {
+                posX = touch.clientX - dragStartX;
+                posY = touch.clientY - dragStartY;
+            }
+        }
+    }
+
+    function handleTouchEnd() {
+        isDragging = false;
+    }
 </script>
 
 <svelte:window 
     on:mousemove={handleMouseMove} 
-    on:mouseup={handleMouseUp} 
+    on:mouseup={handleMouseUp}
+    on:touchmove={handleTouchMove}
+    on:touchend={handleTouchEnd}
+    on:touchcancel={handleTouchEnd}
 />
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -119,6 +179,7 @@
     style="{posX !== null ? `left: ${posX}px;` : `right: ${rightOffset}px;`} {posY !== null ? `top: ${posY}px;` : `top: ${bottomOffset}px;`}"
     on:mousedown={handleMouseDown}
     on:wheel={handleWheel}
+    on:touchstart={handleTouchStart}
     role="navigation"
     aria-label="Canvas navigation"
 >

@@ -16,6 +16,11 @@
   let startX = 0;
   let startY = 0;
 
+  // Touch interaction state
+  let touchStartDistance = 0;
+  let touchStartZoom = 0;
+  let lastTouchDistance = 0;
+
   // Target positions for smooth animation
   let targetPanX: number | null = null;
   let targetPanY: number | null = null;
@@ -357,6 +362,85 @@
     canvasElement.style.cursor = "grab";
   }
 
+  function handleTouchStart(e: TouchEvent) {
+    if (e.touches.length === 1) {
+      // Single finger - pan
+      isPanning = true;
+      const touch = e.touches[0];
+      startX = touch.clientX - panX;
+      startY = touch.clientY - panY;
+    } else if (e.touches.length === 2) {
+      // Two fingers - prepare for pinch zoom
+      isPanning = false;
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const dx = touch2.clientX - touch1.clientX;
+      const dy = touch2.clientY - touch1.clientY;
+      touchStartDistance = Math.sqrt(dx * dx + dy * dy);
+      lastTouchDistance = touchStartDistance;
+      touchStartZoom = zoom;
+    }
+  }
+
+  function handleTouchMove(e: TouchEvent) {
+    e.preventDefault();
+    
+    if (e.touches.length === 1 && isPanning) {
+      // Single finger pan
+      const touch = e.touches[0];
+      panX = touch.clientX - startX;
+      panY = touch.clientY - startY;
+    } else if (e.touches.length === 2) {
+      // Two finger pinch zoom
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      
+      // Calculate current distance between fingers
+      const dx = touch2.clientX - touch1.clientX;
+      const dy = touch2.clientY - touch1.clientY;
+      const currentDistance = Math.sqrt(dx * dx + dy * dy);
+      
+      // Calculate zoom center (midpoint between fingers)
+      const rect = canvasElement.getBoundingClientRect();
+      const centerX = ((touch1.clientX + touch2.clientX) / 2) - rect.left;
+      const centerY = ((touch1.clientY + touch2.clientY) / 2) - rect.top;
+      
+      // Calculate canvas position before zoom
+      const canvasXBefore = (centerX - panX) / zoom;
+      const canvasYBefore = (centerY - panY) / zoom;
+      
+      // Calculate new zoom based on distance change
+      const scale = currentDistance / touchStartDistance;
+      const newZoom = Math.max(0.15, Math.min(3, touchStartZoom * scale));
+      
+      // Calculate canvas position after zoom
+      const canvasXAfter = (centerX - panX) / newZoom;
+      const canvasYAfter = (centerY - panY) / newZoom;
+      
+      // Adjust pan to keep center position consistent
+      panX += (canvasXAfter - canvasXBefore) * newZoom;
+      panY += (canvasYAfter - canvasYBefore) * newZoom;
+      
+      zoom = newZoom;
+      lastTouchDistance = currentDistance;
+    }
+  }
+
+  function handleTouchEnd(e: TouchEvent) {
+    if (e.touches.length === 0) {
+      isPanning = false;
+      touchStartDistance = 0;
+      touchStartZoom = 0;
+    } else if (e.touches.length === 1) {
+      // Went from 2 fingers to 1, restart pan
+      isPanning = true;
+      const touch = e.touches[0];
+      startX = touch.clientX - panX;
+      startY = touch.clientY - panY;
+      touchStartDistance = 0;
+    }
+  }
+
   function toggleFullscreen() {
     isFullscreen = !isFullscreen;
 
@@ -557,6 +641,10 @@
     on:mousemove={handleMouseMove}
     on:mouseup={handleMouseUp}
     on:mouseleave={handleMouseUp}
+    on:touchstart={handleTouchStart}
+    on:touchmove={handleTouchMove}
+    on:touchend={handleTouchEnd}
+    on:touchcancel={handleTouchEnd}
     role="application"
     tabindex="0"
     aria-label="Infinite canvas with content cards"
