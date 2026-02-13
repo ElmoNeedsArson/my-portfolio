@@ -1,11 +1,11 @@
 <script>
   import Router from "svelte-spa-router";
   import Home from "./routes/Home.svelte";
-  import Project from "./routes/Project.svelte";
-  import Header from "./components/header.svelte";
-  import Footer from "./components/footer.svelte";
+  import Project from "./routes/ProjectPage.svelte";
+  import Header from "./components/SiteWideComponents/header.svelte";
+  import Footer from "./components/SiteWideComponents/footer.svelte";
   import TabNavigation from "./components/TabNavigation.svelte";
-  import Dock from "./components/Dock.svelte";
+  import Dock from "./components/overlay.svelte";
   import { useTabNavigation } from "./lib/navigationStore";
   import { location } from "svelte-spa-router";
 
@@ -25,6 +25,11 @@
                       $location === "/experiments" || 
                       $location === "/eindhoven";
     $useTabNavigation = isHomePage;
+  }
+
+  // Scroll to top on route change
+  $: if ($location) {
+    window.scrollTo(0, 0);
   }
 
   // Manual toggle for dock (set to false to disable dock completely)

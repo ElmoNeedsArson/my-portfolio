@@ -191,14 +191,6 @@
         box-sizing: border-box;
     }
 
-    h3 {
-        font-size: 1.25rem;
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        color: var(--primary-text-color);
-        max-width: 100%;
-    }
-
     .tabs-container {
         display: flex;
         gap: 0.5rem;

@@ -7,7 +7,7 @@
   import { createEventDispatcher } from "svelte";
 
   export let project: Project;
-  export let showPinIcon: boolean = true; // Default to true for backward compatibility
+  export let showPinIcon: boolean = true;
 
   const dispatch = createEventDispatcher<{
     cardClick: void;
@@ -33,7 +33,7 @@
   $: imageUrl = getSrc(selectedThumb) ?? "";
 
   function handleTagClick(event: MouseEvent, tag: string) {
-    event.preventDefault(); //even though stoppropagation is called, this ensures the link is not followed
+    event.preventDefault(); 
     event.stopPropagation();
     navigateToSearch(tag, "tags");
   }
@@ -45,7 +45,6 @@
 
 <a href={`/${project.slug}`} use:link on:click={handleCardClick}>
   <article class="card">
-    <!-- background image container; `imageUrl` is reactive to theme changes -->
     <div class="card-bg" style="background-image: url('{imageUrl}')">
       <span class="date">{project.date.slice(0, 4)}</span>
 

@@ -1,10 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import { X, ArrowLeft, Search } from "@lucide/svelte";
-    import { link } from "svelte-spa-router";
-    import ProjectCard from "./ProjectCard.svelte";
     import type { SearchResult } from "../lib/searchUtils";
-    import { getCategoryById } from "../lib/searchCategories";
     import ResultsHeader from "./SearchResults/ResultsHeader.svelte";
     import ResultsContent from "./SearchResults/ResultsContent.svelte";
 
@@ -17,8 +13,6 @@
     function handleBackToSearch() {dispatch("backToSearch");}
 
     function handleClickOutside(event: MouseEvent) {
-        // event.stopPropagation();
-        // event.preventDefault();
         const target = event.target as HTMLElement;
         if (!target.closest(".results-container")) { handleClose(); }
     }

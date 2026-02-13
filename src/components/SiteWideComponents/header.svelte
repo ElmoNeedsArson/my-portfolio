@@ -1,14 +1,14 @@
 <script lang="ts">
     import { Linkedin, Github, Moon, Sun, Search } from "@lucide/svelte";
-    import { darkMode } from "../lib/darkModeStore";
-    import SearchModal from "./SearchModal.svelte";
-    import SearchResults from "./SearchResults.svelte";
-    import type { SearchResult } from "../lib/searchUtils";
+    import { darkMode } from "../../lib/darkModeStore";
+    import SearchModal from "./../SearchModal.svelte";
+    import SearchResults from "./../SearchResults.svelte";
+    import type { SearchResult } from "../../lib/searchUtils";
     import {
         searchResultStore,
         showSearchResultsStore,
         closeSearchResults,
-    } from "../lib/searchNavigation";
+    } from "../../lib/searchNavigation";
     import { fade, scale, fly } from "svelte/transition";
 
     // State variables for managing search functionality

@@ -6,7 +6,6 @@
 
   export let project: Project;
   export let showPinIcon: boolean = true;
-  // export let showTags: boolean = false;
   export let showDescription: boolean = true;
 
    const dispatch = createEventDispatcher<{
@@ -87,7 +86,6 @@
 
   .pinIcon {
     color: var(--muted-color);
-    /* color: #a1a4aa; */
   }
 
   .bar-title {

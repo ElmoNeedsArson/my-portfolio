@@ -69,15 +69,6 @@
       </nav>
     </div>
   </div>
-
-  <!-- Close Text -->
-  <!-- <div
-    class="close-text"
-    in:fade={{ duration: 300, delay: 200 }}
-    out:fade={{ duration: 200 }}
-  >
-    Close
-  </div> -->
 {/if}
 
 <!-- Dock Container -->
@@ -89,7 +80,6 @@
   tabindex="0"
   aria-label="Navigation menu toggle"
 >
-  <!-- Menu Text (when closed) -->
 
   <!-- Fixed Dock Bar -->
   <div class="dock">
@@ -117,7 +107,6 @@
     transform: translateX(-50%);
     z-index: 1000;
     cursor: pointer;
-    /* Ensure container has enough height for menu text */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -139,23 +128,6 @@
     transform: scaleY(1.2) scaleX(1.3);
   }
 
-  /* .menu-text:hover + .dock .dock-bar {
-    transform: scaleY(1.2) scaleX(1.3);
-  } */
-
-  /* .close-text {
-    position: fixed;
-    top: 35px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1001;
-    color: var(--muted-color);
-    font-size: 14px;
-    font-weight: 500;
-    pointer-events: none;
-    user-select: none;
-  } */
-
   .menu-text, .close-text {
     color: var(--muted-color);
     font-size: 14px;
@@ -166,8 +138,7 @@
 
   .menu-overlay {
     position: fixed;
-    /* inset: 0; */
-    background: rgba(20, 20, 20, 0.55); /* darker base tint */
+    background: rgba(20, 20, 20, 0.55); 
     backdrop-filter: blur(40px) saturate(160%) contrast(120%);
     -webkit-backdrop-filter: blur(40px) saturate(160%) contrast(120%);
     z-index: 999;
@@ -215,10 +186,6 @@
     text-decoration: none;
     padding: 1rem 2rem;
     border-radius: 16px;
-    /* background: rgba(255, 255, 255, 0.08); */
-    /* border: 1px solid rgba(255, 255, 255, 0.15); */
-    /* backdrop-filter: blur(15px) saturate(150%); */
-    /* -webkit-backdrop-filter: blur(15px) saturate(150%); */
     transition: all 0.3s ease;
   }
 
@@ -228,7 +195,6 @@
     transform: translateY(-2px);
   }
 
-  /* Mobile responsiveness */
   @media (max-width: 768px) {
     .menu-container {
       width: 80%;

@@ -29,12 +29,6 @@
   let targetZoom: number | null = null;
   let animationFrame: number | null = null;
 
-  // Card data structure - positions are in canvas coordinates
-  // Layout: Row 1: Professional Identity | Vision
-  //         Row 2: Future Development | Short Term Goals | Long Term
-  //         Row 3+: Specialization, Courses, Beyond Education
-  // Cards are 1200px wide
-  // You can use functions for x/y to reference other cards: () => getCard("card-id")!.x + offset
   const cardDefinitions = [
     {
       id: "professional-identity",
@@ -263,9 +257,6 @@
     },
   ];
 
-  // Helper function to get a card by ID from definitions
-  const getCard = (id: string) => cardDefinitions.find((c) => c.id === id);
-
   // Compute final card positions (evaluates functions for relative positioning)
   const cards = cardDefinitions.map((card) => ({
     ...card,
@@ -274,7 +265,6 @@
   }));
 
   // Arrow connections - connect cards by their IDs with edge positions and optional waypoints
-  // Waypoints create 90-degree turns for cleaner routing
   const connections = [
     {
       from: "professional-identity",
@@ -514,7 +504,6 @@
         usingHeight: actualHeight
       });
     }
-    const headerHeight = 60; // Card header
 
     switch (side) {
       case "top":
@@ -522,15 +511,9 @@
       case "bottom":
         return { x: card.x + card.width / 2, y: card.y + actualHeight };
       case "left":
-        return {
-          x: card.x,
-          y: card.y + actualHeight / 2,
-        };
+        return { x: card.x, y: card.y + actualHeight / 2,};
       case "right":
-        return {
-          x: card.x + card.width,
-          y: card.y + actualHeight / 2,
-        };
+        return {x: card.x + card.width, y: card.y + actualHeight / 2,};
     }
   }
 
@@ -542,22 +525,6 @@
 
     // Build points array: start -> waypoints -> end
     return [start, ...(connection.waypoints || []), end];
-  }
-
-  function getCardCenter(cardId: string): { x: number; y: number } {
-    const card = cards.find((c) => c.id === cardId);
-    if (!card) return { x: 0, y: 0 };
-
-    // Estimate card height based on content length
-    const estimatedHeight = Math.max(
-      200,
-      Math.ceil(card.content.length / 6) + 100,
-    );
-
-    return {
-      x: card.x + card.width / 2,
-      y: card.y + estimatedHeight / 2,
-    };
   }
 
   function animateToTarget() {
@@ -605,7 +572,6 @@
     
     // Get actual height from DOM if available
     const cardElement = canvasContentElement?.querySelector(`[data-card-id="${cardId}"]`) as HTMLElement;
-    const actualHeight = cardElement?.offsetHeight || 600;
 
     // Calculate target position to show the top of the card
     const targetZoomLevel = 0.6; // Zoom level to view the card
@@ -640,7 +606,7 @@
         // Calculate zoom to fit card width with some margin
         const cardWidth = professionalIdentityCard.width;
         const availableWidth = rect.width * 0.9; // Use 90% of viewport width
-        const calculatedZoom = Math.min(0.55, availableWidth / cardWidth); // Max zoom 0.7
+        const calculatedZoom = Math.min(0.75, availableWidth / cardWidth); // Max zoom 0.7
 
         // Position card at top-left with small margin
         const marginX = 50;
@@ -756,13 +722,13 @@
     margin: 0;
     background: var(
       --background-color
-    ); /* Solid background to hide page content */
+    ); 
   }
 
   .infinite-canvas {
     position: relative;
     width: 100%;
-    height: 75vh; /* Preview mode height - adjust this value (e.g., 50vh, 70vh) */
+    height: 70vh; /* Preview mode height*/
     overflow: hidden;
     cursor: grab;
     background: var(--secondary-background-color);
@@ -771,12 +737,12 @@
   }
 
   .infinite-canvas.preview {
-    min-height: 75vh; /* Should match height above */
+    min-height: 70vh; /* Should match height above */
   }
 
   .canvas-wrapper.fullscreen .infinite-canvas {
     border-radius: 0;
-    height: 100vh; /* Full height in fullscreen mode */
+    height: 100vh;
   }
 
   .dot-grid {
