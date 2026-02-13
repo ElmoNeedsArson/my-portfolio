@@ -3,28 +3,39 @@
     export let y: number;
     export let width: number;
     export let title: string;
-    export let content: string;
     export let color: string = "rgba(255, 255, 255, 0.18)";
-    export let images: Array<{images: Array<{src: string, alt: string}>, caption?: string, cols?: number}> = [];
+    export let sections: Array<{
+        type: 'content' | 'images';
+        content?: string;
+        images?: Array<{src: string, alt: string}>;
+        caption?: string;
+        cols?: number;
+    }> = [];
     
-    // Detect if content has multiple goals (for grid layout)
-    $: hasGoalsGrid = content.includes('**Independence:**') || 
-                      (content.match(/\*\*[^*]+:\*\*/g) || []).length >= 4;
+    // Helper function to detect if content has multiple goals (for grid layout)
+    function hasGoalsGrid(content: string): boolean {
+        return content.includes('**Independence:**') || 
+               (content.match(/\*\*[^*]+:\*\*/g) || []).length >= 4;
+    }
     
     // Parse goals into grid items if detected
-    $: goals = hasGoalsGrid ? content.split('\n\n').filter(p => p.trim()).map(p => {
-        const match = p.match(/\*\*([^:]+):\*\*\s*(.+)/s);
-        if (match) {
-            return { title: match[1], description: match[2] };
-        }
-        return null;
-    }).filter(g => g !== null) : [];
+    function parseGoals(content: string) {
+        return content.split('\n\n').filter(p => p.trim()).map(p => {
+            const match = p.match(/\*\*([^:]+):\*\*\s*(.+)/s);
+            if (match) {
+                return { title: match[1], description: match[2] };
+            }
+            return null;
+        }).filter(g => g !== null);
+    }
     
     // Split content by double newlines and detect quotes
-    $: paragraphs = !hasGoalsGrid ? content.split('\n\n').filter(p => p.trim()).map(p => {
-        const isQuote = p.trim().startsWith('"') && p.trim().endsWith('"');
-        return { text: p, isQuote };
-    }) : [];
+    function parseParagraphs(content: string) {
+        return content.split('\n\n').filter(p => p.trim()).map(p => {
+            const isQuote = p.trim().startsWith('"') && p.trim().endsWith('"');
+            return { text: p, isQuote };
+        });
+    }
 </script>
 
 <div
@@ -40,41 +51,44 @@
         <h3>{title}</h3>
     </div>
     <div class="card-content">
-        {#if hasGoalsGrid}
-            <div class="goals-grid">
-                {#each goals as goal}
-                    <div class="goal-item">
-                        <h4 class="goal-title">{goal.title}</h4>
-                        <p class="goal-description">{goal.description}</p>
-                    </div>
-                {/each}
-            </div>
-        {:else}
-            {#each paragraphs as paragraph}
-                {#if paragraph.isQuote}
-                    <div class="quote">
-                        <p>{paragraph.text}</p>
+        {#each sections as section}
+            {#if section.type === 'content' && section.content}
+                {@const isGoalsGrid = hasGoalsGrid(section.content)}
+                {#if isGoalsGrid}
+                    {@const goals = parseGoals(section.content)}
+                    <div class="goals-grid">
+                        {#each goals as goal}
+                            <div class="goal-item">
+                                <h4 class="goal-title">{goal.title}</h4>
+                                <p class="goal-description">{goal.description}</p>
+                            </div>
+                        {/each}
                     </div>
                 {:else}
-                    <p>{paragraph.text}</p>
+                    {@const paragraphs = parseParagraphs(section.content)}
+                    {#each paragraphs as paragraph}
+                        {#if paragraph.isQuote}
+                            <div class="quote">
+                                <p>{paragraph.text}</p>
+                            </div>
+                        {:else}
+                            <p>{paragraph.text}</p>
+                        {/if}
+                    {/each}
                 {/if}
-            {/each}
-        {/if}
-        
-        {#if images.length > 0}
-            {#each images as imageGroup}
-                <div class="image-gallery" style="grid-template-columns: repeat({imageGroup.cols || 3}, 1fr);">
-                    {#each imageGroup.images as image}
+            {:else if section.type === 'images' && section.images}
+                <div class="image-gallery" style="grid-template-columns: repeat({section.cols || 3}, 1fr);">
+                    {#each section.images as image}
                         <div class="gallery-item">
                             <img src={image.src} alt={image.alt} draggable="false" />
                         </div>
                     {/each}
                 </div>
-                {#if imageGroup.caption}
-                    <p class="image-caption"><i>{imageGroup.caption}</i></p>
+                {#if section.caption}
+                    <p class="image-caption"><i>{section.caption}</i></p>
                 {/if}
-            {/each}
-        {/if}
+            {/if}
+        {/each}
     </div>
 </div>
 
