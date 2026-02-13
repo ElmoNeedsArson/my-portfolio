@@ -33,5 +33,4 @@ src/assets
 .vscode
 .pretierrc
 SEARCH_ARCHITECTURE.md
-package-lock.json
 Experiments.md
