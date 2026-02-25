@@ -1,0 +1,112 @@
+{
+    "pinned": false,
+    "slug": "aesthetics-of-ai-data",
+    "title": "Aesthetics of AI/Data",
+    "type": "eindhoven",
+    "shortDesc": "A speculative live performance combining data, AI aesthetics, and audience interaction to critique (and complicate) algorithmic control in workplace systems.",
+    "thumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2025-04",
+    "languages": [
+        "JavaScript"
+    ],
+    "tools": [
+        "Data Foundry",
+        "p5.js",
+        "Canva",
+        "QR-based Mobile Interaction"
+    ],
+    "tags": [
+        "Performance",
+        "Speculative Design",
+        "AI Aesthetics",
+        "Heteromation",
+        "Interaction Design",
+        "Critical Design"
+    ],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 5,
+            "reason": "Implemented and coordinated interactive digital components (mobile scanning flow, synchronized interface states, and data-driven cues) during a live performance context."
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 7,
+            "reason": "Built and integrated functional prototypes for audience-scale interaction, including web-based interaction flows and a custom digital soundboard used in the final performance."
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 9,
+            "reason": "Developed an intentionally aesthetic-first, open-ended concept that used ambiguity, instability, and staged algorithmic authority as design materials rather than side effects."
+        },
+        {
+            "area": "User and Society",
+            "rating": 8,
+            "reason": "Explored social effects of algorithmic systems through roleplay and audience participation, highlighting agency loss, attention commodification, and human-AI power dynamics."
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 2,
+            "reason": "Primarily an artistic-research and critical exploration project, not focused on commercial deployment."
+        }
+    ],
+    "content": {
+        "overview": "This project was developed in the course Creativity & Aesthetics of Data and AI, where our group created a live performance/presentation instead of a traditional paper deliverable. We built a fictional company, AIBPO, that framed algorithmic labor management as a polished corporate promise while gradually exposing its social and emotional consequences.\n\nThe project intentionally started from aesthetic exploration rather than direct utility. We used themes like uncertainty, instability, harmonizing agencies, and intentionality to build an experience that felt both persuasive and unsettling. The result was a hybrid format: part presentation, part interaction experiment, part staged critique.",
+        "keyFeatures": [
+            "Live performative narrative with role-based script and staged escalation",
+            "Audience participation through QR-driven mobile interactions",
+            "Speculative corporate interface language (AIBPO / F.R.E.E.D.O.M. protocol)",
+            "Interactive prototype components deployed at classroom scale",
+            "Custom digital soundboard for synchronized audio layering and control",
+            "Critical framing of heteromation, agency, and algorithmic labor"
+        ],
+        "sections": [
+            {
+                "text": "Github Repository: <a href=\"https://github.com/ElmoNeedsArson/Glitcher-P1\" target=\"_blank\">Here</a>"
+            },
+            {
+                "title": "Concept",
+                "text": "AIBPO was designed as a fictional 'solution provider' that sells cognitive relief through algorithmic guidance. The core concept translated heteromation into a staged experience: humans remain in the loop, but increasingly as data nodes in a system that claims optimization and fairness.\n\nRather than giving a one-sided critique, the performance aimed for nuance by showing both the seductive appeal of reduced decision load and the discomfort of losing agency over time."
+            },
+            {
+                "title": "Performance Structure",
+                "text": "The final deliverable followed a scripted flow: onboarding, procedural setup, guided scanning tasks, system escalation, disruption, and chaotic completion. Audience members became active participants by scanning prompts and following device-based instructions while performers enacted corporate roles.\n\nAs the sequence intensified, repeated scan directives, warning states, and emergent sound patterns created a shift from orderly compliance to collective overload. This transition was central to the message."
+            },
+            {
+                "title": "Technical Prototype",
+                "text": "Even though the project was performative, the technical layer was substantial. We deployed web-based mobile interactions through QR access, synchronized interaction cues, and live audio control.\n\nI contributed by building prototypes and creating a digital soundboard used during the performance, including multiple channels, volume control, and rapid reset/playback behavior so the live flow could be controlled reliably under pressure."
+            },
+            {
+                "title": "Outcome",
+                "text": "The final presentation generated strong engagement and discussion around algorithmic control, worker autonomy, and the emotional framing of AI systems. For me, it also marked a shift in design identity: still grounded in technical implementation, but more willing to use ambiguity, performance, and narrative as legitimate design tools."
+            },
+            {
+                "title": "Personal Reflection (PDF)",
+                "text": "As with any course, we had to write a reflection for this course, but I think for this course I wrote one of my favourite reflections ever, it was just such an experience.",
+                "pdf": {
+                    "type": "pdf",
+                    "src": "/assets/pdfs/Personal-Reflection.pdf",
+                    "caption": "Personal Reflection",
+                    "downloadName": "Personal-Reflection.pdf"
+                }
+            }
+        ]
+    }
+}
