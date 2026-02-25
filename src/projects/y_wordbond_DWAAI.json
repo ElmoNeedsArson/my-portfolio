@@ -23,7 +23,12 @@
     "caption": ""
   },
   "date": "2024-12",
-  "languages": ["Python", "JavaScript", "HTML", "CSS"],
+  "languages": [
+    "Python",
+    "JavaScript",
+    "HTML",
+    "CSS"
+  ],
   "tools": [
     "easyOCR",
     "gemini-1.5-flash",
@@ -33,7 +38,14 @@
     "Buildozer",
     "Android Debug Bridge / ADB"
   ],
-  "tags": ["AI", "Accessibility", "HCI", "Assistive Technology", "Computer Vision", "User Study"],
+  "tags": [
+    "AI",
+    "Accessibility",
+    "HCI",
+    "Assistive Technology",
+    "Computer Vision",
+    "User Study"
+  ],
   "expertise": [
     {
       "area": "Math, Data and Computing",
@@ -65,9 +77,13 @@
     "overview": "WordBond is an AI-powered shared reading tool designed to support visually impaired parents when reading physical children's books with their sighted children. Combining OCR, LLM-based correction, hand-tracking, and text-to-speech, WordBond allows parents to narrate stories with their own voice while receiving contextual support during shared reading.",
     "keyFeatures": [],
     "sections": [
-        {
-                "text": "Github Repository: <a href=\"https://github.com/ElmoNeedsArson/pywebview-api-variant\" target=\"_blank\">Here</a>"
-        },
+      {
+        "text": "Github Repository: <a href=\"https://github.com/ElmoNeedsArson/pywebview-api-variant\" target=\"_blank\">Here</a>"
+      },
+      {
+        "title": "Problem & Design Goal",
+        "text": "Many existing assistive reading tools prioritize information access, but often replace the parent voice with synthetic narration. WordBond focuses on preserving the emotional voice bond in shared reading by helping visually impaired parents read physical books in their own voice while still receiving timely support when needed."
+      },
       {
         "title": "System Overview",
         "text": "WordBond enables visually impaired parents to scan books in advance and read them aloud naturally with real-time support. The system uses easyOCR and gemini-1.5-flash to produce clean audio snippets, while openCV hand tracking supports pointing gestures during shared reading."
@@ -83,8 +99,16 @@
         }
       },
       {
-        "title": "User Studies",
-        "text": "A pilot study and a formal user study evaluated usability, cognitive load, and interaction patterns using blindfolded participants simulating visually impaired parents. Findings revealed high engagement but highlighted the need for clearer cues and refined segmentation. Iterative improvements significantly reduced cognitive load, validated using NASA TLX and UEQ metrics."
+        "title": "Evaluation Setup",
+        "text": "WordBond was evaluated iteratively with blindfolded sighted participants simulating visually impaired use. A pilot study (n=4) identified core usability bottlenecks, then a formal user study (n=7) assessed improvements using mixed methods: observation, semi-structured interviews, UEQ for user experience, and NASA TLX for workload."
+      },
+      {
+        "title": "Key Results",
+        "text": "Results showed strong novelty and engagement (UEQ hedonic quality higher than pragmatic quality), with all UEQ dimensions scoring above 1.0 in the formal study. NASA TLX indicated medium-low overall workload and clear improvements after design iteration, especially through shorter segmented audio and replay controls. Remaining challenges centered on interaction clarity (the cue for pointing interactions) and supporting more expressive, less monotonous storytelling delivery."
+      },
+      {
+        "title": "Next Steps",
+        "text": "Moving from simulated users to in-situ studies with visually impaired parents and children, improving on-device autonomy, adding richer contextual cues for interactive mode, and integrating image description support to help parents narrate with stronger emotional expression."
       }
     ]
   }

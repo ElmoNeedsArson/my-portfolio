@@ -18,14 +18,28 @@
     },
     "projectPageThumbnail": {
         "type": "image",
-        "src": "",
+        "src": "/assets/images/tactone1.png",
         "alt": "",
         "caption": ""
     },
     "date": "2024-12",
-    "languages": ["C++ (Arduino)"],
-    "tools": ["Arduino", "Teensy", "Fusion 360", "3D Printing", "Laser Cutting"],
-    "tags": ["Soft Robotics", "Haptics", "Sound Design", "Interaction Design", "Tooling"],
+    "languages": [
+        "C++ (Arduino)"
+    ],
+    "tools": [
+        "Arduino",
+        "Teensy",
+        "Fusion 360",
+        "3D Printing",
+        "Laser Cutting"
+    ],
+    "tags": [
+        "Soft Robotics",
+        "Haptics",
+        "Sound Design",
+        "Interaction Design",
+        "Tooling"
+    ],
     "expertise": [
         {
             "area": "Math, Data and Computing",
@@ -54,14 +68,64 @@
         }
     ],
     "content": {
-        "overview": "The design of soft robots is often driven by functional requirements, but their aesthetics—how they look, feel, and sound—play an equally important role in shaping user perception. Tactone addresses this gap by giving designers a hands-on, sensory tool to explore the perceptual qualities of soft robotics.\n\nTactone is a modular, multi-sensorial interactive pad system. Each silicone pad inflates when touched, while audio responds dynamically based on coverage and duration. By combining tactile feedback with adaptive sound, designers can investigate how material behavior influences emotional response.\n\nThe system runs on a Teensy 4.1 microcontroller and includes a customizable codebase. Designers can swap pads, adjust sensitivity, and experiment with audio mappings—making Tactone a flexible tool for crafting the aesthetic experience of soft robots.",
+        "overview": "The design of soft robots is often driven by functional requirements, but their aesthetics, how they look, feel, and sound, play an equally important role in shaping user perception. Tactone addresses this gap by giving designers a hands-on, sensory tool to explore the perceptual qualities of soft robotics.\n\nTactone is a modular, multi-sensorial interactive pad system. Each silicone pad inflates when touched, while audio responds dynamically based on coverage and duration. By combining tactile feedback with adaptive sound, designers can investigate how material behavior influences emotional response.\n\nThe system runs on a Teensy 4.1 microcontroller and includes a customizable codebase. Designers can swap pads, adjust sensitivity, and experiment with audio mappings, making Tactone a flexible tool for crafting the aesthetic experience of soft robots.\n\nIn the broader project, Tactone is positioned as both an exploration tool (for early ideation) and a refinement tool (for tuning interaction qualities), with a focus on embodied, multisensory design rather than purely technical actuation performance.",
         "sections": [
             {
                 "text": "Github Repository: <a href=\"https://github.com/ElmoNeedsArson/SensoryMatters_Tactone_Codebase\" target=\"_blank\">Here</a>"
             },
             {
                 "title": "How Tactone Works",
-                "text": "Tactone consists of four interactive silicone pads, each designed to evoke a different emotional response. When a pad is covered, the system detects light changes via LDRs, triggers inflation through pumps, and modulates audio playback in real time. Designers use headphones to experience the full tactile-auditory interaction.\n\nThe codebase allows tuning parameters such as environmental light thresholds, audio file mappings, and actuation behavior. Alternative actuators can be integrated by adjusting the switch-case logic in the main loop."
+                "text": "Tactone consists of four interactive silicone pads, each designed to evoke a different emotional response. When a pad is covered, the system detects light changes via LDRs, triggers inflation through pumps, and modulates audio playback in real time. Designers use headphones to experience the full tactile-auditory interaction.\n\nThe codebase allows tuning parameters such as environmental light thresholds, audio file mappings, and actuation behavior. Alternative actuators can be integrated by adjusting the switch-case logic in the main loop.\n\nBy default, two motor drivers control four pumps, but the architecture also supports replacing pumps with other compatible actuators. This makes Tactone useful as a sandbox for testing how subtle changes in movement, touch, and sound alter perceived expression.",
+                "gallery": {
+                    "columns": 2,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "/assets/images/tactone2.png",
+                            "alt": "",
+                            "caption": ""
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/tactone3.png",
+                            "alt": "",
+                            "caption": ""
+                        }
+                    ],
+                    "caption": ""
+                }
+            },
+            {
+                "title": "Material & Pad Construction",
+                "text": "The pad system is intentionally modular. Each pad uses layered silicone construction with a soft top layer (Ecoflex 30) and sturdier structural layers (Eurosil 33). The middle layer defines air compartments, allowing designers to test different bubble/spike behaviors and tactile patterns.\n\nA practical constraint from the guide is keeping top-layer thickness low (recommended under ~2 mm) for better actuation response, while preserving rigid support in lower layers to prevent uncontrolled ballooning. Pads are sealed into 3D-printed casings and leveled for consistent interaction across all four positions."
+            },
+            {
+                "title": "Modularity Through Guide + Codebase",
+                "text": "The Tactone guide extends the project from a fixed prototype to a reusable design platform. It covers creating custom pads, changing casings, replacing actuators, uploading custom 16-bit WAV files through micro-SD, and configuring Teensy/Arduino setup.\n\nAudio is structured as two files per pad (rhythm + lead), enabling layered sonic behavior during interaction. On the software side, variables like lower light thresholds and trigger maps are exposed for calibration in different environments, and switch-case logic maps idle/active pad states for alternate actuation behaviors.",
+                "image": {
+                    "type": "image",
+                    "src": "/assets/images/tactone4.png",
+                    "alt": "",
+                    "caption": ""
+                }
+            },
+            {
+                "title": "Tactone Guide (PDF)",
+                "text": "This embedded guide explains how to customize pads, alter actuation, upload audio files, and adjust the codebase variables for your own setup.",
+                "pdf": {
+                    "type": "pdf",
+                    "src": "/assets/pdfs/Guides%20For%20Tactone.pdf",
+                    "caption": "Guides For Tactone (December 2024)",
+                    "downloadName": "Guides-For-Tactone.pdf"
+                }
+            },
+            {
+                "title": "Study Insights",
+                "text": "The report frames Tactone as an embodied design instrument for people with little to no soft robotics background. User studies suggest two strong application modes: ideation (discovering emotional/material directions) and refinement (fine-tuning mappings and response qualities).\n\nA notable insight was that setup order and interaction flow influence perception outcomes, emphasizing that the artifact is not only about component quality but also about interaction choreography and presentation context."
+            },
+            {
+                "title": "Limitations & Next Iteration",
+                "text": "The report identifies three improvement areas: modularity/accessibility, system responsiveness, and sensory synchrony. Participants noted startup and interaction latency, and some suggested tighter alignment between inflation rhythm and audio rhythm to make interaction feel more natural.\n\nNext iterations can focus on faster response times, easier actuator interchangeability, richer customization maps, and smoother multimodal coupling so designers can iterate quickly without breaking creative flow."
             }
         ]
     }

@@ -15,7 +15,7 @@ export const searchState = derived(
 
 // pops up the search results modal
 export function navigateToSearch(searchTerm: string, category: SearchCategory) {
-    const results = searchProjects(category, searchTerm);
+    const results = searchProjects(category, searchTerm, { exactMatch: true });
     
     searchResultStore.set(results);
     showSearchResultsStore.set(true);

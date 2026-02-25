@@ -10,6 +10,10 @@ export interface SearchResult {
     category: SearchCategory;
 }
 
+export interface SearchOptions {
+    exactMatch?: boolean;
+}
+
 // Sort projects by date, with pinned projects first
 const sortProjectsByDate = (projects: Project[]): Project[] => {
     // Separate pinned and unpinned projects
@@ -110,9 +114,14 @@ export const getAllCategoryValues = (category: SearchCategory): string[] => {
 };
 
 // Filter projects based on search category and term
-export const searchProjects = (category: SearchCategory, searchTerm: string): SearchResult => {
+export const searchProjects = (
+    category: SearchCategory,
+    searchTerm: string,
+    options: SearchOptions = {}
+): SearchResult => {
     const projects = loadAllProjectsRaw();
     const normalizedSearch = searchTerm.toLowerCase().trim();
+    const useExactMatch = options.exactMatch ?? false;
     
     const filteredProjects = projects.filter(project => {
         switch (category) {
@@ -121,7 +130,9 @@ export const searchProjects = (category: SearchCategory, searchTerm: string): Se
                        project.description.toLowerCase().includes(normalizedSearch);
             case 'tags':
                 return project.tags.some(tag => 
-                    tag.toLowerCase().includes(normalizedSearch)
+                    useExactMatch
+                        ? tag.toLowerCase() === normalizedSearch
+                        : tag.toLowerCase().includes(normalizedSearch)
                 );
             case 'languages':
                 return project.languages.some(lang => 
@@ -130,7 +141,9 @@ export const searchProjects = (category: SearchCategory, searchTerm: string): Se
                 );
             case 'tools':
                 return project.tools.some(tool => 
-                    tool.toLowerCase().includes(normalizedSearch)
+                    useExactMatch
+                        ? tool.toLowerCase() === normalizedSearch
+                        : tool.toLowerCase().includes(normalizedSearch)
                 );
             default:
                 return false;

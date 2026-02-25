@@ -21,6 +21,13 @@ export interface ThreeJSObject {
   caption?: string;
 }
 
+export interface PdfObject {
+  type: 'pdf';
+  src: string;
+  caption?: string;
+  downloadName?: string;
+}
+
 export type MediaObject = ImageObject | VideoObject | ThreeJSObject;
 
 export interface GalleryObject {
@@ -41,6 +48,8 @@ export interface ProjectSection {
   gallery?: GalleryObject;
   // video object with src, type, and optional caption
   video?: VideoObject;
+  // embedded PDF document with optional caption and filename hint
+  pdf?: PdfObject;
   // Path to a Three.js scene file
   ThreeJSScene?: ThreeJSObject; 
 }

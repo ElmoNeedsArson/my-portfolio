@@ -1,0 +1,133 @@
+{
+    "pinned": false,
+    "slug": "cluster-merge",
+    "title": "Cluster&Merge",
+    "type": "eindhoven",
+    "shortDesc": "A collaborative brainstorming prototype that combines NLP keyword extraction, clustering, merging, and image generation to stimulate ideation.",
+    "thumbnail": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "thumbnailLight": {
+        "type": "image",
+        "src": "",
+        "alt": "",
+        "caption": ""
+    },
+    "projectPageThumbnail": {
+        "type": "image",
+        "src": "/assets/images/CDR1.png",
+        "alt": "",
+        "caption": ""
+    },
+    "date": "2024-12",
+    "languages": [
+        "Processing"
+    ],
+    "tools": [
+        "Processing",
+        "NLP (Speech-to-Text)",
+        "Google API's Image Query"
+    ],
+    "tags": [
+        "HCI",
+        "Collaborative Systems",
+        "Brainstorming",
+        "NLP",
+        "Interaction Design",
+        "User Study"
+    ],
+    "expertise": [
+        {
+            "area": "Math, Data and Computing",
+            "rating": 7,
+            "reason": "Implemented speech-to-text keyword processing and interaction logging, and analyzed interaction patterns across timed intervals after merge actions."
+        },
+        {
+            "area": "Technology and Realization",
+            "rating": 8,
+            "reason": "Built and tested a working touch-enabled prototype in Processing with keyword streams, drag/place interaction, merge behavior, image querying, and deletion logic."
+        },
+        {
+            "area": "Creativity and Aesthetics",
+            "rating": 6,
+            "reason": "Designed ideation-support interactions that combine textual and visual stimuli, including clustering and merged-image prompts to spark unconventional ideas."
+        },
+        {
+            "area": "User and Society",
+            "rating": 9,
+            "reason": "Conducted a field study with 15 participants in 4 groups, including observation and interviews, and evaluated collaborative dynamics, inclusion, and perceived usefulness."
+        },
+        {
+            "area": "Business and Entrepreneurship",
+            "rating": 2,
+            "reason": "Project focused primarily on research and prototype evaluation rather than commercialization."
+        }
+    ],
+    "content": {
+        "overview": "Cluster&Merge is a collocated collaborative brainstorming system that uses natural language processing to convert speech into live keyword streams, then allows participants to cluster and merge words into new prompts. By combining touch interaction and visual image generation, the prototype explores whether merged concepts can improve ideation quality and collaboration during brainstorm sessions.",
+        "keyFeatures": [
+            "Real-time speech-to-text keyword stream",
+            "Direct-touch drag-and-place interaction",
+            "Word clustering and merge-triggered concept generation",
+            "Image querying for single and merged keywords",
+            "Interaction logging and post-session analysis"
+        ],
+        "sections": [
+            {
+                "title": "Research Focus",
+                "text": "The project investigated how combining speech-to-text extracted keywords and visual merging influences brainstorming quality. The core research question centered on whether merged keyword prompts and generated imagery can stimulate richer or more varied idea generation in face-to-face collaboration."
+            },
+            {
+                "title": "Prototype",
+                "text": "The system was built in Processing and run on a touch-enabled LCD setup. Spoken input is translated into keyword streams that participants can drag, place, cluster, and merge. A merge action combines words into a new concept and allows image retrieval for additional inspiration. A trash boundary enables quick removal of irrelevant items.",
+                "gallery": {
+                    "columns": 2,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "/assets/images/CDRP1.png",
+                            "alt": "Prototype setup",
+                            "caption": "prototype device (tv screen) that consist an LCD screen with a touch input layer on top"
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/CDRP2.png",
+                            "alt": "Merge interaction",
+                            "caption": "How the actual screen looked, dragging a word out of the stream on the prototype. Dragging multiple words over eachother would merge them and query images"
+                        }
+                    ],
+                    "caption": ""
+                }
+            },
+            {
+                "title": "User Study",
+                "text": "A field study was conducted with 15 graduate design participants in 4 groups. Sessions included an introduction, a timed brainstorm, and individual debrief interviews. Findings showed mixed but generally positive responses: participants appreciated playful collaboration and inspiration from images, while others reported distraction, pacing issues, and occasional disruption of conversational flow.",
+                "gallery": {
+                    "columns": 2,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "/assets/images/CDRUS1.png",
+                            "alt": "Prototype setup",
+                            "caption": "Picture of camera taped to the ceiling during field study."
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/CDRUS2.png",
+                            "alt": "Merge interaction",
+                            "caption": "The second computer is attached to the prototype to run the program."
+                        }
+                    ],
+                    "caption": ""
+                }
+            },
+            {
+                "title": "Findings & Reflection",
+                "text": "Clustering and merging were often used out of curiosity and perceived as engaging, but their measurable effect on interactions was not consistently positive. Merged images were considered inspiring by many participants, while others felt they could constrain imagination. The study highlighted trade-offs between stimulation and distraction, and pointed to future improvements in pacing, organization tools, and interface adaptability for different collaboration styles."
+            }
+        ]
+    }
+}

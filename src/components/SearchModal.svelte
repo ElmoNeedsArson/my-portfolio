@@ -96,10 +96,10 @@
         }
 
         // Otherwise, perform search to show results
-        performSearch();
+        performSearch(true);
     }
 
-    function performSearch() {
+    function performSearch(exactMatch = false) {
         console.log(
             "Performing search for:",
             searchInput,
@@ -108,7 +108,9 @@
         );
         const trimmedInput = searchInput.trim();
         if (!trimmedInput) return;
-        const results = searchProjects(selectedCategory, trimmedInput);
+        const results = searchProjects(selectedCategory, trimmedInput, {
+            exactMatch,
+        });
         dispatch("searchResults", results);
         closeSearch();
     }

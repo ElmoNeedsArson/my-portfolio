@@ -3,7 +3,7 @@
     "slug": "discord-clocking-bot",
     "title": "Discord Clocking Bot",
     "type": "bar",
-    "shortDesc": "A discord bot, for clocking work hours and generating reports",
+    "shortDesc": "A Discord bot for clocking work hours, managing shared cash pools, and visualizing team stats with live chart embeds",
     "thumbnail": {
         "type": "image",
         "src": "",
@@ -22,54 +22,73 @@
         "alt": "",
         "caption": ""
     },
-    "date": "2023-12",
+    "date": "2026-02",
     "languages": ["JavaScript"],
-    "tools": ["Discord.js", "Google Sheets API"],
-    "tags": ["personal-project", "productivity", "automation","business"],
-    "expertise": [
-        {
-            "area": "Math, Data and Computing",
-            "rating": 3,
-            "reason": "Time tracking data management"
-        },
-        {
-            "area": "Technology and Realization",
-            "rating": 6,
-            "reason": "Discord bot development with Google Sheets API integration"
-        },
-        {
-            "area": "Creativity and Aesthetics",
-            "rating": 2,
-            "reason": "Basic bot interface design"
-        },
-        {
-            "area": "User and Society",
-            "rating": 3,
-            "reason": "Productivity tool for team workflows"
-        },
-        {
-            "area": "Business and Entrepreneurship",
-            "rating": 6,
-            "reason": "Developed productivity automation tool for business operations, tracking work hours and generating reports for startup management"
-        }
-    ],
+    "tools": ["Discord.js", "Google Sheets API", "QuickChart", "Node.js"],
+    "tags": ["Discord Bot", "Automation", "Data Visualization", "Google Sheets", "JavaScript"],
     "content": {
-        "overview": "",
-        "keyFeatures": [],
+        "overview": "This project is a Discord bot that tracks team work sessions directly from slash commands and writes results to Google Sheets in real time. Users can clock in, clock out with task notes, and manually add missed time. The bot also visualizes worked hours and pooled company funds in chart embeds, making operational data visible in-channel without opening external dashboards.",
+        "keyFeatures": [
+            "Slash command based time tracking with /in, /out, and /add",
+            "Google Sheets integration for persistent logging and calculations",
+            "Automatic worked-time computation in minutes and decimal hours",
+            "QuickChart-powered pie chart embeds for total hours and pool distributions",
+            "Shared cash pool commands for filling, draining, and risk visibility"
+        ],
         "sections": [
             {
-                "title": "Work in Progress",
-                "text": "",
+                "title": "Background",
+                "text": "The bot was built to simplify internal hour tracking and pool accounting inside a Discord-first workflow. Instead of switching between chat and spreadsheets manually, team members can register work sessions directly where they already communicate.",
                 "gallery": {
                     "columns": 0,
-                    "media": [
-                        {
-                            "type": "image",
-                            "src": "",
-                            "alt": "",
-                            "caption": ""
-                        }
-                    ],
+                    "media": [],
+                    "caption": ""
+                },
+                "ThreeJSScene": {
+                    "type": "threejs",
+                    "src": "",
+                    "caption": ""
+                }
+            },
+            {
+                "title": "Functionality",
+                "text": "The /in command stores a timestamped session start in Google Sheets. The /out command fetches the latest start entry, calculates the elapsed time, updates the sheet with duration and work description, and replies with a summary embed. The /add command allows manual correction for missed sessions. On top of time tracking, /fill and /drain update a shared financial pool model, while /well and /risk visualize ownership and risk distribution using generated pie charts.",
+                "gallery": {
+                    "columns": 0,
+                    "media": [],
+                    "caption": ""
+                },
+                "ThreeJSScene": {
+                    "type": "threejs",
+                    "src": "",
+                    "caption": ""
+                }
+            },
+            {
+                "title": "Commands",
+                "text": "Main commands implemented in this version:\n- <code>/in</code>\n- <code>/out</code>\n- <code>/add</code>\n- <code>/time</code>\n- <code>/fill</code>\n- <code>/drain</code>\n- <code>/well</code>\n- <code>/risk</code>\n- <code>/suprise</code>",
+                "gallery": {
+                    "columns": 0,
+                    "media": [],
+                    "caption": ""
+                },
+                "ThreeJSScene": {
+                    "type": "threejs",
+                    "src": "",
+                    "caption": ""
+                }
+            },
+            {
+                "title": "Technical Notes",
+                "text": "The bot dynamically loads command and event modules from folder structure at startup and registers slash commands through Discord REST routes. Data persistence is handled by Google Sheets API with a service credential file, while charts are rendered through QuickChart URLs and sent as Discord embeds.",
+                "gallery": {
+                    "columns": 0,
+                    "media": [],
+                    "caption": ""
+                },
+                "ThreeJSScene": {
+                    "type": "threejs",
+                    "src": "",
                     "caption": ""
                 }
             }

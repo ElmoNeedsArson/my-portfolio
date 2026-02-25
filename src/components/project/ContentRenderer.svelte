@@ -156,6 +156,28 @@
                 </div>
             {/if}
 
+            {#if section.pdf && section.pdf.src != ""}
+                <div class="pdf-container">
+                    <iframe
+                        src={section.pdf.src}
+                        title={section.pdf.caption || section.title || "PDF"}
+                        frameborder="0"
+                    ></iframe>
+                    <a
+                        href={section.pdf.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="pdf-link"
+                        download={section.pdf.downloadName}
+                    >
+                        Open or download PDF
+                    </a>
+                    {#if section.pdf.caption}
+                        <p class="caption">{section.pdf.caption}</p>
+                    {/if}
+                </div>
+            {/if}
+
             {#if section.ThreeJSScene && section.ThreeJSScene.src != ""}
                 <div class="threejs-container">
                     <iframe
@@ -368,5 +390,32 @@
     iframe {
         width: 100%;
         aspect-ratio: 16 / 9;
+    }
+
+    .pdf-container {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .pdf-container iframe {
+        width: 100%;
+        height: 70vh;
+        min-height: 420px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color, rgba(128, 128, 128, 0.3));
+        background: var(--background-color);
+    }
+
+    .pdf-link {
+        display: inline-block;
+        margin-top: 0.6rem;
+        color: var(--secondary-text-color);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
+    .pdf-link:hover {
+        border-bottom-color: var(--secondary-text-color);
     }
 </style>
