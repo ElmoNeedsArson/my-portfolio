@@ -4,7 +4,7 @@
 
 <!-- Simple page footer: static copyright / ownership text -->
 <footer>
-    <p>© 2024 Jesse's Portfolio. All rights reserved.</p>
+    <p>© 2026 Jesse's Portfolio. All rights reserved.</p>
 </footer>
 
 <style>

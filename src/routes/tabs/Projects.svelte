@@ -27,6 +27,18 @@
         gap: 10px;
     }
 
+    @media (max-width: 1500px) {
+        .grid {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 1150px) {
+        .grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
     .no-content {
         text-align: center;
         padding: 4rem 2rem;

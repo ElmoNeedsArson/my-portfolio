@@ -3,6 +3,7 @@
     "slug": "obsidian-plugin",
     "title": "Obsidian Plugin",
     "type": "card",
+    "installations": 1600,
     "shortDesc": "",
     "thumbnail": {
         "type": "image",

@@ -2,9 +2,9 @@
   import type { Project } from "../types";
   import { darkMode } from "../lib/darkModeStore";
   import { navigateToSearch } from "../lib/searchNavigation";
-  import { Pin } from "@lucide/svelte";
+  import { CloudDownload, Pin } from "@lucide/svelte";
   import { link } from "svelte-spa-router";
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount, tick } from "svelte";
 
   export let project: Project;
   export let showPinIcon: boolean = true;
@@ -32,14 +32,104 @@
   );
   $: imageUrl = getSrc(selectedThumb) ?? "";
 
+  let liveInstallations: number | null = null;
+  let metaRowElement: HTMLDivElement | null = null;
+  let tagsElement: HTMLDivElement | null = null;
+  let counterElement: HTMLDivElement | null = null;
+  let fullCounterMeasureElement: HTMLSpanElement | null = null;
+  let showDownloadWord = true;
+
+  $: isObsidian3DPlugin = project.slug === "obsidian-plugin";
+  $: displayInstallations =
+    isObsidian3DPlugin && liveInstallations !== null
+      ? liveInstallations
+      : project.installations;
+  $: hasInstallations = typeof displayInstallations === "number";
+  $: installationCount = hasInstallations
+    ? displayInstallations.toLocaleString()
+    : "";
+
+  function updateDownloadWordVisibility() {
+    if (
+      !hasInstallations ||
+      !metaRowElement ||
+      !tagsElement ||
+      !fullCounterMeasureElement
+    ) {
+      showDownloadWord = true;
+      return;
+    }
+
+    const rowStyles = getComputedStyle(metaRowElement);
+    const rowGap = Number.parseFloat(rowStyles.columnGap || rowStyles.gap || "0") || 0;
+
+    const tags = Array.from(tagsElement.querySelectorAll<HTMLElement>(".tag"));
+    const tagsWidth = tags.reduce((sum, tag) => sum + tag.offsetWidth, 0);
+    const tagsGap = tags.length > 1 ? (tags.length - 1) * 6.4 : 0;
+
+    const fullCounterWidth = 14 + 5.6 + fullCounterMeasureElement.offsetWidth;
+    const requiredWidth = tagsWidth + tagsGap + rowGap + fullCounterWidth;
+
+    showDownloadWord = metaRowElement.clientWidth >= requiredWidth;
+  }
+
+  $: if (hasInstallations) {
+    tick().then(updateDownloadWordVisibility);
+  }
+
+  onMount(() => {
+    if (!isObsidian3DPlugin) {
+      return;
+    }
+
+    let isDisposed = false;
+
+    const loadInstallations = async () => {
+      try {
+        const response = await fetch("/api/obsidian-downloads");
+        if (!response.ok) {
+          return;
+        }
+
+        const payload = await response.json();
+        const downloads = Number(payload?.downloads);
+
+        if (!isDisposed && Number.isFinite(downloads)) {
+          liveInstallations = downloads;
+        }
+      } catch {
+        // keep JSON fallback when API is unavailable
+      }
+    };
+
+    loadInstallations();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateDownloadWordVisibility();
+    });
+
+    if (metaRowElement) {
+      resizeObserver.observe(metaRowElement);
+    }
+
+    if (tagsElement) {
+      resizeObserver.observe(tagsElement);
+    }
+
+    return () => {
+      isDisposed = true;
+      resizeObserver.disconnect();
+    };
+  });
+
   function handleTagClick(event: MouseEvent, tag: string) {
-    event.preventDefault(); 
+    event.preventDefault();
     event.stopPropagation();
     navigateToSearch(tag, "tags");
   }
 
   function handleCardClick() {
-    dispatch('cardClick');
+    dispatch("cardClick");
   }
 </script>
 
@@ -50,12 +140,36 @@
 
       <div class="overlay-content">
         <h1>{project.title}</h1>
-        <div class="tags">
-          {#each project.tags.slice(0, 3) as tag}
-            <button class="tag" on:click={(e) => handleTagClick(e, tag)}>
-              {tag}
-            </button>
-          {/each}
+        <div class="meta-row" bind:this={metaRowElement}>
+          <div class="tags" bind:this={tagsElement}>
+            {#each project.tags.slice(0, 3) as tag}
+              <button class="tag" on:click={(e) => handleTagClick(e, tag)}>
+                {tag}
+              </button>
+            {/each}
+          </div>
+          {#if hasInstallations}
+            <div
+              class="installation-counter"
+              aria-label="Project installations"
+              bind:this={counterElement}
+            >
+              <CloudDownload size={14} />
+              <span class="installation-counter-text">
+                <span>{installationCount}</span>
+                {#if showDownloadWord}
+                  <span>downloads</span>
+                {/if}
+              </span>
+              <span
+                class="installation-counter-measure"
+                aria-hidden="true"
+                bind:this={fullCounterMeasureElement}
+              >
+                {installationCount} downloads
+              </span>
+            </div>
+          {/if}
         </div>
       </div>
       {#if project.pinned && showPinIcon}
@@ -104,7 +218,11 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    background: linear-gradient(in oklch, transparent 0%, oklch(25.5% .021 279.29) 100%)
+    background: linear-gradient(
+      in oklch,
+      transparent 0%,
+      oklch(25.5% 0.021 279.29) 100%
+    );
   }
 
   h1 {
@@ -118,7 +236,7 @@
 
   .date {
     /* color: var(--muted-color); */
-    color: #A1A4AA;
+    color: #a1a4aa;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
     font-weight: 500;
     font-size: 1.2rem;
@@ -128,13 +246,22 @@
   }
 
   .tags {
-    /* position: absolute;
-    bottom: 8px;
-    right: 12px; */
     display: flex;
     flex-direction: row;
     gap: 0.4rem;
-    align-items: flex-end;
+    align-items: center;
+    min-width: 0;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    min-width: 0;
   }
 
   .pinIcon {
@@ -142,7 +269,7 @@
     top: 8px;
     left: 12px;
     /* color: var(--muted-color); */
-    color: #A1A4AA;
+    color: #a1a4aa;
   }
 
   .tag {
@@ -158,6 +285,39 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
     font-family: inherit;
+  }
+
+  .installation-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #a1a4aa;
+    font-size: 0.82rem;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+    width: fit-content;
+    margin-left: auto;
+    white-space: nowrap;
+    line-height: 1.1;
+    flex: 0 1 auto;
+    min-width: 0;
+    position: relative;
+  }
+
+  .installation-counter-text {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.2rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .installation-counter-measure {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+    white-space: nowrap;
+    height: 0;
+    overflow: hidden;
   }
 
   @media (hover: hover) {

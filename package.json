@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "node server.js",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server.js"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
@@ -16,6 +18,7 @@
   "dependencies": {
     "@lucide/svelte": "^0.552.0",
     "chart.js": "^4.5.1",
+    "express": "^4.21.2",
     "marked": "^16.4.1",
     "svelte-spa-router": "^4.0.1"
   }
