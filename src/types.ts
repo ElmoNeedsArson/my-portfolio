@@ -3,6 +3,7 @@ export interface ImageObject {
   src: string;
   alt?: string;
   caption?: string;
+  invert?: boolean;
 }
 
 export interface VideoObject {

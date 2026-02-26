@@ -12,7 +12,7 @@
     },
     "thumbnailLight": {
         "type": "image",
-        "src": "",
+        "src": "../assets/images/Game_Planet.png",
         "alt": "",
         "caption": ""
     },

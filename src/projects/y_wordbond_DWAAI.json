@@ -2,13 +2,14 @@
   "pinned": false,
   "slug": "wordbond",
   "title": "WordBond",
-  "type": "eindhoven",
+  "type": "card",
   "shortDesc": "Empowering blind parents to share reading with their children.",
   "thumbnail": {
     "type": "image",
     "src": "/assets/images/wordbond1.png",
     "alt": "",
-    "caption": ""
+    "caption": "",
+    "invert": true
   },
   "thumbnailLight": {
     "type": "image",
@@ -75,7 +76,7 @@
     }
   ],
   "content": {
-    "overview": "WordBond is an AI-powered shared reading tool designed to support visually impaired parents when reading physical children's books with their sighted children. Combining OCR, LLM-based correction, hand-tracking, and text-to-speech, WordBond allows parents to narrate stories with their own voice while receiving contextual support during shared reading.",
+    "overview": "WordBond is an AI-powered shared reading tool designed to support visually impaired parents when reading physical children's books with their sighted children. Combining OCR, LLM-based correction, hand-tracking, and text-to-speech, WordBond allows parents to narrate stories with their own voice while receiving contextual support during shared reading.\n\nThis project is actually in the process of getting a paper published through <a href=\"https://easychair.org/cfp/ICHEC2025\" target=\"_blank\">ICHEC 2025</a>. At the bottom of this page you can find the initial draft of the paper, this will be updated with the final version and DOI link when finished",
     "keyFeatures": [],
     "sections": [
       {
@@ -110,6 +111,16 @@
       {
         "title": "Next Steps",
         "text": "Moving from simulated users to in-situ studies with visually impaired parents and children, improving on-device autonomy, adding richer contextual cues for interactive mode, and integrating image description support to help parents narrate with stronger emotional expression."
+      },
+      {
+        "title": "WordBond Final Report (PDF)",
+        "text": "",
+        "pdf": {
+          "type": "pdf",
+          "src": "/assets/pdfs/WordBond_FinalReport.pdf",
+          "caption": "WordBond Final Report (January 2025)",
+          "downloadName": "WordBond_FinalReport.pdf"
+        }
       }
     ]
   }

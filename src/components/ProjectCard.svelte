@@ -31,6 +31,7 @@
     selectedThumb,
   );
   $: imageUrl = getSrc(selectedThumb) ?? "";
+  $: imageFilter = selectedThumb?.invert ? "invert(0.9)" : "none";
 
   let liveInstallations: number | null = null;
   let metaRowElement: HTMLDivElement | null = null;
@@ -135,7 +136,12 @@
 
 <a href={`/${project.slug}`} use:link on:click={handleCardClick}>
   <article class="card">
-    <div class="card-bg" style="background-image: url('{imageUrl}')">
+    <div class="card-bg">
+      <div
+        class="card-image"
+        style="background-image: url('{imageUrl}'); filter: {imageFilter};"
+        aria-hidden="true"
+      ></div>
       <span class="date">{project.date.slice(0, 4)}</span>
 
       <div class="overlay-content">
@@ -205,11 +211,17 @@
   .card-bg {
     width: 100%;
     aspect-ratio: 1 / 1;
-    background-size: cover;
-    background-position: center;
     position: relative;
     display: flex;
     align-items: flex-end;
+  }
+
+  .card-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
   }
 
   .overlay-content {
@@ -218,6 +230,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    position: relative;
+    z-index: 1;
     background: linear-gradient(
       in oklch,
       transparent 0%,
@@ -243,6 +257,7 @@
     position: absolute;
     top: 8px;
     right: 12px;
+    z-index: 1;
   }
 
   .tags {
@@ -270,6 +285,7 @@
     left: 12px;
     /* color: var(--muted-color); */
     color: #a1a4aa;
+    z-index: 1;
   }
 
   .tag {
