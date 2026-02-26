@@ -70,7 +70,8 @@
     <path
         d={pathD}
         fill="none"
-        stroke="rgba(130, 130, 130, 1)"
+        stroke="currentColor"
+        stroke-opacity="0.7"
         stroke-width="5"
         stroke-dasharray="5,5"
     />
@@ -78,8 +79,9 @@
     <!-- Arrowhead at the last point -->
     {#if points.length > 0}
         <polygon
-            points="-8,-4 0,0 -8,4"
-            fill="rgba(255, 255, 255, 1)"
+            points="-13,-6.5 0,0 -13,6.5"
+            fill="currentColor"
+            fill-opacity="0.95"
             transform="translate({lastPoint.x}, {lastPoint.y}) rotate({angle})"
         />
     {/if}
@@ -88,6 +90,7 @@
 <style>
     .arrow {
         pointer-events: none;
+        color: var(--primary-text-color);
     }
 
     .arrow path {
@@ -95,7 +98,7 @@
     }
 
     .arrow:hover path {
-        stroke: rgba(255, 255, 255, 0.5);
+        stroke-opacity: 1;
     }
 
     /* Print styles for PDF export */

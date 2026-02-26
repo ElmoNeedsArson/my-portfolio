@@ -3,11 +3,13 @@
   import CanvasCard from "./CanvasCard.svelte";
   import CanvasArrow from "./CanvasArrow.svelte";
   import CanvasNavigation from "./CanvasNavigation.svelte";
-  import { X, Maximize2 } from "@lucide/svelte";
+  import { X, Maximize2, Moon, Sun, FileText } from "@lucide/svelte";
 
   export let isPreview = true;
 
   let isFullscreen = false;
+  let isCanvasDarkMode = false;
+  let showWordCountOverlay = false;
   let canvasElement: HTMLElement;
   let canvasContentElement: HTMLElement;
   let zoom = 0.58;
@@ -264,6 +266,61 @@
     y: typeof card.y === "function" ? card.y() : card.y,
   }));
 
+  function getCountedWords(text: string): string[] {
+    const cleanedText = text
+      .replace(/\*\*/g, " ")
+      .replace(/[`#>*_\[\]()\-–—]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (!cleanedText) return [];
+    return cleanedText.split(" ").filter(Boolean);
+  }
+
+  function countWords(text: string): number {
+    return getCountedWords(text).length;
+  }
+
+  function logTitleWordBreakdown() {
+    const titleBreakdown = cards.map((card) => {
+      const words = getCountedWords(card.title);
+      return {
+        title: card.title,
+        count: words.length,
+        words,
+      };
+    });
+
+    const total = titleBreakdown.reduce((sum, item) => sum + item.count, 0);
+
+    console.groupCollapsed("Canvas title word count breakdown");
+    titleBreakdown.forEach((item) => {
+      console.log(`[${item.count}] ${item.title}:`, item.words);
+    });
+    console.log("Total title words:", total);
+    console.groupEnd();
+  }
+
+  $: wordCountStats = cards.reduce(
+    (stats, card) => {
+      stats.titleWords += countWords(card.title);
+
+      for (const section of card.sections) {
+        if (section.type === "content" && section.content) {
+          stats.contentWords += countWords(section.content);
+        }
+        if (section.caption) {
+          stats.captionWords += countWords(section.caption);
+          stats.captionCount += 1;
+        }
+      }
+      return stats;
+    },
+    { titleWords: 0, contentWords: 0, captionWords: 0, captionCount: 0 },
+  );
+
+  $: nonCaptionNonTitleWordTotal = wordCountStats.contentWords;
+
   // Arrow connections - connect cards by their IDs with edge positions and optional waypoints
   const connections = [
     {
@@ -482,7 +539,16 @@
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
+      showWordCountOverlay = false;
     }
+  }
+
+  function toggleDarkMode() {
+    isCanvasDarkMode = !isCanvasDarkMode;
+  }
+
+  function toggleWordCountOverlay() {
+    showWordCountOverlay = !showWordCountOverlay;
   }
 
   function getCardEdgePoint(
@@ -591,6 +657,8 @@
   }
 
   onMount(async () => {
+    logTitleWordBreakdown();
+
     // Wait for cards to be in DOM
     await tick();
     cardsMounted = true;
@@ -626,7 +694,21 @@
   });
 </script>
 
-<div class="canvas-wrapper" class:fullscreen={isFullscreen}>
+<div
+  class="canvas-wrapper"
+  class:fullscreen={isFullscreen}
+  style="
+    --primary-text-color: {isCanvasDarkMode ? '#ffffff' : '#141414'};
+    --secondary-text-color: #F96743;
+    --background-color: {isCanvasDarkMode ? '#010409' : '#ffffff'};
+    --secondary-background-color: {isCanvasDarkMode ? '#1A1D21' : '#f8f9fa'};
+    --muted-color: {isCanvasDarkMode ? '#A1A4AA' : '#666666'};
+    --border-color: {isCanvasDarkMode ? '#525252' : '#dddddd'};
+    --hover-color: {isCanvasDarkMode ? '#2A2D35' : '#f1f3f4'};
+    --canvas-card-background: {isCanvasDarkMode ? 'rgba(26, 29, 33, 0.92)' : 'rgba(255, 255, 255, 0.96)'};
+    --canvas-card-shadow: {isCanvasDarkMode ? 'rgba(0, 0, 0, 0.25)' : 'rgba(0, 0, 0, 0.12)'};
+  "
+>
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
   <div
@@ -694,13 +776,52 @@
     {/if}
 
     {#if isFullscreen}
-      <button
-        class="canvas-action-button close"
-        on:click={toggleFullscreen}
-        type="button"
-      >
-        <X size={20} />
-      </button>
+      <div class="canvas-top-actions">
+        <button
+          class="canvas-action-button word-count"
+          on:click={toggleWordCountOverlay}
+          type="button"
+          aria-label="Show canvas word count"
+          title="Show canvas word count"
+        >
+          <FileText size={18} />
+          Words
+        </button>
+
+        <button
+          class="canvas-action-button theme-toggle"
+          on:click={toggleDarkMode}
+          type="button"
+          aria-label="Toggle day and night mode"
+          title="Toggle day and night mode"
+        >
+          {#if isCanvasDarkMode}
+            <Sun size={20} />
+          {:else}
+            <Moon size={20} />
+          {/if}
+        </button>
+
+        <button
+          class="canvas-action-button close"
+          on:click={toggleFullscreen}
+          type="button"
+          aria-label="Close fullscreen canvas"
+        >
+          <X size={20} />
+        </button>
+      </div>
+
+      {#if showWordCountOverlay}
+        <div class="word-count-overlay" role="status" aria-live="polite">
+          <h4>Canvas Word Count</h4>
+          <p class="word-count-total">Total (excluding captions and titles): {nonCaptionNonTitleWordTotal}</p>
+          <div class="word-count-details">
+            <p>Titles: {wordCountStats.titleWords}</p>
+            <p>Image captions ({wordCountStats.captionCount}): {wordCountStats.captionWords}</p>
+          </div>
+        </div>
+      {/if}
     {/if}
 
     <!-- Canvas Navigation Widget -->
@@ -782,7 +903,6 @@
   }
 
   .canvas-action-button {
-    position: absolute;
     z-index: 10;
     padding: 0.5rem 1rem;
     border-radius: 999px;
@@ -806,18 +926,104 @@
   }
 
   .canvas-action-button.enlarge {
+    position: absolute;
     top: 1.25rem;
     right: 1.25rem;
+    animation: enlargePulse 1.8s ease-in-out infinite;
   }
 
   .canvas-action-button.close {
+    padding: 0.5rem;
+  }
+
+  .canvas-action-button.theme-toggle {
+    padding: 0.5rem;
+    /* right: 10px; */
+  }
+
+  .canvas-action-button.word-count {
+    padding: 0.5rem 0.75rem;
+    /* right:40px; */
+  }
+
+  .canvas-top-actions {
+    position: absolute;
     top: 1.25rem;
     right: 1.25rem;
-    padding: 0.5rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .canvas-top-actions .canvas-action-button {
+    position: static;
+    z-index: auto;
+  }
+
+  .word-count-overlay {
+    position: absolute;
+    top: 5rem;
+    right: 3rem;
+    z-index: 1001;
+    min-width: 260px;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--background-color);
+    color: var(--primary-text-color);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.3);
+  }
+
+  .word-count-overlay h4 {
+    margin: 0 0 0.6rem 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+  }
+
+  .word-count-overlay p {
+    margin: 0.35rem 0;
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+
+  .word-count-total {
+    display: inline-block;
+    border-bottom: 1px solid color-mix(in srgb, var(--muted-color) 35%, transparent);
+    padding-bottom: 0.45rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .word-count-details {
+    display: block;
+    width: fit-content;
+    padding-top: 0.1rem;
   }
 
   .infinite-canvas:active {
     cursor: grabbing;
+  }
+
+  @keyframes enlargePulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(249, 103, 67, 0.45);
+    }
+    65% {
+      transform: scale(1.06);
+      box-shadow: 0 0 0 14px rgba(249, 103, 67, 0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(249, 103, 67, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .canvas-action-button.enlarge {
+      animation: none;
+    }
   }
 
   /* Print styles for PDF export */

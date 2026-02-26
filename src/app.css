@@ -18,6 +18,9 @@
 
   --inverted-bg-color: #ffffff;
   --inverted-text-color: #141414;
+
+  --canvas-card-background: rgba(26, 29, 33, 0.92);
+  --canvas-card-shadow: rgba(0, 0, 0, 1);
 }
 
 [data-theme="light"] {
@@ -35,6 +38,9 @@
 
   --inverted-bg-color: #010409;
   --inverted-text-color: #ffffff;
+
+  --canvas-card-background: rgba(255, 255, 255, 0.96);
+  --canvas-card-shadow: rgba(0, 0, 0, 0.12);
 }
 
 body {

@@ -1,6 +1,7 @@
 <script lang="ts">
     export let thumbnail: string | { src?: string; alt?: string; caption?: string } | undefined;
     export let title: string;
+    export let thumbnailHeight: number | undefined = undefined;
 
     function getSrc(img: string | { src?: string } | undefined) {
         if (!img) return undefined;
@@ -23,6 +24,7 @@
         <img
             src={getSrc(thumbnail)}
             alt={getAlt(thumbnail, title)}
+            style={thumbnailHeight ? `height: ${thumbnailHeight}vh; width: auto;` : undefined}
         />
         {#if getCaption(thumbnail)}
             <p class="caption">{getCaption(thumbnail)}</p>

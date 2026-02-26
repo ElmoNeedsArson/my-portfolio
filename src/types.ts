@@ -72,6 +72,7 @@ export interface Project {
   thumbnail: ImageObject;
   thumbnailLight?: ImageObject; // Optional: image for light mode
   projectPageThumbnail?: ImageObject; // Optional: different image for project page header
+  projectPageThumbnailHeight?: number;
   date: string;
   languages: string[];
   tools: string[];

@@ -52,7 +52,11 @@
       <p class="date">{project.date}</p>
 
       <!-- Project hero image -->
-      <ProjectHero thumbnail={project.projectPageThumbnail} title={project.title}/>
+      <ProjectHero
+        thumbnail={project.projectPageThumbnail}
+        title={project.title}
+        thumbnailHeight={project.projectPageThumbnailHeight}
+      />
 
       <!-- Tag list, languages, tools, and optionally tabs -->
       <ProjectTagList tags={project.tags} />

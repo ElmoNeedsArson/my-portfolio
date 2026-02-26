@@ -6,22 +6,23 @@
   "shortDesc": "Empowering blind parents to share reading with their children.",
   "thumbnail": {
     "type": "image",
-    "src": "",
+    "src": "/assets/images/wordbond1.png",
     "alt": "",
     "caption": ""
   },
   "thumbnailLight": {
     "type": "image",
-    "src": "",
+    "src": "/assets/images/wordbond1.png",
     "alt": "",
     "caption": ""
   },
   "projectPageThumbnail": {
     "type": "image",
-    "src": "",
+    "src": "/assets/images/wordbond1.png",
     "alt": "",
     "caption": ""
   },
+  "projectPageThumbnailHeight": 60,
   "date": "2025-01",
   "languages": [
     "Python",

@@ -7,6 +7,7 @@
   import TabNavigation from "./components/TabNavigation.svelte";
   import Dock from "./components/overlay.svelte";
   import { useTabNavigation } from "./lib/navigationStore";
+  import { darkMode } from "./lib/darkModeStore";
   import { location } from "svelte-spa-router";
 
   // Route table: specific routes first, then catch-all for projects
@@ -31,6 +32,11 @@
   $: if ($location) {
     window.scrollTo(0, 0);
   }
+
+  // // Force light mode on Eindhoven tab
+  // $: if ($location === "/eindhoven" && $darkMode) {
+  //   darkMode.set(false);
+  // }
 
   // Manual toggle for dock (set to false to disable dock completely)
   const showDock = false;
