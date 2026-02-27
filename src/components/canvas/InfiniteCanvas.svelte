@@ -14,6 +14,7 @@
   } from "@lucide/svelte";
 
   export let isPreview = true;
+  export let startFullscreen = false;
 
   let isFullscreen = false;
   let isCanvasDarkMode = false;
@@ -603,8 +604,22 @@
     }
   }
 
+  function syncFullscreenUrl(fullscreen: boolean) {
+    const url = new URL(window.location.href);
+
+    if (fullscreen) {
+      url.searchParams.set("canvas", "fullscreen");
+    } else if (url.searchParams.get("canvas") === "fullscreen") {
+      url.searchParams.delete("canvas");
+    }
+
+    const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+    window.history.replaceState(window.history.state, "", nextUrl);
+  }
+
   async function toggleFullscreen() {
     isFullscreen = !isFullscreen;
+    syncFullscreenUrl(isFullscreen);
 
     // Hide body scrollbar when fullscreen
     if (isFullscreen) {
@@ -812,6 +827,12 @@
 
   onMount(async () => {
     logTitleWordBreakdown();
+
+    if (startFullscreen) {
+      isFullscreen = true;
+      document.body.style.overflow = "hidden";
+      syncFullscreenUrl(true);
+    }
 
     // Wait for cards to be in DOM
     await tick();
