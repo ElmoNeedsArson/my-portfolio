@@ -1,0 +1,14 @@
+{
+  "id": "courses-year-2",
+  "title": "Courses and Electives - Year 2",
+  "width": 1200,
+  "offsetX": 0,
+  "offsetY": "1ch",
+  "color": "rgba(74, 144, 226, 0.3)",
+  "sections": [
+    {
+      "type": "content",
+      "content": "In the second year of my master's program, I plan to broaden my design perspective by studying abroad at either Aalto University or the Technical University of Copenhagen. Both institutions offer opportunities to complement my current skillset: Aalto's focus on practical, hands-on design approaches will enhance my ability to prototype and iterate effectively, while Copenhagen's emphasis on more technical subjects will allow me to deepen my expertise in areas like artificial intelligence, digital systems, and data-driven design. I think in addition that this experience will contribute to me potentially growing as a person by creating more and broader experiences.\n\nFor my Final Master Project (FMP), I aim to integrate advanced technologies, such as AI, digital twins, or interactive systems, into educational settings to explore how these tools can enhance learning experiences. Building on my prior experience in educational digital games and my coursework in advanced AI and digital design tools, my FMP will reflect my dedication to creating meaningful, user-centered solutions that balance technological innovation with human ."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "long-term",
+  "title": "Long Term",
+  "width": 1200,
+  "offsetX": 1300,
+  "offsetY": 0,
+  "color": "rgba(74, 144, 226, 0.25)",
+  "sections": [
+    {
+      "type": "content",
+      "content": "Taking my vision and professional Identity into account, I already see an emphasizes leveraging technology thoughtfully and responsibly while recognizing its human impact. To link this to expertise areas, I intend to deepen my expertise in Math, Data, and Computing (MDC) and Technology and Realization (T&R) to enhance my technical skills. These areas resonate strongly with my passion for building meaningful and innovative solutions. Simultaneously, as per my vision, I'll continue integrating insights from User and Society (U&S) to ensure that my designs have real-world relevance and impact, connecting technical innovation with human-centered approaches. This dual focus will allow me to act even better as a connector, bridging technical disciplines (e.g., electrical engineering, computer science, and mechanical engineering) and the societal and environmental impact of my designs, fostering a holistic approach to design."
+    }
+  ]
+}

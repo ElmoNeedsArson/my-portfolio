@@ -1,0 +1,14 @@
+{
+  "id": "courses-year-1",
+  "title": "Courses and Electives - Year 1",
+  "width": 1200,
+  "offsetX": 0,
+  "offsetY": "1ch",
+  "color": "rgba(155, 89, 182, 0.25)",
+  "sections": [
+    {
+      "type": "content",
+      "content": "The selected courses align with my vision as a designer to thoughtfully integrate advanced technologies in meaningful, human-centered ways. Courses like Interactional Morality and Values-Based Leadership (DLE track course) strengthen my ability to critically evaluate the societal and ethical impact of my designs, by fostering a deep understanding of the broader implications of design decisions on users, organizations, and society.\n\nIn addition, courses such as Creativity and Aesthetics of Data & AI, Designing with Advanced AI, and Designing with and for Digital Twins will deepen my technical expertise in machine learning, digital twins, and other advanced technologies while exploring their creative and expressive potential. These subjects directly support my short- and long-term goals of expanding technical skills in areas like Math, Data, and Computing (MDC) and Technology and Realization (T&R) while connecting them to creative, real-world applications."
+    }
+  ]
+}
