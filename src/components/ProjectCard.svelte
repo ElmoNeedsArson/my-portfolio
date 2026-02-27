@@ -93,9 +93,14 @@
         }
 
         const payload = await response.json();
-        const downloads = Number(payload?.downloads);
+        const downloads = payload?.downloads;
 
-        if (!isDisposed && Number.isFinite(downloads)) {
+        if (
+          !isDisposed &&
+          typeof downloads === "number" &&
+          Number.isFinite(downloads) &&
+          downloads > 0
+        ) {
           liveInstallations = downloads;
         }
       } catch {
