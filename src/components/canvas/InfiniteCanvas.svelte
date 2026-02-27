@@ -3,7 +3,15 @@
   import CanvasCard from "./CanvasCard.svelte";
   import CanvasArrow from "./CanvasArrow.svelte";
   import CanvasNavigation from "./CanvasNavigation.svelte";
-  import { X, Maximize2, Moon, Sun, FileText } from "@lucide/svelte";
+  import {
+    X,
+    Maximize2,
+    Moon,
+    Sun,
+    FileText,
+    ArrowLeft,
+    ArrowRight,
+  } from "@lucide/svelte";
 
   export let isPreview = true;
 
@@ -30,8 +38,54 @@
   let targetPanY: number | null = null;
   let targetZoom: number | null = null;
   let animationFrame: number | null = null;
+  let currentCardIndex = 0;
+  let introAlignedY: number | null = null;
 
-  const cardDefinitions = [
+  type CardSection = {
+    type: "content" | "images";
+    content?: string;
+    images?: Array<{ src: string; alt: string }>;
+    caption?: string;
+    cols?: number;
+  };
+
+  type CardDefinition = {
+    id: string;
+    title: string;
+    x: number | (() => number);
+    y: number | (() => number);
+    width: number;
+    color: string;
+    sections: CardSection[];
+    hideHeader?: boolean;
+    contentAlign?: "left" | "center";
+    introTitle?: string;
+    introSubtitle?: string;
+    introLarge?: boolean;
+    initialCenterMode?: "top" | "middle";
+  };
+
+  const cardDefinitions: CardDefinition[] = [
+    {
+      id: "intro-overview",
+      title: "Overview",
+      x: -1700,
+      y: 100,
+      width: 1100,
+      color: "rgba(74, 144, 226, 0.2)",
+      hideHeader: true,
+      contentAlign: "center",
+      introTitle: "Jesse's Portfolio",
+      introSubtitle: "This portfolio gives an overview of my identity, vision, goals, and future direction. \nUse the arrows, navigation widget, or just drag your mouse to navigate the canvas",
+      introLarge: true,
+      initialCenterMode: "middle",
+      sections: [
+        {
+          type: 'content',
+          content: ""
+        }
+      ]
+    },
     {
       id: "professional-identity",
       title: "Professional Identity",
@@ -260,11 +314,22 @@
   ];
 
   // Compute final card positions (evaluates functions for relative positioning)
-  const cards = cardDefinitions.map((card) => ({
-    ...card,
-    x: typeof card.x === "function" ? card.x() : card.x,
-    y: typeof card.y === "function" ? card.y() : card.y,
-  }));
+  $: cards = cardDefinitions.map((card) => {
+    const resolvedCard = {
+      ...card,
+      x: typeof card.x === "function" ? card.x() : card.x,
+      y: typeof card.y === "function" ? card.y() : card.y,
+    };
+
+    if (resolvedCard.id === "intro-overview" && introAlignedY !== null) {
+      return { ...resolvedCard, y: introAlignedY };
+    }
+
+    return resolvedCard;
+  });
+
+  $: canNavigatePrevious = currentCardIndex > 0;
+  $: canNavigateNext = currentCardIndex < cards.length - 1;
 
   function getCountedWords(text: string): string[] {
     const cleanedText = text
@@ -323,6 +388,13 @@
 
   // Arrow connections - connect cards by their IDs with edge positions and optional waypoints
   const connections = [
+    {
+      from: "intro-overview",
+      fromSide: "right" as const,
+      to: "professional-identity",
+      toSide: "left" as const,
+      waypoints: [],
+    },
     {
       from: "professional-identity",
       fromSide: "right" as const,
@@ -531,7 +603,7 @@
     }
   }
 
-  function toggleFullscreen() {
+  async function toggleFullscreen() {
     isFullscreen = !isFullscreen;
 
     // Hide body scrollbar when fullscreen
@@ -541,6 +613,19 @@
       document.body.style.overflow = "";
       showWordCountOverlay = false;
     }
+
+    if (animationFrame !== null) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+    }
+    targetPanX = null;
+    targetPanY = null;
+    targetZoom = null;
+
+    await tick();
+
+    const currentCardId = cards[currentCardIndex]?.id || "intro-overview";
+    centerOnCardInstant(currentCardId);
   }
 
   function toggleDarkMode() {
@@ -634,19 +719,30 @@
     const card = cards.find((c) => c.id === cardId);
     if (!card || !canvasElement) return;
 
-    const rect = canvasElement.getBoundingClientRect();
-    
-    // Get actual height from DOM if available
-    const cardElement = canvasContentElement?.querySelector(`[data-card-id="${cardId}"]`) as HTMLElement;
+    const cardIndex = cards.findIndex((c) => c.id === cardId);
+    if (cardIndex >= 0) {
+      currentCardIndex = cardIndex;
+    }
 
-    // Calculate target position to show the top of the card
+    const rect = canvasElement.getBoundingClientRect();
+    const cardElement = canvasContentElement?.querySelector(
+      `[data-card-id="${cardId}"]`,
+    ) as HTMLElement | null;
+
+    // Calculate target position
     const targetZoomLevel = 0.6; // Zoom level to view the card
     const cardCenterX = card.x + card.width / 2;
     const cardTopY = card.y;
+    const actualHeight = cardElement?.offsetHeight || 300;
+    const cardCenterY = card.y + actualHeight / 2;
+    const centerMode = card.initialCenterMode || "top";
 
-    // Calculate pan to center horizontally, but show from the top vertically
+    // Center horizontally, and either top-align or middle-align vertically per card config
     targetPanX = rect.width / 2 - cardCenterX * targetZoomLevel;
-    targetPanY = rect.height * 0.15 - cardTopY * targetZoomLevel; // 15% from top for some padding
+    targetPanY =
+      centerMode === "middle"
+        ? rect.height / 2 - cardCenterY * targetZoomLevel
+        : rect.height * 0.15 - cardTopY * targetZoomLevel;
 
     targetZoom = targetZoomLevel;
 
@@ -656,35 +752,75 @@
     }
   }
 
+  function navigateToAdjacentCard(direction: -1 | 1) {
+    const nextIndex = currentCardIndex + direction;
+    if (nextIndex < 0 || nextIndex >= cards.length) return;
+
+    navigateToCard(cards[nextIndex].id);
+  }
+
+  function centerOnCardInstant(cardId: string) {
+    const card = cards.find((c) => c.id === cardId);
+    if (!card || !canvasElement) return;
+
+    const cardIndex = cards.findIndex((c) => c.id === cardId);
+    if (cardIndex >= 0) {
+      currentCardIndex = cardIndex;
+    }
+
+    const rect = canvasElement.getBoundingClientRect();
+    const targetZoomLevel = 0.6;
+    const cardCenterX = card.x + card.width / 2;
+    const cardTopY = card.y;
+    const cardElement = canvasContentElement?.querySelector(
+      `[data-card-id="${cardId}"]`,
+    ) as HTMLElement | null;
+    const actualHeight = cardElement?.offsetHeight || 300;
+    const cardCenterY = card.y + actualHeight / 2;
+    const centerMode = card.initialCenterMode || "top";
+
+    zoom = targetZoomLevel;
+    panX = rect.width / 2 - cardCenterX * targetZoomLevel;
+    panY =
+      centerMode === "middle"
+        ? rect.height / 2 - cardCenterY * targetZoomLevel
+        : rect.height * 0.15 - cardTopY * targetZoomLevel;
+  }
+
+  function alignIntroCardToProfessionalIdentityCenter() {
+    if (!canvasContentElement) return;
+
+    const introCard = canvasContentElement.querySelector(
+      '[data-card-id="intro-overview"]',
+    ) as HTMLElement | null;
+    const professionalIdentityCard = canvasContentElement.querySelector(
+      '[data-card-id="professional-identity"]',
+    ) as HTMLElement | null;
+    const professionalIdentityData = cards.find(
+      (c) => c.id === "professional-identity",
+    );
+
+    if (!introCard || !professionalIdentityCard || !professionalIdentityData) {
+      return;
+    }
+
+    introAlignedY =
+      professionalIdentityData.y +
+      professionalIdentityCard.offsetHeight / 2 -
+      introCard.offsetHeight / 2;
+  }
+
   onMount(async () => {
     logTitleWordBreakdown();
 
     // Wait for cards to be in DOM
     await tick();
     cardsMounted = true;
-    
-    // Anchor to top-left showing Professional Identity card
-    if (isPreview && canvasElement) {
-      const rect = canvasElement.getBoundingClientRect();
-      const professionalIdentityCard = cards.find(
-        (c) => c.id === "professional-identity",
-      );
 
-      if (professionalIdentityCard) {
-        // Calculate zoom to fit card width with some margin
-        const cardWidth = professionalIdentityCard.width;
-        const availableWidth = rect.width * 0.9; // Use 90% of viewport width
-        const calculatedZoom = Math.min(0.75, availableWidth / cardWidth); // Max zoom 0.7
+    alignIntroCardToProfessionalIdentityCenter();
+    await tick();
 
-        // Position card at top-left with small margin
-        const marginX = 50;
-        const marginY = 50;
-
-        zoom = calculatedZoom;
-        panX = marginX - professionalIdentityCard.x * zoom;
-        panY = marginY - professionalIdentityCard.y * zoom;
-      }
-    }
+    centerOnCardInstant("intro-overview");
   });
 
   onDestroy(() => {
@@ -710,6 +846,7 @@
   "
 >
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
   <div
     class="infinite-canvas"
@@ -759,6 +896,11 @@
           title={card.title}
           color={card.color}
           sections={card.sections}
+          hideHeader={card.hideHeader || false}
+          contentAlign={card.contentAlign || "left"}
+          introTitle={card.introTitle}
+          introSubtitle={card.introSubtitle}
+          introLarge={card.introLarge || false}
         />
       {/each}
     </div>
@@ -823,6 +965,34 @@
         </div>
       {/if}
     {/if}
+
+    <div class="canvas-sequential-nav">
+      <button
+        class="canvas-action-button canvas-sequential-nav-button"
+        on:click={() => navigateToAdjacentCard(-1)}
+        on:mousedown|stopPropagation
+        on:touchstart|stopPropagation
+        type="button"
+        aria-label="Go to previous card"
+        title="Previous card"
+        disabled={!canNavigatePrevious}
+      >
+        <ArrowLeft size={22} strokeWidth={2.8} />
+      </button>
+
+      <button
+        class="canvas-action-button canvas-sequential-nav-button"
+        on:click={() => navigateToAdjacentCard(1)}
+        on:mousedown|stopPropagation
+        on:touchstart|stopPropagation
+        type="button"
+        aria-label="Go to next card"
+        title="Next card"
+        disabled={!canNavigateNext}
+      >
+        <ArrowRight size={22} strokeWidth={2.8} />
+      </button>
+    </div>
 
     <!-- Canvas Navigation Widget -->
     <CanvasNavigation {cards} onNavigate={navigateToCard} {isFullscreen} />
@@ -960,6 +1130,48 @@
   .canvas-top-actions .canvas-action-button {
     position: static;
     z-index: auto;
+  }
+
+  .canvas-sequential-nav {
+    position: absolute;
+    left: 50%;
+    bottom: 1.25rem;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .canvas-sequential-nav-button {
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--canvas-card-shadow) 85%, transparent);
+    border: 1px solid var(--border-color);
+    background: var(--secondary-background-color);
+    backdrop-filter: blur(10px);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .canvas-sequential-nav-button:hover {
+    transform: translateY(-1px) scale(1.03);
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--canvas-card-shadow) 95%, transparent);
+  }
+
+  .canvas-sequential-nav-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-color: var(--border-color);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .canvas-sequential-nav-button:disabled:hover {
+    background: var(--hover-color);
+    border-color: var(--border-color);
   }
 
   .word-count-overlay {
