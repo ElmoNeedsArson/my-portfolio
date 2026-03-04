@@ -125,20 +125,65 @@
         }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 768px) and (orientation: portrait) {
         .results-header {
-            padding: 1rem;
-            flex-direction: column;
-            gap: 1rem;
+            padding: 0.625rem 0.75rem;
+            gap: 0.5rem;
+        }
+
+        .back-button {
+            padding: 0.375rem 0.5rem;
+            font-size: 0.75rem;
+            gap: 0.25rem;
+            flex-shrink: 0;
         }
 
         .search-info {
-            order: -1;
+            gap: 0.375rem;
+            min-width: 0;
+            justify-content: center;
         }
 
-        .back-button,
+        .search-details {
+            display: none;
+            flex-direction: row;
+            align-items: baseline;
+            gap: 0.25rem;
+            min-width: 0;
+            text-align: left;
+        }
+
+        .search-term,
+        .search-category {
+            font-size: 0.75rem;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-term {
+            max-width: 38vw;
+        }
+
+        .search-category {
+            max-width: 28vw;
+        }
+
         .close-button {
+            padding: 0.375rem;
             flex-shrink: 0;
+        }
+
+        .search-category-icon {
+            display:none;
+        }
+
+        .back-button :global(svg),
+        .search-category-icon :global(svg),
+        .close-button :global(svg) {
+            width: 16px;
+            height: 16px;
         }
     }
 </style>

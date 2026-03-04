@@ -203,4 +203,10 @@
             max-width: 300px;
         }
     }
+
+    @media (max-width: 768px) {
+        .radar-container {
+            display: none;
+        }
+    }
 </style>

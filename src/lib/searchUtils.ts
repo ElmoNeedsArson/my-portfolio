@@ -32,11 +32,6 @@ const sortProjectsByDate = (projects: Project[]): Project[] => {
     return [...pinnedProjects, ...unpinnedProjects];
 };
 
-// Sort projects alphabetically by title (for search results)
-const sortProjectsAlphabetically = (projects: Project[]): Project[] => {
-    return [...projects].sort((a, b) => a.title.localeCompare(b.title));
-};
-
 // Load all projects without any sorting (raw data)
 const loadAllProjectsRaw = (): Project[] => {
     const jsonModules = import.meta.glob("../projects/*.json", {
@@ -150,8 +145,8 @@ export const searchProjects = (
         }
     });
 
-    // Sort alphabetically for search results
-    const sortedProjects = sortProjectsAlphabetically(filteredProjects);
+    // Sort search results by date (pinned first, newest first)
+    const sortedProjects = sortProjectsByDate(filteredProjects);
 
     // Return structured result object
     return {

@@ -20,11 +20,14 @@
 </script>
 
 {#if thumbnail}
-    <div class="thumbnail">
+    <div
+        class="thumbnail"
+        class:has-custom-height={thumbnailHeight !== undefined}
+        style={thumbnailHeight ? `--project-thumbnail-height: ${thumbnailHeight}vh;` : undefined}
+    >
         <img
             src={getSrc(thumbnail)}
             alt={getAlt(thumbnail, title)}
-            style={thumbnailHeight ? `height: ${thumbnailHeight}vh; width: auto;` : undefined}
         />
         {#if getCaption(thumbnail)}
             <p class="caption">{getCaption(thumbnail)}</p>
@@ -39,7 +42,15 @@
 
     img {
         max-width: 100%;
+        height: auto;
         border-radius: 6px;
+    }
+
+    @media (min-width: 768px) and (orientation: landscape) {
+        .thumbnail.has-custom-height img {
+            height: var(--project-thumbnail-height);
+            width: auto;
+        }
     }
 
     .caption {
