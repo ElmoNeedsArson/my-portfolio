@@ -1,16 +1,17 @@
 <script lang="ts">
     import { location } from "svelte-spa-router";
-    import { lastVisitedTab } from "../lib/navigationStore";
+        import {
+            DEFAULT_TAB_ID,
+            getTabIdByPath,
+            lastVisitedTab,
+            type TabId,
+        } from "../lib/navigationStore";
     import Eindhoven from "./tabs/Eindhoven.svelte";
     import Experiments from "./tabs/Experiments.svelte";
     import Projects from "./tabs/Projects.svelte";
 
     // Determine page type based on current route or active tab
-    $: pageType = $location === "/experiments"
-        ? "experiments"
-        : $location === "/eindhoven"
-          ? "eindhoven"
-          : "projects";
+        $: pageType = (getTabIdByPath($location) ?? DEFAULT_TAB_ID) as TabId;
     
     $: isExperimentsPage = pageType === "experiments";
     $: isEindhovenPage = pageType === "eindhoven";

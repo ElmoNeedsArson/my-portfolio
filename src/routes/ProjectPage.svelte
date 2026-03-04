@@ -9,7 +9,7 @@
   import ProjectTabs from "../components/project/ProjectTabs.svelte";
   import ContentRenderer from "../components/project/ContentRenderer.svelte";
   import { findProjectBySlug } from "../lib/searchUtils";
-  import { lastVisitedTab } from "../lib/navigationStore";
+  import { getTabPathById, lastVisitedTab } from "../lib/navigationStore";
 
   let slug: string = "";
   $: slug = $params?.slug ?? "";
@@ -20,12 +20,7 @@
   let activeContent: ContentBlock | undefined;
 
   // Get the back URL based on the last visited tab
-  $: backUrl =
-    $lastVisitedTab === "experiments"
-      ? "/experiments"
-      : $lastVisitedTab === "eindhoven"
-        ? "/eindhoven"
-        : "/projects";
+  $: backUrl = getTabPathById($lastVisitedTab);
 
   // Handle back button functionality
   function handleBackClick(event: MouseEvent) {

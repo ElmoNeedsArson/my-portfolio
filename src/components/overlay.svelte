@@ -2,6 +2,7 @@
   import { link } from "svelte-spa-router";
   import { fade, scale, fly } from "svelte/transition";
   import { quintOut } from "svelte/easing";
+  import { getTabPathById, tabs } from "../lib/navigationStore";
 
   let isMenuOpen = false;
 
@@ -21,11 +22,10 @@
   }
 
   // Navigation items
-  const navItems = [
-    { label: "Projects", path: "/projects" },
-    { label: "Experiments", path: "/experiments" },
-    { label: "Eindhoven", path: "/eindhoven" },
-  ];
+  const navItems = tabs.map((tab) => ({
+    label: tab.label,
+    path: getTabPathById(tab.id),
+  }));
 </script>
 
 <!-- Navigation Menu Overlay -->

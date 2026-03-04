@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { tabs } from "../lib/navigationStore";
+  import {
+    DEFAULT_TAB_ID,
+    getTabIdByPath,
+    getTabPathById,
+    tabs,
+    type TabId,
+  } from "../lib/navigationStore";
   import { ToyBrick, Pin, MapPin } from "@lucide/svelte";
   import { push, location } from "svelte-spa-router";
   import { onMount, tick } from "svelte";
@@ -14,17 +20,10 @@
   let prevLeft = 0;
   let prevWidth = 0;
 
-  $: currentTabId =
-    $location === "/experiments"
-      ? "experiments"
-      : $location === "/eindhoven"
-        ? "eindhoven"
-        : "projects";
+  $: currentTabId = getTabIdByPath($location) ?? DEFAULT_TAB_ID;
 
-  function switchTab(id: string) {
-    if (id === "projects") push("/projects");
-    else if (id === "experiments") push("/experiments");
-    else if (id === "eindhoven") push("/eindhoven");
+  function switchTab(id: TabId) {
+    push(getTabPathById(id));
   }
 
   async function moveIndicator() {
@@ -120,7 +119,7 @@
         bind:this={tabEls[tab.id]}
         class="tab"
         class:active={currentTabId === tab.id}
-        on:click={() => switchTab(tab.id)}
+        on:click={() => switchTab(tab.id as TabId)}
       >
         <div class="tab-icon">
           <svelte:component this={iconMap[tab.icon]} size="24" />

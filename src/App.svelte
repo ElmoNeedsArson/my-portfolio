@@ -6,25 +6,19 @@
   import Footer from "./components/SiteWideComponents/footer.svelte";
   import TabNavigation from "./components/TabNavigation.svelte";
   import Dock from "./components/overlay.svelte";
-  import { useTabNavigation } from "./lib/navigationStore";
+  import { getHomeRoutes, isTabPath, useTabNavigation } from "./lib/navigationStore";
   import { darkMode } from "./lib/darkModeStore";
   import { location } from "svelte-spa-router";
 
-  // Route table: specific routes first, then catch-all for projects
-  const routes = {
-    "/": Home,
-    "/projects": Home,
-    "/experiments": Home,
-    "/eindhoven": Home,
-    "/:slug": Project,
-  };
+  const routes = getHomeRoutes().reduce((acc, routePath) => {
+    acc[routePath] = Home;
+    return acc;
+  }, {});
+  routes["/:slug"] = Project;
 
   // Control navigation style based on current route
   $: {
-    const isHomePage = $location === "/" || 
-                      $location === "/projects" || 
-                      $location === "/experiments" || 
-                      $location === "/eindhoven";
+    const isHomePage = isTabPath($location);
     $useTabNavigation = isHomePage;
   }
 
