@@ -23,14 +23,20 @@
     onNext();
     blurButton(event);
   }
+
+  function handleButtonFocus(event: FocusEvent) {
+    blurButton(event);
+  }
 </script>
 
 <div class="canvas-sequential-nav">
   <button
     class="canvas-action-button canvas-sequential-nav-button"
+    tabindex="-1"
     on:click={handlePreviousClick}
-    on:mousedown|preventDefault|stopPropagation
-    on:touchstart|preventDefault|stopPropagation
+    on:focus={handleButtonFocus}
+    on:mousedown|stopPropagation
+    on:touchstart|stopPropagation
     type="button"
     aria-label="Go to previous card"
     title="Previous card"
@@ -41,9 +47,11 @@
 
   <button
     class="canvas-action-button canvas-sequential-nav-button"
+    tabindex="-1"
     on:click={handleNextClick}
-    on:mousedown|preventDefault|stopPropagation
-    on:touchstart|preventDefault|stopPropagation
+    on:focus={handleButtonFocus}
+    on:mousedown|stopPropagation
+    on:touchstart|stopPropagation
     type="button"
     aria-label="Go to next card"
     title="Next card"
