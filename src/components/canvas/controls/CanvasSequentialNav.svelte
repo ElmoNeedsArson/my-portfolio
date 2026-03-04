@@ -6,14 +6,22 @@
   export let onPrevious: () => void;
   export let onNext: () => void;
 
-  function handlePreviousClick(event: MouseEvent) {
-    onPrevious();
-    (event.currentTarget as HTMLButtonElement | null)?.blur();
+  function blurButton(event: Event) {
+    const button = event.currentTarget as HTMLButtonElement | null;
+    if (!button) return;
+
+    button.blur();
+    requestAnimationFrame(() => button.blur());
   }
 
-  function handleNextClick(event: MouseEvent) {
+  function handlePreviousClick(event: Event) {
+    onPrevious();
+    blurButton(event);
+  }
+
+  function handleNextClick(event: Event) {
     onNext();
-    (event.currentTarget as HTMLButtonElement | null)?.blur();
+    blurButton(event);
   }
 </script>
 
@@ -21,8 +29,8 @@
   <button
     class="canvas-action-button canvas-sequential-nav-button"
     on:click={handlePreviousClick}
-    on:mousedown|stopPropagation
-    on:touchstart|stopPropagation
+    on:mousedown|preventDefault|stopPropagation
+    on:touchstart|preventDefault|stopPropagation
     type="button"
     aria-label="Go to previous card"
     title="Previous card"
@@ -34,8 +42,8 @@
   <button
     class="canvas-action-button canvas-sequential-nav-button"
     on:click={handleNextClick}
-    on:mousedown|stopPropagation
-    on:touchstart|stopPropagation
+    on:mousedown|preventDefault|stopPropagation
+    on:touchstart|preventDefault|stopPropagation
     type="button"
     aria-label="Go to next card"
     title="Next card"
