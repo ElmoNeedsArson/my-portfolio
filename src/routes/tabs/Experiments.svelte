@@ -83,4 +83,14 @@
     margin: 0px;
     margin-left: 2rem;
   }
+
+  @media (max-width: 768px) {
+    .subtitleElement {
+      margin-left: 1rem;
+      margin-right: 1rem;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      hyphens: auto;
+    }
+  }
 </style>

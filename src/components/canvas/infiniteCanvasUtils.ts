@@ -45,21 +45,27 @@ export function getNavigationTarget({
   viewportHeight,
   zoomLevel = 0.6,
 }: NavigationTargetInput): { panX: number; panY: number; zoom: number } {
+  const isPhoneViewport = viewportWidth <= 640;
+  const widthFitZoom = (viewportWidth * 0.9) / Math.max(card.width, 1);
+  const resolvedZoom = isPhoneViewport
+    ? Math.max(0.15, Math.min(zoomLevel, widthFitZoom))
+    : zoomLevel;
+
   const cardCenterX = card.x + card.width / 2;
   const cardTopY = card.y;
   const cardCenterY = card.y + cardHeight / 2;
   const centerMode = card.initialCenterMode || "top";
 
-  const panX = viewportWidth / 2 - cardCenterX * zoomLevel;
+  const panX = viewportWidth / 2 - cardCenterX * resolvedZoom;
   const panY =
     centerMode === "middle"
-      ? viewportHeight / 2 - cardCenterY * zoomLevel
-      : viewportHeight * 0.15 - cardTopY * zoomLevel;
+      ? viewportHeight / 2 - cardCenterY * resolvedZoom
+      : viewportHeight * 0.15 - cardTopY * resolvedZoom;
 
   return {
     panX,
     panY,
-    zoom: zoomLevel,
+    zoom: resolvedZoom,
   };
 }
 

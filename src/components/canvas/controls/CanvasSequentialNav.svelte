@@ -5,12 +5,22 @@
   export let canNavigateNext = false;
   export let onPrevious: () => void;
   export let onNext: () => void;
+
+  function handlePreviousClick(event: MouseEvent) {
+    onPrevious();
+    (event.currentTarget as HTMLButtonElement | null)?.blur();
+  }
+
+  function handleNextClick(event: MouseEvent) {
+    onNext();
+    (event.currentTarget as HTMLButtonElement | null)?.blur();
+  }
 </script>
 
 <div class="canvas-sequential-nav">
   <button
     class="canvas-action-button canvas-sequential-nav-button"
-    on:click={onPrevious}
+    on:click={handlePreviousClick}
     on:mousedown|stopPropagation
     on:touchstart|stopPropagation
     type="button"
@@ -23,7 +33,7 @@
 
   <button
     class="canvas-action-button canvas-sequential-nav-button"
-    on:click={onNext}
+    on:click={handleNextClick}
     on:mousedown|stopPropagation
     on:touchstart|stopPropagation
     type="button"
@@ -62,7 +72,7 @@
   .canvas-sequential-nav {
     position: absolute;
     left: 50%;
-    bottom: 1.25rem;
+    bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
     z-index: 10;
     display: flex;

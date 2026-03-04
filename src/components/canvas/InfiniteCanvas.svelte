@@ -124,6 +124,7 @@
   }
 
   function handleWheel(e: WheelEvent) {
+    clearActiveElementFocus();
     e.preventDefault();
 
     // Get mouse position relative to canvas
@@ -151,6 +152,7 @@
   }
 
   function handleMouseDown(e: MouseEvent) {
+    clearActiveElementFocus();
     // Only pan with left mouse button
     if (e.button !== 0) return;
 
@@ -177,6 +179,7 @@
   }
 
   function handleTouchStart(e: TouchEvent) {
+    clearActiveElementFocus();
     if (e.touches.length === 1) {
       // Single finger - pan
       isPanning = true;
@@ -266,6 +269,13 @@
 
     const nextUrl = `${url.pathname}${url.search}${url.hash}`;
     window.history.replaceState(window.history.state, "", nextUrl);
+  }
+
+  function clearActiveElementFocus() {
+    const activeElement = document.activeElement as HTMLElement | null;
+    if (activeElement && activeElement !== document.body) {
+      activeElement.blur();
+    }
   }
 
   async function toggleFullscreen() {
@@ -666,6 +676,7 @@
   .canvas-wrapper.fullscreen .infinite-canvas {
     border-radius: 0;
     height: 100vh;
+    height: 100dvh;
   }
 
   .dot-grid {
