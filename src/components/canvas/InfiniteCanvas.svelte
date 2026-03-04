@@ -123,7 +123,19 @@
     });
   }
 
+  function cancelNavigationAnimation() {
+    if (animationFrame !== null) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+    }
+
+    targetPanX = null;
+    targetPanY = null;
+    targetZoom = null;
+  }
+
   function handleWheel(e: WheelEvent) {
+    cancelNavigationAnimation();
     clearActiveElementFocus();
     e.preventDefault();
 
@@ -152,6 +164,7 @@
   }
 
   function handleMouseDown(e: MouseEvent) {
+    cancelNavigationAnimation();
     clearActiveElementFocus();
     // Only pan with left mouse button
     if (e.button !== 0) return;
@@ -179,6 +192,7 @@
   }
 
   function handleTouchStart(e: TouchEvent) {
+    cancelNavigationAnimation();
     clearActiveElementFocus();
     if (e.touches.length === 1) {
       // Single finger - pan
