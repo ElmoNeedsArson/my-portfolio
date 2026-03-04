@@ -85,7 +85,19 @@
         "sections": [
             {
                 "title": "Research Goal",
-                "text": "The study asked: What impact does real-time written-visual feedback, through different design roles, have on novice students' attitudes toward learning programming? Rather than treating feedback as neutral, the project tested feedback as a designed social role with style, tone, and visual expression."
+                "text": "The study asked: What impact does real-time written-visual feedback, through different design roles, have on novice students' attitudes toward learning programming? Rather than treating feedback as neutral, the project tested feedback as a designed social role with style, tone, and visual expression.",
+                "gallery": {
+                    "columns": 1,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "/assets/images/M12_3.png",
+                            "alt": "",
+                            "caption": ""
+                        }
+                    ],
+                    "caption": ""
+                }
             },
             {
                 "title": "Literature and Conceptual Framing",

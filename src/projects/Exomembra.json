@@ -58,8 +58,84 @@
         "keyFeatures": [],
         "sections": [
             {
-                "title": "",
-                "text": ""
+                "title": "Prototype Gallery",
+                "text": "Early Exomembra prototype snapshots from build and wear sessions.",
+                "gallery": {
+                    "columns": 3,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "/assets/images/eindhoven/arm1.jpg",
+                            "alt": "Exomembra arm prototype",
+                            "caption": "Arm prototype"
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/eindhoven/stand1.jpg",
+                            "alt": "Exomembra standing prototype",
+                            "caption": "Standing fit test"
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/eindhoven/work1.jpg",
+                            "alt": "Exomembra workshop iteration",
+                            "caption": "Workshop iteration"
+                        }
+                    ],
+                    "caption": ""
+                }
+            },
+            {
+                "title": "Reflection",
+                "text": "Building Exomembra taught me how valuable it is to test ambitious ideas in a real community first. By working with cosplay and LARP users, we could iterate quickly, receive direct comfort feedback, and improve both form and wearability before considering more regulated contexts. This project strengthened my confidence in combining creative direction with practical prototyping and user-driven decision making.",
+                "gallery": {
+                    "columns": 3,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "/assets/images/Exomembra/arm1.jpg",
+                            "alt": "Exomembra arm prototype",
+                            "caption": ""
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/Exomembra/arm2.jpg",
+                            "alt": "Exomembra standing prototype",
+                            "caption": ""
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/Exomembra/piston.gif",
+                            "alt": "Exomembra piston mechanism",
+                            "caption": ""
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/Exomembra/deco1.jpg",
+                            "alt": "Exomembra decoration 1",
+                            "caption": ""
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/Exomembra/deco2.jpg",
+                            "alt": "Exomembra standing prototype",
+                            "caption": ""
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/Exomembra/decoImg1.jpg",
+                            "alt": "Exomembra workshop iteration",
+                            "caption": ""
+                        },
+                        {
+                            "type": "image",
+                            "src": "/assets/images/Exomembra/logo1.jpg",
+                            "alt": "Exomembra logo",
+                            "caption": ""
+                        }
+                    ],
+                    "caption": ""
+                }
             }
         ]
     }

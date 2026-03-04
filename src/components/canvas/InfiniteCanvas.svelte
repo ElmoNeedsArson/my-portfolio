@@ -3,15 +3,24 @@
   import CanvasCard from "./CanvasCard.svelte";
   import CanvasArrow from "./CanvasArrow.svelte";
   import CanvasNavigation from "./CanvasNavigation.svelte";
+  import CanvasEnlargeButton from "./controls/CanvasEnlargeButton.svelte";
+  import CanvasTopActions from "./controls/CanvasTopActions.svelte";
+  import CanvasWordCountOverlay from "./controls/CanvasWordCountOverlay.svelte";
+  import CanvasSequentialNav from "./controls/CanvasSequentialNav.svelte";
+  import { connections } from "./canvasConnections";
   import {
-    X,
-    Maximize2,
-    Moon,
-    Sun,
-    FileText,
-    ArrowLeft,
-    ArrowRight,
-  } from "@lucide/svelte";
+    adjustPanForZoomAtPoint,
+    computeWordCountStats,
+    getCountedWords,
+    getNavigationTarget,
+    resolveCardDefinitions,
+  } from "./infiniteCanvasUtils";
+  import type {
+    CardDefinition,
+    CardDefinitionInput,
+    Connection,
+    Waypoint,
+  } from "./infiniteCanvasTypes";
 
   export let isPreview = true;
   export let startFullscreen = false;
@@ -46,52 +55,6 @@
   let arrowData = [];
   let currentCardIndex = 0;
 
-  type CardSection = {
-    type: "content" | "images";
-    content?: string;
-    images?: Array<{ src: string; alt: string }>;
-    caption?: string;
-    cols?: number;
-  };
-
-  type CardDefinition = {
-    id: string;
-    title: string;
-    x: number;
-    y: number;
-    width: number;
-    color: string;
-    sections: CardSection[];
-    hideHeader?: boolean;
-    contentAlign?: "left" | "center";
-    introTitle?: string;
-    introSubtitle?: string;
-    introLarge?: boolean;
-    initialCenterMode?: "top" | "middle";
-  };
-
-  type CardDefinitionInput = Omit<CardDefinition, "x" | "y"> & {
-    x?: number;
-    y?: number;
-    offsetX?: number | string;
-    offsetY?: number | string;
-    relativeToCardId?: string;
-  };
-
-  type Waypoint = {
-    relativeTo: "from" | "to";
-    offsetX: number;
-    offsetY: number;
-  };
-
-  type Connection = {
-    from: string;
-    fromSide: "top" | "bottom" | "left" | "right";
-    to: string;
-    toSide: "top" | "bottom" | "left" | "right";
-    waypoints?: Waypoint[];
-  };
-
   const cardModules = import.meta.glob("./canvasCards/*.json", {
     eager: true,
     import: "default",
@@ -101,142 +64,6 @@
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, card]) => card);
 
-  function resolveOffsetValue(
-    rawOffset: number | string | undefined,
-    card: CardDefinitionInput,
-    cardHeight: number,
-    anchorCard: CardDefinition | null,
-    anchorCardHeight: number,
-  ): number {
-    if (typeof rawOffset === "number") {
-      return rawOffset;
-    }
-
-    if (typeof rawOffset !== "string") {
-      return 0;
-    }
-
-    const normalizedOffset = rawOffset
-      .trim()
-      .toLowerCase()
-      .replace(/,/g, ".")
-      .replace(/\s+/g, "");
-
-    const terms = normalizedOffset.match(/[+-]?[^+-]+/g);
-
-    if (terms) {
-      let total = 0;
-
-      for (const term of terms) {
-        const match = term.match(/^([+-]?\d*\.?\d+)(ch|cw|ph|pw)?$/);
-
-        if (!match) {
-          const parsedNumber = Number(normalizedOffset);
-          return Number.isNaN(parsedNumber) ? 0 : parsedNumber;
-        }
-
-        const factor = Number(match[1]);
-        const unit = match[2];
-
-        if (Number.isNaN(factor)) {
-          return 0;
-        }
-
-        if (!unit) {
-          total += factor;
-          continue;
-        }
-
-        if (unit === "ch") {
-          total += factor * cardHeight;
-          continue;
-        }
-
-        if (unit === "cw") {
-          total += factor * card.width;
-          continue;
-        }
-
-        if (unit === "ph") {
-          total += factor * anchorCardHeight;
-          continue;
-        }
-
-        total += factor * (anchorCard?.width ?? 0);
-      }
-
-      return total;
-    }
-
-    const parsedNumber = Number(normalizedOffset);
-    return Number.isNaN(parsedNumber) ? 0 : parsedNumber;
-  }
-
-  function resolveCardDefinitions(
-    definitions: CardDefinitionInput[],
-    measuredHeights: Record<string, number>,
-  ): CardDefinition[] {
-    return definitions.reduce<CardDefinition[]>((resolvedCards, card) => {
-      let anchorCard: CardDefinition | null = null;
-      let baseX = 0;
-      let baseY = 0;
-      const cardHeight = measuredHeights[card.id] ?? 300;
-      let anchorCardHeight = 300;
-
-      if (card.relativeToCardId) {
-        anchorCard =
-          resolvedCards.find((resolved) => resolved.id === card.relativeToCardId) ??
-          null;
-      } else if (resolvedCards.length > 0) {
-        anchorCard = resolvedCards[resolvedCards.length - 1];
-      }
-
-      if (anchorCard) {
-        baseX = anchorCard.x;
-        baseY = anchorCard.y;
-        anchorCardHeight = measuredHeights[anchorCard.id] ?? 300;
-      }
-
-      let resolvedX = baseX + resolveOffsetValue(
-        card.offsetX,
-        card,
-        cardHeight,
-        anchorCard,
-        anchorCardHeight,
-      );
-      if (typeof card.x === "number") {
-        resolvedX = card.x;
-      }
-
-      let resolvedY = baseY + resolveOffsetValue(
-        card.offsetY,
-        card,
-        cardHeight,
-        anchorCard,
-        anchorCardHeight,
-      );
-      if (typeof card.y === "number") {
-        resolvedY = card.y;
-      }
-
-      const {
-        x,
-        y,
-        offsetX,
-        offsetY,
-        relativeToCardId,
-        ...rest
-      } = card;
-
-      resolvedCards.push({
-        ...rest,
-        x: resolvedX,
-        y: resolvedY,
-      });
-
-      return resolvedCards;
-    }, []);
-  }
 
   let resolvedCardDefinitions: CardDefinition[] = [];
 
@@ -251,21 +78,6 @@
 
   $: canNavigatePrevious = currentCardIndex > 0;
   $: canNavigateNext = currentCardIndex < cards.length - 1;
-
-  function getCountedWords(text: string): string[] {
-    const cleanedText = text
-      .replace(/\*\*/g, " ")
-      .replace(/[`#>*_\[\]()\-–—]/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-
-    if (!cleanedText) return [];
-    return cleanedText.split(" ").filter(Boolean);
-  }
-
-  function countWords(text: string): number {
-    return getCountedWords(text).length;
-  }
 
   function logTitleWordBreakdown() {
     const titleBreakdown = cards.map((card) => {
@@ -287,104 +99,9 @@
     console.groupEnd();
   }
 
-  $: wordCountStats = cards.reduce(
-    (stats, card) => {
-      stats.titleWords += countWords(card.title);
-
-      for (const section of card.sections) {
-        if (section.type === "content" && section.content) {
-          stats.contentWords += countWords(section.content);
-        }
-        if (section.caption) {
-          stats.captionWords += countWords(section.caption);
-          stats.captionCount += 1;
-        }
-      }
-      return stats;
-    },
-    { titleWords: 0, contentWords: 0, captionWords: 0, captionCount: 0 },
-  );
+  $: wordCountStats = computeWordCountStats(cards);
 
   $: nonCaptionNonTitleWordTotal = wordCountStats.contentWords;
-
-  // Arrow connections - connect cards by their IDs with edge positions and optional waypoints
-  const connections: Connection[] = [
-    {
-      from: "intro-overview",
-      fromSide: "right" as const,
-      to: "vision",
-      toSide: "left" as const,
-      waypoints: [],
-    },
-    {
-      from: "vision",
-      fromSide: "right" as const,
-      to: "professional-identity",
-      toSide: "left" as const,
-      waypoints: [
-        { relativeTo: "from", offsetX: 1250, offsetY: 1212 },
-        { relativeTo: "from", offsetX: 1250, offsetY: 511 },
-      ],
-    },
-
-    {
-      from: "professional-identity",
-      fromSide: "right" as const,
-      to: "future-development",
-      toSide: "top" as const,
-      waypoints: [
-        { relativeTo: "from", offsetX: 1900, offsetY: 511 },
-      ],
-    },
-    // Future Development → Long Term (vertical, same column)
-    {
-      from: "future-development",
-      fromSide: "bottom" as const,
-      to: "long-term",
-      toSide: "top" as const,
-      waypoints: [],
-    },
-
-    {
-      from: "future-development",
-      fromSide: "bottom" as const,
-      to: "short-term",
-      toSide: "top" as const,
-      waypoints: [
-        { relativeTo: "from", offsetX: 600, offsetY: 448 },
-        { relativeTo: "from", offsetX: -700, offsetY: 448 },
-      ],
-    },
-
-    {
-      from: "future-development",
-      fromSide: "bottom" as const,
-      to: "beyond-education",
-      toSide: "top" as const,
-      waypoints: [
-        { relativeTo: "from", offsetX: 600, offsetY: 448 },
-        { relativeTo: "from", offsetX: 1900, offsetY: 448 },
-      ],
-    },
-
-    // Long Term → Courses Year 1 (vertical, same column)
-    {
-      from: "long-term",
-      fromSide: "bottom" as const,
-      to: "courses-year-1",
-      toSide: "top" as const,
-      waypoints: [],
-    },
-
-    // Courses Year 1 → Year 2 (vertical)
-    {
-      from: "courses-year-1",
-      fromSide: "bottom" as const,
-      to: "courses-year-2",
-      toSide: "top" as const,
-      waypoints: [],
-    },
-  ];
 
   // Reactive arrow points - recalculate when cards are mounted and card layout changes
   $: cardLayoutVersion,
@@ -414,21 +131,21 @@
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    // Calculate position in canvas coordinates before zoom
-    const canvasXBefore = (mouseX - panX) / zoom;
-    const canvasYBefore = (mouseY - panY) / zoom;
-
     // Update zoom with min/max limits
     const zoomDelta = -e.deltaY * 0.001;
     const newZoom = Math.max(0.15, Math.min(3, zoom + zoomDelta));
 
-    // Calculate position in canvas coordinates after zoom
-    const canvasXAfter = (mouseX - panX) / newZoom;
-    const canvasYAfter = (mouseY - panY) / newZoom;
+    const nextPan = adjustPanForZoomAtPoint({
+      focusX: mouseX,
+      focusY: mouseY,
+      panX,
+      panY,
+      oldZoom: zoom,
+      newZoom,
+    });
 
-    // Adjust pan to keep mouse position consistent
-    panX += (canvasXAfter - canvasXBefore) * newZoom;
-    panY += (canvasYAfter - canvasYBefore) * newZoom;
+    panX = nextPan.panX;
+    panY = nextPan.panY;
 
     zoom = newZoom;
   }
@@ -502,21 +219,21 @@
       const centerX = ((touch1.clientX + touch2.clientX) / 2) - rect.left;
       const centerY = ((touch1.clientY + touch2.clientY) / 2) - rect.top;
       
-      // Calculate canvas position before zoom
-      const canvasXBefore = (centerX - panX) / zoom;
-      const canvasYBefore = (centerY - panY) / zoom;
-      
       // Calculate new zoom based on distance change
       const scale = currentDistance / touchStartDistance;
       const newZoom = Math.max(0.15, Math.min(3, touchStartZoom * scale));
-      
-      // Calculate canvas position after zoom
-      const canvasXAfter = (centerX - panX) / newZoom;
-      const canvasYAfter = (centerY - panY) / newZoom;
-      
-      // Adjust pan to keep center position consistent
-      panX += (canvasXAfter - canvasXBefore) * newZoom;
-      panY += (canvasYAfter - canvasYBefore) * newZoom;
+
+      const nextPan = adjustPanForZoomAtPoint({
+        focusX: centerX,
+        focusY: centerY,
+        panX,
+        panY,
+        oldZoom: zoom,
+        newZoom,
+      });
+
+      panX = nextPan.panX;
+      panY = nextPan.panY;
       
       zoom = newZoom;
       lastTouchDistance = currentDistance;
@@ -695,22 +412,17 @@
       `[data-card-id="${cardId}"]`,
     ) as HTMLElement | null;
 
-    // Calculate target position
-    const targetZoomLevel = 0.6; // Zoom level to view the card
-    const cardCenterX = card.x + card.width / 2;
-    const cardTopY = card.y;
     const actualHeight = cardElement?.offsetHeight || 300;
-    const cardCenterY = card.y + actualHeight / 2;
-    const centerMode = card.initialCenterMode || "top";
+    const target = getNavigationTarget({
+      card,
+      cardHeight: actualHeight,
+      viewportWidth: rect.width,
+      viewportHeight: rect.height,
+    });
 
-    // Center horizontally, and either top-align or middle-align vertically per card config
-    targetPanX = rect.width / 2 - cardCenterX * targetZoomLevel;
-    targetPanY =
-      centerMode === "middle"
-        ? rect.height / 2 - cardCenterY * targetZoomLevel
-        : rect.height * 0.15 - cardTopY * targetZoomLevel;
-
-    targetZoom = targetZoomLevel;
+    targetPanX = target.panX;
+    targetPanY = target.panY;
+    targetZoom = target.zoom;
 
     // Start animation if not already running
     if (animationFrame === null) {
@@ -735,22 +447,20 @@
     }
 
     const rect = canvasElement.getBoundingClientRect();
-    const targetZoomLevel = 0.6;
-    const cardCenterX = card.x + card.width / 2;
-    const cardTopY = card.y;
     const cardElement = canvasContentElement?.querySelector(
       `[data-card-id="${cardId}"]`,
     ) as HTMLElement | null;
     const actualHeight = cardElement?.offsetHeight || 300;
-    const cardCenterY = card.y + actualHeight / 2;
-    const centerMode = card.initialCenterMode || "top";
+    const target = getNavigationTarget({
+      card,
+      cardHeight: actualHeight,
+      viewportWidth: rect.width,
+      viewportHeight: rect.height,
+    });
 
-    zoom = targetZoomLevel;
-    panX = rect.width / 2 - cardCenterX * targetZoomLevel;
-    panY =
-      centerMode === "middle"
-        ? rect.height / 2 - cardCenterY * targetZoomLevel
-        : rect.height * 0.15 - cardTopY * targetZoomLevel;
+    zoom = target.zoom;
+    panX = target.panX;
+    panY = target.panY;
   }
 
   onMount(async () => {
@@ -890,92 +600,31 @@
 
     <!-- Enlarge/Close button -->
     {#if isPreview && !isFullscreen}
-      <button
-        class="canvas-action-button enlarge"
-        on:click={toggleFullscreen}
-        type="button"
-      >
-        <Maximize2 size={16} />
-        Enlarge
-      </button>
+      <CanvasEnlargeButton onClick={toggleFullscreen} />
     {/if}
 
     {#if isFullscreen}
-      <div class="canvas-top-actions">
-        <button
-          class="canvas-action-button word-count"
-          on:click={toggleWordCountOverlay}
-          type="button"
-          aria-label="Show canvas word count"
-          title="Show canvas word count"
-        >
-          <FileText size={18} />
-          Words
-        </button>
-
-        <button
-          class="canvas-action-button theme-toggle"
-          on:click={toggleDarkMode}
-          type="button"
-          aria-label="Toggle day and night mode"
-          title="Toggle day and night mode"
-        >
-          {#if isCanvasDarkMode}
-            <Sun size={20} />
-          {:else}
-            <Moon size={20} />
-          {/if}
-        </button>
-
-        <button
-          class="canvas-action-button close"
-          on:click={toggleFullscreen}
-          type="button"
-          aria-label="Close fullscreen canvas"
-        >
-          <X size={20} />
-        </button>
-      </div>
+      <CanvasTopActions
+        {isCanvasDarkMode}
+        onToggleWordCount={toggleWordCountOverlay}
+        onToggleDarkMode={toggleDarkMode}
+        onClose={toggleFullscreen}
+      />
 
       {#if showWordCountOverlay}
-        <div class="word-count-overlay" role="status" aria-live="polite">
-          <h4>Canvas Word Count</h4>
-          <p class="word-count-total">Total (excluding captions and titles): {nonCaptionNonTitleWordTotal}</p>
-          <div class="word-count-details">
-            <p>Titles: {wordCountStats.titleWords}</p>
-            <p>Image captions ({wordCountStats.captionCount}): {wordCountStats.captionWords}</p>
-          </div>
-        </div>
+        <CanvasWordCountOverlay
+          {nonCaptionNonTitleWordTotal}
+          {wordCountStats}
+        />
       {/if}
     {/if}
 
-    <div class="canvas-sequential-nav">
-      <button
-        class="canvas-action-button canvas-sequential-nav-button"
-        on:click={() => navigateToAdjacentCard(-1)}
-        on:mousedown|stopPropagation
-        on:touchstart|stopPropagation
-        type="button"
-        aria-label="Go to previous card"
-        title="Previous card"
-        disabled={!canNavigatePrevious}
-      >
-        <ArrowLeft size={22} strokeWidth={2.8} />
-      </button>
-
-      <button
-        class="canvas-action-button canvas-sequential-nav-button"
-        on:click={() => navigateToAdjacentCard(1)}
-        on:mousedown|stopPropagation
-        on:touchstart|stopPropagation
-        type="button"
-        aria-label="Go to next card"
-        title="Next card"
-        disabled={!canNavigateNext}
-      >
-        <ArrowRight size={22} strokeWidth={2.8} />
-      </button>
-    </div>
+    <CanvasSequentialNav
+      {canNavigatePrevious}
+      {canNavigateNext}
+      onPrevious={() => navigateToAdjacentCard(-1)}
+      onNext={() => navigateToAdjacentCard(1)}
+    />
 
     <!-- Canvas Navigation Widget -->
     <CanvasNavigation {cards} onNavigate={navigateToCard} {isFullscreen} />
@@ -1055,170 +704,8 @@
     overflow: visible;
   }
 
-  .canvas-action-button {
-    z-index: 10;
-    padding: 0.5rem 1rem;
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    background: var(--hover-color);
-    backdrop-filter: blur(10px);
-    color: var(--primary-text-color);
-    font-size: 0.85rem;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .canvas-action-button:hover {
-    background: var(--secondary-background-color);
-    border-color: var(--secondary-text-color);
-  }
-
-  .canvas-action-button.enlarge {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    animation: enlargePulse 1.8s ease-in-out infinite;
-  }
-
-  .canvas-action-button.close {
-    padding: 0.5rem;
-  }
-
-  .canvas-action-button.theme-toggle {
-    padding: 0.5rem;
-    /* right: 10px; */
-  }
-
-  .canvas-action-button.word-count {
-    padding: 0.5rem 0.75rem;
-    /* right:40px; */
-  }
-
-  .canvas-top-actions {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    z-index: 10;
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .canvas-top-actions .canvas-action-button {
-    position: static;
-    z-index: auto;
-  }
-
-  .canvas-sequential-nav {
-    position: absolute;
-    left: 50%;
-    bottom: 1.25rem;
-    transform: translateX(-50%);
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-  }
-
-  .canvas-sequential-nav-button {
-    width: 3rem;
-    height: 3rem;
-    padding: 0;
-    border-radius: 50%;
-    justify-content: center;
-    box-shadow: 0 10px 28px color-mix(in srgb, var(--canvas-card-shadow) 85%, transparent);
-    border: 1px solid var(--border-color);
-    background: var(--secondary-background-color);
-    backdrop-filter: blur(10px);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.2s ease, background 0.2s ease;
-  }
-
-  .canvas-sequential-nav-button:hover {
-    transform: translateY(-1px) scale(1.03);
-    box-shadow: 0 14px 34px color-mix(in srgb, var(--canvas-card-shadow) 95%, transparent);
-  }
-
-  .canvas-sequential-nav-button:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-    border-color: var(--border-color);
-    box-shadow: none;
-    transform: none;
-  }
-
-  .canvas-sequential-nav-button:disabled:hover {
-    background: var(--hover-color);
-    border-color: var(--border-color);
-  }
-
-  .word-count-overlay {
-    position: absolute;
-    top: 5rem;
-    right: 3rem;
-    z-index: 1001;
-    min-width: 260px;
-    padding: 0.85rem 1rem;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    background: var(--background-color);
-    color: var(--primary-text-color);
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.3);
-  }
-
-  .word-count-overlay h4 {
-    margin: 0 0 0.6rem 0;
-    font-size: 0.9rem;
-    letter-spacing: 0.02em;
-  }
-
-  .word-count-overlay p {
-    margin: 0.35rem 0;
-    font-size: 0.88rem;
-    line-height: 1.35;
-  }
-
-  .word-count-total {
-    display: inline-block;
-    border-bottom: 1px solid color-mix(in srgb, var(--muted-color) 35%, transparent);
-    padding-bottom: 0.45rem;
-    margin-bottom: 0.35rem;
-  }
-
-  .word-count-details {
-    display: block;
-    width: fit-content;
-    padding-top: 0.1rem;
-  }
-
   .infinite-canvas:active {
     cursor: grabbing;
-  }
-
-  @keyframes enlargePulse {
-    0% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(249, 103, 67, 0.45);
-    }
-    65% {
-      transform: scale(1.06);
-      box-shadow: 0 0 0 14px rgba(249, 103, 67, 0);
-    }
-    100% {
-      transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(249, 103, 67, 0);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .canvas-action-button.enlarge {
-      animation: none;
-    }
   }
 
   /* Print styles for PDF export */
@@ -1246,7 +733,7 @@
       display: none;
     }
 
-    .canvas-action-button,
+    :global(.canvas-action-button),
     :global(.canvas-navigation) {
       display: none !important;
     }

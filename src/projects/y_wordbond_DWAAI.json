@@ -84,7 +84,7 @@
       },
       {
         "title": "Problem & Design Goal",
-        "text": "Many existing assistive reading tools prioritize information access, but often replace the parent voice with synthetic narration. WordBond focuses on preserving the emotional voice bond in shared reading by helping visually impaired parents read physical books in their own voice while still receiving timely support when needed."
+        "text": "Many existing assistive reading tools prioritize information access, but often replace the parents' voice with synthetic narration. WordBond focuses on preserving the emotional voice bond in shared reading by helping visually impaired parents read physical books in their own voice while still receiving timely support when needed."
       },
       {
         "title": "System Overview",
@@ -110,7 +110,7 @@
       },
       {
         "title": "Next Steps",
-        "text": "Moving from simulated users to in-situ studies with visually impaired parents and children, improving on-device autonomy, adding richer contextual cues for interactive mode, and integrating image description support to help parents narrate with stronger emotional expression."
+        "text": "Moving from simulated users to on-site studies with visually impaired parents and children, improving on-device autonomy, adding richer contextual cues for interactive mode, and integrating image description support to help parents narrate with stronger emotional expression."
       },
       {
         "title": "WordBond Final Report (PDF)",
