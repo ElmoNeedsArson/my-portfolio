@@ -14,8 +14,8 @@ export const connections: Connection[] = [
     to: "professional-identity",
     toSide: "left",
     waypoints: [
-      { relativeTo: "from", offsetX: 1250, offsetY: 1212 },
-      { relativeTo: "from", offsetX: 1250, offsetY: 511 },
+      { relativeTo: "from", offsetX: 50, offsetY: 0 },
+      { relativeTo: "to", offsetX: -50, offsetY: 0 },
     ],
   },
   {
@@ -23,7 +23,7 @@ export const connections: Connection[] = [
     fromSide: "right",
     to: "future-development",
     toSide: "top",
-    waypoints: [{ relativeTo: "from", offsetX: 1900, offsetY: 511 }],
+    waypoints: [{ relativeTo: "to", offsetX: 0, offsetY: -590 }],
   },
   {
     from: "future-development",
@@ -38,8 +38,8 @@ export const connections: Connection[] = [
     to: "short-term",
     toSide: "top",
     waypoints: [
-      { relativeTo: "from", offsetX: 600, offsetY: 448 },
-      { relativeTo: "from", offsetX: -700, offsetY: 448 },
+      { relativeTo: "from", offsetX: 0, offsetY: 150 },
+      { relativeTo: "to", offsetX: 0, offsetY: -65 },
     ],
   },
   {
@@ -48,8 +48,8 @@ export const connections: Connection[] = [
     to: "beyond-education",
     toSide: "top",
     waypoints: [
-      { relativeTo: "from", offsetX: 600, offsetY: 448 },
-      { relativeTo: "from", offsetX: 1900, offsetY: 448 },
+      { relativeTo: "from", offsetX: 0, offsetY: 150 },
+      { relativeTo: "to", offsetX: 0, offsetY: -65 },
     ],
   },
   {

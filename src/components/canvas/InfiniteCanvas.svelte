@@ -356,18 +356,15 @@
     waypoint: Waypoint,
     connection: Connection,
   ): { x: number; y: number } {
-    const anchorId =
-      waypoint.relativeTo === "from" ? connection.from : connection.to;
-    const anchorCard = cards.find((card) => card.id === anchorId);
+    const anchorPoint =
+      waypoint.relativeTo === "from"
+        ? getCardEdgePoint(connection.from, connection.fromSide)
+        : getCardEdgePoint(connection.to, connection.toSide);
 
-    if (anchorCard) {
-      return {
-        x: anchorCard.x + waypoint.offsetX,
-        y: anchorCard.y + waypoint.offsetY,
-      };
-    }
-
-    return { x: 0, y: 0 };
+    return {
+      x: anchorPoint.x + waypoint.offsetX,
+      y: anchorPoint.y + waypoint.offsetY,
+    };
   }
 
   function getArrowPoints(
