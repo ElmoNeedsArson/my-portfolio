@@ -312,7 +312,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    color: #a1a4aa;
+    color: var(--secondary-text-color);
     font-size: 0.82rem;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
     width: fit-content;
