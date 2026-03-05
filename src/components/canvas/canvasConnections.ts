@@ -10,6 +10,13 @@ export const connections: Connection[] = [
   },
   {
     from: "vision",
+    fromSide: "bottom",
+    to: "ambition",
+    toSide: "top",
+    waypoints: [],
+  },
+  {
+    from: "ambition",
     fromSide: "right",
     to: "professional-identity",
     toSide: "left",
@@ -23,7 +30,7 @@ export const connections: Connection[] = [
     fromSide: "right",
     to: "future-development",
     toSide: "top",
-    waypoints: [{ relativeTo: "to", offsetX: 0, offsetY: -590 }],
+    waypoints: [{ relativeTo: "to", offsetX: 0, offsetY: -410 }],
   },
   {
     from: "future-development",

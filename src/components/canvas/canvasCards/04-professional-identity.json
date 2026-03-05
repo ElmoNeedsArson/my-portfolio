@@ -1,0 +1,118 @@
+{
+  "id": "professional-identity",
+  "title": "Professional Identity",
+  "width": 1200,
+  "relativeToCardId": "vision",
+  "offsetX": 1300,
+  "offsetY": 0,
+  "color": "rgba(74, 144, 226, 0.35)",
+  "sections": [
+    {
+      "type": "content",
+      "content": "I am a designer passionate about combining technology, human-centered thinking, and creative problem-solving to shape meaningful, user-focused solutions. I value optimism and open-mindedness, believing these traits fuel creativity, collaboration, and motivation. My strength lies in connecting people and disciplines, facilitating inclusive, stakeholder-driven design processes [3] where diverse perspectives lead to innovative outcomes. In team settings, I naturally gravitate toward coordination, ensuring all voices are heard and ideas are shared collaboration as a cornerstone of impactful design, and I actively work to create an environment where inclusivity drives innovation. My Bachelor’s in Creative Technology at the University of Twente provided a foundation in bridging hardware, software, and user needs, a skillset I’ve refined a lot through hands-on projects.\n\nFor example, designing a data physicalization prototype (Figure 1) deepened my expertise in electronic circuits and iterative prototyping, and while developing a low-poly video game from scratch (Figure 2) I improved my ability to translate abstract ideas into functional code and custom assets. These experiences taught me to embrace technical challenges as opportunities to create tangible, user-centric outcomes."
+    },
+    {
+      "type": "images",
+      "cols": 3,
+      "images": [
+        {
+          "src": "/assets/images/eindhoven/Mod8-3.png",
+          "alt": "Data Physicalization Project"
+        },
+        {
+          "src": "/assets/images/eindhoven/Mod8.png",
+          "alt": "Data Physicalization Project"
+        },
+        {
+          "src": "/assets/images/eindhoven/Mod8-2.png",
+          "alt": "Data Physicalization Project"
+        }
+      ],
+      "caption": "Figure 1: A data physicalization project I undertook in my bachelor, significantly improving my electronics knowledge and prototyping skills"
+    },
+    {
+      "type": "images",
+      "cols": 2,
+      "images": [
+        {
+          "src": "/assets/images/eindhoven/spotty-1.png",
+          "alt": "Low poly video game"
+        },
+        {
+          "src": "/assets/images/eindhoven/spotty-2.png",
+          "alt": "Low poly video game"
+        }
+      ],
+      "caption": "Figure 2: Screenshots of a low poly video game made during the bachelor, all the code and assets were manually created."
+    },
+    {
+      "type": "content",
+      "content": "Beyond academia, my work in a startup crafting cosplay and LARP products (Figure 3) immersed me in end-to-end design processes, from conceptualizing wearable art to building a responsive web shop. This role highlighted the importance of balancing creativity with practicality, as I collaborated directly with customers to align designs with their needs. Similarly, designing an information system for a client (Figure 4) once more revealed the value of including stakeholder in the design, where they showed me multiple elements they valued I did not expect, reinforcing my commitment to inclusive, iterative processes. These projects showed the importance of involving stakeholders and users in the design to ensure adoption and real-world relevance."
+    },
+    {
+      "type": "images",
+      "cols": 3,
+      "images": [
+        {
+          "src": "/assets/images/eindhoven/stand1.jpg",
+          "alt": "Startup booth"
+        },
+        {
+          "src": "/assets/images/eindhoven/arm1.jpg",
+          "alt": "Costume piece"
+        },
+        {
+          "src": "/assets/images/eindhoven/work1.jpg",
+          "alt": "Workshop"
+        }
+      ],
+      "caption": "Figure 3: Pictures of the startup where we made costume pieces and went to larp and cosplay events to sell our products, additionaly I made a web shop for the startup (not pictured here)"
+    },
+    {
+      "type": "images",
+      "cols": 3,
+      "images": [
+        {
+          "src": "/assets/images/eindhoven/lms-1.png",
+          "alt": "Information system"
+        },
+        {
+          "src": "/assets/images/eindhoven/lms-2.png",
+          "alt": "Information system"
+        },
+        {
+          "src": "/assets/images/eindhoven/lms-3.png",
+          "alt": "Information system"
+        }
+      ],
+      "caption": "Figure 4: Screenshots of said information system application"
+    },
+    {
+      "type": "content",
+      "content": "In my design approach, flexibility is key. I adapt methodologies to fit the unique needs of each project (Figure 6,7,8), drawing from diverse frameworks to find the most effective process. In group projects, I prioritize a clear and structured approach to ensure transparency and accountability. On the other hand, my personal projects often follow a more spontaneous path driven by curiosity and exploration, allowing me to experiment freely and learn by doing."
+    },
+    {
+      "type": "images",
+      "cols": 3,
+      "images": [
+        {
+          "src": "/assets/images/wordbond2.png",
+          "alt": "Figure 5: During the design of wordbond, an accessibility tool to help visually impaired parents read to their children, a research through design method was used [12]."
+        },
+        {
+          "src": "/assets/images/conversationInterviewDrawing_selfmade.jpeg",
+          "alt": "Figure 6: During my fmp (Currently in progress) the focus lays on understanding of users first and foremost, and a human centered design approach was taken [10]."
+        },
+        {
+          "src": "/assets/images/tactone6.png",
+          "alt": "Figure 7: During the design of tactone, a designer tool for soft robotic perception, where we used a material driven design method [11]. "
+        }
+      ],
+      "caption": "Figure 4: Screenshots of said information system application"
+    },
+    {
+      "type": "content",
+      "content": "What drives me in my work is a focus on solving problems. Over time, I’ve grown more confident in my ability to tackle challenges by breaking them down and applying my skillset. I used to see personal motivation as the main factor for completing projects, and also my biggest pitfall, since it can be an unstable factor for specializing. But I’ve noticed that over time and with my education in my bachelor and the acquisition of skills my motivation shifted to the process itself and the satisfaction of finding solutions are what keep me going. I’m still navigating the balance between specialization and generalization, as I’m driven both by a desire to master specific skills and by the excitement of connecting diverse ideas across fields. \n\nWhile I thrive in collaborative and inclusive environments, I sometimes struggle when others show a lack of initiative, which can lead me to take over tasks to maintain momentum. I’m aware that this tendency could hinder team dynamics, and I aim to improve my ability to navigate these situations, as it will likely also be part of future professional settings. \n\nIn summary, I am a designer dedicated to leveraging technology thoughtfully and responsibly, balancing creativity, technical skills, and human-centered design to craft solutions that make a meaningful impact."
+    }
+  ]
+}

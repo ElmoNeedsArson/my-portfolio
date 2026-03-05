@@ -1,0 +1,15 @@
+{
+  "id": "beyond-education",
+  "title": "Beyond Education",
+  "width": 1200,
+  "relativeToCardId": "future-development",
+  "offsetX": 1300,
+  "offsetY": 500,
+  "color": "rgba(249, 103, 67, 0.3)",
+  "sections": [
+    {
+      "type": "content",
+      "content": "When I think about my professional life after finishing this master’s degree, I think that I will approach work as something that should contribute to my development. I don’t really see my first job as just a strategic career step, but more as a phase in which I can build practical skills, gain experience, and develop myself in ways that go beyond academic knowledge. For me, professional steps function as building blocks or pillars I think. They do not need to be perfect long-term choices, but they should help me grow in concrete ways.\n\nIf I look at the possibilities ahead, I defined two directions for myself: either I continue studying, for example by doing another master’s abroad or engD, or I move into the workforce. At the moment, I feel more drawn toward starting to work. More specifically, I find myself leaning toward something hands-on and technical, such as simply working in a repair shop. What attracts me to this or technical environments is the directness of the work. You deal with real, concrete problems. Something does not function, and you work toward making it function again. You interact directly with people or with physical systems, and you see the outcome of your effort immediately. That visibility and immediacy of impact appeals to me. I think that kind of environment would complement my academic background and help me develop a more grounded, practical form of competence. In my vision I try to underline the personal importance to me of concrete impact, and not contribution to a hypothetical future scenario. For me, this comes down to how I relate to value. I am currently more motivated by improving something that already exists and seeing that change directly, rather than contributing to a possible future scenario. The idea of addressing present, concrete problems feels more meaningful to me at this stage."
+    }
+  ]
+}
