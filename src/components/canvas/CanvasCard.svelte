@@ -13,7 +13,7 @@
     export let sections: Array<{
         type: "content" | "images";
         content?: string;
-        images?: Array<{ src: string; alt: string }>;
+        images?: Array<{ src: string; alt: string; caption?: string }>;
         caption?: string;
         cols?: number;
     }> = [];
@@ -118,12 +118,19 @@
                             3}, 1fr);"
                     >
                         {#each section.images as image}
-                            <div class="gallery-item">
-                                <img
-                                    src={image.src}
-                                    alt={image.alt}
-                                    draggable="false"
-                                />
+                            <div class="gallery-entry">
+                                <div class="gallery-item">
+                                    <img
+                                        src={image.src}
+                                        alt={image.alt}
+                                        draggable="false"
+                                    />
+                                </div>
+                                {#if image.caption}
+                                    <p class="image-source-caption">
+                                        <i>{image.caption}</i>
+                                    </p>
+                                {/if}
                             </div>
                         {/each}
                     </div>
@@ -277,6 +284,12 @@
         margin: 1.5rem 0;
     }
 
+    .gallery-entry {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
     .gallery-item {
         border-radius: 8px;
         overflow: hidden;
@@ -295,6 +308,14 @@
         font-size: 0.9rem;
         color: var(--muted-color);
         margin-top: -0.5rem !important;
+    }
+
+    .image-source-caption {
+        margin: 0;
+        font-size: 0.82rem;
+        line-height: 1.35;
+        color: var(--muted-color);
+        opacity: 0.95;
     }
 
     @media print {

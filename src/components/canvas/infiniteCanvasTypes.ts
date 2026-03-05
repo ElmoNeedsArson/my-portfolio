@@ -1,7 +1,7 @@
 export type CardSection = {
   type: "content" | "images";
   content?: string;
-  images?: Array<{ src: string; alt: string }>;
+  images?: Array<{ src: string; alt: string; caption?: string }>;
   caption?: string;
   cols?: number;
 };
