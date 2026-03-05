@@ -97,18 +97,21 @@
       "images": [
         {
           "src": "/assets/images/wordbond2.png",
-          "alt": "Figure 5: During the design of wordbond, an accessibility tool to help visually impaired parents read to their children, a research through design method was used [12]."
+          "alt": "Figure 5: During the design of wordbond, an accessibility tool to help visually impaired parents read to their children, a research through design method was used [12].",
+          "caption": "Figure 5: During the design of wordbond, an accessibility tool to help visually impaired parents read to their children, a research through design method was used [12]."
         },
         {
           "src": "/assets/images/conversationInterviewDrawing_selfmade.jpeg",
-          "alt": "Figure 6: During my fmp (Currently in progress) the focus lays on understanding of users first and foremost, and a human centered design approach was taken [10]."
+          "alt": "Figure 6: During my fmp (Currently in progress) the focus lays on understanding of users first and foremost, and a human centered design approach was taken [10].",
+          "caption": "Figure 6: During my fmp (Currently in progress) the focus lays on understanding of users first and foremost, and a human centered design approach was taken [10]."
         },
         {
           "src": "/assets/images/tactone6.png",
-          "alt": "Figure 7: During the design of tactone, a designer tool for soft robotic perception, where we used a material driven design method [11]. "
+          "alt": "Figure 7: During the design of tactone, a designer tool for soft robotic perception, where we used a material driven design method [11]. ",
+          "caption": "Figure 7: During the design of tactone, a designer tool for soft robotic perception, where we used a material driven design method [11]. "
         }
       ],
-      "caption": "Figure 4: Screenshots of said information system application"
+      "caption": ""
     },
     {
       "type": "content",
