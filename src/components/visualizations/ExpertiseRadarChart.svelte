@@ -194,6 +194,7 @@
 
     @media (max-width: 1200px) {
         .radar-container {
+            display: none;
             position: static;
             margin: 1rem auto;
             max-width: 250px;

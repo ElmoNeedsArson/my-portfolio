@@ -68,6 +68,9 @@
         "keyFeatures": [],
         "sections": [
             {
+                "text": "Github Repository: <a href=\"https://github.com/ElmoNeedsArson/Obsidian-3D-embed\" target=\"_blank\">Here</a>"
+            },
+            {
                 "title": "About Obsidian",
                 "text": "<a href=\"https://obsidian.md\" target=\"_blank\">Obsidian</a> is \"the private and flexible writing app that adapts to the way you think\". At least that is what they say on their website. This application has taken my notetaking to a whole new level, and made me into kind of a fanboy.\n\nIt uses markdown files, which load incredibly fast, but have no fancy additions like word and google docs, and is itself very barebones, but allows for linking together of notes. This produces a very easily navigable note environment. Kind of like your own Wikipedia. An additional feature is the graph you see below, that allows for easy navigation between notes aswell.",
                 "gallery": {
