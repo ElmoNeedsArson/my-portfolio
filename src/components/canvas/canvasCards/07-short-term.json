@@ -1,6 +1,8 @@
 {
   "id": "short-term",
   "title": "Short Term Goals",
+  "numberOrder": 7,
+  "hide": true,
   "width": 1200,
   "offsetX": -2600,
   "offsetY": 500,

@@ -9,11 +9,13 @@ export type CardSection = {
 export type CardDefinition = {
   id: string;
   title: string;
+  numberOrder?: number;
   x: number;
   y: number;
   width: number;
   color: string;
   sections: CardSection[];
+  hide?: boolean;
   hideHeader?: boolean;
   contentAlign?: "left" | "center";
   introTitle?: string;

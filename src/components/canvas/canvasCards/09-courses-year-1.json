@@ -1,6 +1,8 @@
 {
   "id": "courses-year-1",
   "title": "Courses and Electives - Year 1",
+  "numberOrder": 9,
+  "hide": true,
   "width": 1200,
   "offsetX": 0,
   "offsetY": "1ch",

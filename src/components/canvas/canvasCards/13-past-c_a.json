@@ -1,8 +1,9 @@
 {
   "id": "past-creativity-and-aesthetics",
   "title": "Creativity and Aesthetics",
-  "width": 1200,
-  "offsetX": 1300,
+  "numberOrder": 13,
+  "width": 600,
+  "offsetX": 700,
   "offsetY": 0,
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [

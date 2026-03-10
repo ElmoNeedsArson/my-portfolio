@@ -209,6 +209,12 @@ export function resolveCardDefinitions(
       anchorCard =
         resolvedCards.find((resolved) => resolved.id === card.relativeToCardId) ??
         null;
+
+      // If the target card is unavailable (for example hidden), fall back to
+      // the previous resolved card so relative positioning still works.
+      if (!anchorCard && resolvedCards.length > 0) {
+        anchorCard = resolvedCards[resolvedCards.length - 1];
+      }
     } else if (resolvedCards.length > 0) {
       anchorCard = resolvedCards[resolvedCards.length - 1];
     }

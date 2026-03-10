@@ -1,6 +1,7 @@
 {
   "id": "professional-identity",
   "title": "Professional Identity",
+  "numberOrder": 4,
   "width": 1200,
   "relativeToCardId": "vision",
   "offsetX": 1300,

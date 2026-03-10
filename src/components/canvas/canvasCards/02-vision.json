@@ -1,6 +1,7 @@
 {
   "id": "vision",
   "title": "Vision",
+  "numberOrder": 2,
   "width": 1200,
   "offsetX": 1800,
   "offsetY": "0.5ph-0.5ch",

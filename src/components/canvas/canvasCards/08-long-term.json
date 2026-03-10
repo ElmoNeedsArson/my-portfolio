@@ -1,6 +1,8 @@
 {
   "id": "long-term",
   "title": "Long Term",
+  "numberOrder": 8,
+  "hide": true,
   "width": 1200,
   "offsetX": 1300,
   "offsetY": 0,

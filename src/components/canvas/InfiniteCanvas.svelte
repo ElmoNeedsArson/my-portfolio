@@ -61,8 +61,15 @@
   }) as Record<string, CardDefinitionInput>;
 
   const cardDefinitionsInput: CardDefinitionInput[] = Object.entries(cardModules)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([, card]) => card);
+    .map(([, card]) => ({ card }))
+    .sort((a, b) => {
+      const aOrder = a.card.numberOrder ?? a.card.numberOrder ?? Number.POSITIVE_INFINITY;
+      const bOrder = b.card.numberOrder ?? b.card.numberOrder ?? Number.POSITIVE_INFINITY;
+
+      return aOrder - bOrder;
+    })
+    .map(({ card }) => card)
+    .filter((card) => !card.hide);
 
 
   let resolvedCardDefinitions: CardDefinition[] = [];
@@ -103,10 +110,18 @@
 
   $: nonCaptionNonTitleWordTotal = wordCountStats.contentWords;
 
+  $: visibleCardIds = new Set(cards.map((card) => card.id));
+
   // Reactive arrow points - recalculate when cards are mounted and card layout changes
   $: cardLayoutVersion,
     (arrowData = cardsMounted
-      ? connections.map((connection) => ({
+      ? connections
+          .filter(
+            (connection) =>
+              visibleCardIds.has(connection.from) &&
+              visibleCardIds.has(connection.to),
+          )
+          .map((connection) => ({
           connection,
           points: getArrowPoints(connection),
         }))

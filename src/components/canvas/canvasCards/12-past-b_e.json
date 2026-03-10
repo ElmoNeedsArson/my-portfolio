@@ -1,9 +1,9 @@
 {
   "id": "past-business-and-entrepreneurship",
   "title": "Business and Entrepreneurship",
-  "width": 1200,
-  "relativeToCardId": "future-development",
-  "offsetX": 2600,
+  "numberOrder": 12,
+  "width": 600,
+  "offsetX": 1300,
   "offsetY": 0,
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [
