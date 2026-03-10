@@ -80,6 +80,7 @@
   }
 </script>
 
+{#if sections.length !<1}
 <div class="outline-container" class:expanded={isExpanded}>
   <button class="outline-toggle" on:click={toggleOutline}>
     <span class="outline-header">
@@ -110,6 +111,7 @@
     </nav>
   {/if}
 </div>
+{/if}
 
 <style>
   .outline-container {
