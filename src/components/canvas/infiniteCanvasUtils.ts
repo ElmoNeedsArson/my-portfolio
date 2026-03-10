@@ -97,8 +97,23 @@ export function computeWordCountStats(
         }
 
         if (section.caption) {
-          stats.captionWords += countWords(section.caption);
-          stats.captionCount += 1;
+          const sectionCaptionWords = countWords(section.caption);
+          if (sectionCaptionWords > 0) {
+            stats.captionWords += sectionCaptionWords;
+            stats.captionCount += 1;
+          }
+        }
+
+        if (section.images?.length) {
+          for (const image of section.images) {
+            if (image.caption) {
+              const imageCaptionWords = countWords(image.caption);
+              if (imageCaptionWords > 0) {
+                stats.captionWords += imageCaptionWords;
+                stats.captionCount += 1;
+              }
+            }
+          }
         }
       }
 
