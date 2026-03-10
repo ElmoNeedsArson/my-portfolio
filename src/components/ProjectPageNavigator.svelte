@@ -80,7 +80,7 @@
   }
 </script>
 
-{#if sections.length !=0}
+{#if sections.length > 0}
 <div class="outline-container" class:expanded={isExpanded}>
   <button class="outline-toggle" on:click={toggleOutline}>
     <span class="outline-header">
