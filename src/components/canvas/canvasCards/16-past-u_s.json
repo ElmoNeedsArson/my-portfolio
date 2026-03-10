@@ -1,0 +1,14 @@
+{
+  "id": "past-user-and-society",
+  "title": "User and Society",
+  "width": 1200,
+  "offsetX": 1300,
+  "offsetY": 0,
+  "color": "rgba(249, 103, 67, 0.3)",
+  "sections": [
+    {
+      "type": "content",
+      "content": "The Student Management Tool is the project I think about most when someone talks about human-centered design. Not because it went well.\n\nI built a desktop app for my tutoring job without a single stakeholder conversation. Technically it worked. My colleagues were enthusiastic. And then they pointed out features that were, in retrospect, completely obvious. The features they surfaced were exactly what a basic conversation would have caught on day one. Designing without the people you're designing for is just guessing with extra steps.\n\nWordBond started from the opposite premise. The iterative evaluation — pilot study, then formal study with standardised scales — kept surfacing real issues and real improvements. Results showed the emotional dimension of the design, the voice-bond between parent and child, was landing even in a simulated setting. The significant limitation is one I name clearly in the report: we never tested with actual visually impaired parents. Simulating impairment and living with it are not the same thing.\n\nWordBond is also where my vision felt most directly at work — AI serving a human experience rather than replacing it. Keeping a parent's voice in a reading moment that belongs to them, not to a text-to-speech engine. The distance between those two projects is the most honest measure of where my thinking on User and Society shifted."
+    }
+  ]
+}

@@ -174,7 +174,7 @@
     startY = e.clientY - panY;
     canvasElement.style.cursor = "grabbing";
 
-    console.log("Pan start:", { startX, startY });
+    //console.log("Pan start:", { startX, startY });
   }
 
   function handleMouseMove(e: MouseEvent) {
@@ -183,7 +183,7 @@
     panX = e.clientX - startX;
     panY = e.clientY - startY;
 
-    console.log("Panning:", { panX, panY });
+    //console.log("Panning:", { panX, panY });
   }
 
   function handleMouseUp() {
@@ -485,7 +485,7 @@
   }
 
   onMount(async () => {
-    logTitleWordBreakdown();
+    //logTitleWordBreakdown();
 
     if (startFullscreen) {
       isFullscreen = true;

@@ -54,12 +54,12 @@
     }
 
     function handleResultsClose() {
-        console.log("Closing search results");
+        //console.log("Closing search results");
         closeSearchResults(); // Use global function to close results
     }
 
     function handleBackToSearch() {
-        console.log("Going back to search modal");
+        //console.log("Going back to search modal");
         showSearchResultsStore.set(false); // Hide results
         showSearchModal = true; // Show search modal again
     }

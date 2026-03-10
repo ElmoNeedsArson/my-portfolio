@@ -20,10 +20,11 @@
 
     // Helper function to detect if content has multiple goals (for grid layout)
     function hasGoalsGrid(content: string): boolean {
-        return (
-            content.includes("**Independence:**") ||
-            (content.match(/\*\*[^*]+:\*\*/g) || []).length >= 4
-        );
+        const goalHeaderMatches =
+            content.match(/<(?:b|strong)>\s*[^<]+:\s*<\/(?:b|strong)>/gi) ||
+            [];
+
+        return goalHeaderMatches.length >= 4;
     }
 
     // Parse goals into grid items if detected
@@ -32,9 +33,14 @@
             .split("\n\n")
             .filter((p) => p.trim())
             .map((p) => {
-                const match = p.match(/\*\*([^:]+):\*\*\s*(.+)/s);
+                const match = p.match(
+                    /^<(?:b|strong)>\s*([^:<]+):\s*<\/(?:b|strong)>\s*([\s\S]+)/i,
+                );
                 if (match) {
-                    return { title: match[1], description: match[2] };
+                    return {
+                        title: match[1].trim(),
+                        description: match[2].trim(),
+                    };
                 }
                 return null;
             })
@@ -94,7 +100,7 @@
                                 <div class="goal-item">
                                     <h4 class="goal-title">{goal.title}</h4>
                                     <p class="goal-description">
-                                        {goal.description}
+                                        {@html goal.description}
                                     </p>
                                 </div>
                             {/each}
@@ -104,10 +110,10 @@
                         {#each paragraphs as paragraph}
                             {#if paragraph.isQuote}
                                 <div class="quote">
-                                    <p>{paragraph.text}</p>
+                                    <p>{@html paragraph.text}</p>
                                 </div>
                             {:else}
-                                <p>{paragraph.text}</p>
+                                <p>{@html paragraph.text}</p>
                             {/if}
                         {/each}
                     {/if}
@@ -240,6 +246,20 @@
         color: var(--muted-color);
         font-style: italic;
         margin: 0;
+    }
+
+    .card-content :global(a) {
+        color: var(--primary-text-color);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    .card-content :global(a:hover) {
+        opacity: 0.85;
+    }
+
+    .card-content :global(strong) {
+        font-weight: 700;
     }
 
     .goals-grid {

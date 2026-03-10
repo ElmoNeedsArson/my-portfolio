@@ -24,12 +24,12 @@
     $darkMode || !project.thumbnailLight
       ? project.thumbnail
       : project.thumbnailLight;
-  $: console.log(
-    "Selected thumbnail for project",
-    project.title,
-    "is",
-    selectedThumb,
-  );
+  // $: console.log(
+  //   "Selected thumbnail for project",
+  //   project.title,
+  //   "is",
+  //   selectedThumb,
+  // );
   $: imageUrl = getSrc(selectedThumb) ?? "";
   $: imageFilter = selectedThumb?.invert ? "invert(0.9)" : "none";
 

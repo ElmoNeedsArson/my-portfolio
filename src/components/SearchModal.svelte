@@ -72,12 +72,12 @@
 
     function handleSuggestionClick(suggestion: string) {
         event.stopPropagation(); //otherwise the results modal immediately closes
-        console.log(
-            "Suggestion clicked: " +
-                suggestion +
-                ", Category:" +
-                selectedCategory,
-        );
+        // console.log(
+        //     "Suggestion clicked: " +
+        //         suggestion +
+        //         ", Category:" +
+        //         selectedCategory,
+        // );
         searchInput = suggestion; //bc of reactivity this is important
 
         //If it's a project name and we find an exact match, navigate directly
@@ -85,7 +85,7 @@
             const allProjects = loadAllProjects();
             const exactMatch = allProjects.find((p) => p.title === suggestion);
             if (exactMatch) {
-                console.log("Direct navigation to project:", exactMatch.slug);
+                //console.log("Direct navigation to project:", exactMatch.slug);
                 // Import the router and navigate
                 import("svelte-spa-router").then(({ push }) => {
                     push(`/${exactMatch.slug}`);
@@ -100,12 +100,12 @@
     }
 
     function performSearch(exactMatch = false) {
-        console.log(
-            "Performing search for:",
-            searchInput,
-            "in category:",
-            selectedCategory,
-        );
+        // console.log(
+        //     "Performing search for:",
+        //     searchInput,
+        //     "in category:",
+        //     selectedCategory,
+        // );
         const trimmedInput = searchInput.trim();
         if (!trimmedInput) return;
         const results = searchProjects(selectedCategory, trimmedInput, {
