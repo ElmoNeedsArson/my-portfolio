@@ -4,9 +4,9 @@
   "numberOrder": 22,
   "relativeToCardId": "past-math-data-and-computing",
   "width": 600,
-  "offsetX": 0,
+  "offsetX": 2300,
   "hide": false,
-  "offsetY": "1.5ph",
+  "offsetY": "0.5ppph + 0.5ch",
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [
     {

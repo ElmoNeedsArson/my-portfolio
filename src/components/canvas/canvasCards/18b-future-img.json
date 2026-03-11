@@ -1,0 +1,23 @@
+{
+  "id": "beyond-education-img",
+  "title": "U&S Images",
+  "numberOrder": 24,
+  "width": 1150,
+  "offsetX": "1.1pw",
+  "offsetY": 0,
+  "hideHeader": true,
+  "color": "rgba(74, 144, 226, 0.35)",
+  "sections": [
+    {
+      "type": "images",
+      "cols": 1,
+      "images": [
+        {
+          "src": "/assets/images/future.png",
+          "alt": "Data Physicalization Project",
+          "caption": ""
+        }
+      ]
+    }
+  ]
+}

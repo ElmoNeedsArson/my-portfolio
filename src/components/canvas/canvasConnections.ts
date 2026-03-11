@@ -27,6 +27,17 @@ export const connections: Connection[] = [
   },
   {
     from: "professional-identity",
+    fromSide: "bottom",
+    to: "past-business-and-entrepreneurship",
+    toSide: "left",
+    waypoints: [
+      { relativeTo: "from", offsetX: 0, offsetY: 200 },
+      { relativeTo: "to", offsetX: -300, offsetY: 2735 },
+      { relativeTo: "to", offsetX: -300, offsetY: 0 },
+    ],
+  },
+  {
+    from: "professional-identity",
     fromSide: "right",
     to: "future-development",
     toSide: "top",
@@ -72,5 +83,55 @@ export const connections: Connection[] = [
     to: "courses-year-2",
     toSide: "top",
     waypoints: [],
+  },
+  {
+    from: "past-business-and-entrepreneurship-img",
+    fromSide: "right",
+    to: "past-conclusion",
+    toSide: "left",
+    waypoints: [
+      { relativeTo: "from", offsetX: 220, offsetY: 0 },
+      { relativeTo: "to", offsetX: -220, offsetY: 0 },
+    ],
+  },
+  {
+    from: "past-creativity-and-aesthetics-img",
+    fromSide: "right",
+    to: "past-conclusion",
+    toSide: "left",
+    waypoints: [
+      { relativeTo: "from", offsetX: 220, offsetY: 0 },
+      { relativeTo: "to", offsetX: -220, offsetY: 0 },
+    ],
+  },
+  {
+    from: "past-math-data-and-computing-img",
+    fromSide: "right",
+    to: "past-conclusion",
+    toSide: "left",
+    waypoints: [
+      { relativeTo: "from", offsetX: 220, offsetY: 0 },
+      { relativeTo: "to", offsetX: -220, offsetY: 0 },
+    ],
+  },
+  {
+    from: "past-technology-and-realization-img",
+    fromSide: "right",
+    to: "past-conclusion",
+    toSide: "left",
+    waypoints: [
+      { relativeTo: "from", offsetX: 220, offsetY: 0 },
+      { relativeTo: "to", offsetX: -220, offsetY: 0 },
+    ],
+  },
+  {
+    from: "past-user-and-society-img",
+    fromSide: "right",
+    to: "past-conclusion",
+    toSide: "left",
+    waypoints: [
+      { relativeTo: "from", offsetX: 220, offsetY: 0 },
+      { relativeTo: "to", offsetX: -220, offsetY: 0 },
+    ],
   },
 ];

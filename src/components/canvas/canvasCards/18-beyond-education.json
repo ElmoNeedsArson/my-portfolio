@@ -2,10 +2,11 @@
   "id": "beyond-education",
   "title": "Beyond Education",
   "numberOrder": 23,
-  "width": 1200,
-  "relativeToCardId": "future-development",
-  "offsetX": 1300,
-  "offsetY": 500,
+  "width": 800,
+  "navigationFitToFrame": true,
+  "relativeToCardId": "professional-identity",
+  "offsetX": 5000,
+  "offsetY": 0,
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [
     {

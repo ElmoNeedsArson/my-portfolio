@@ -72,9 +72,8 @@
         fill="none"
         stroke="currentColor"
         stroke-opacity="0.7"
-        stroke-width="5"
-        stroke-dasharray="5,5"
-    />
+        stroke-width="10" />
+        <!-- stroke-dasharray="5,5" -->
 
     <!-- Arrowhead at the last point -->
     {#if points.length > 0}

@@ -11,6 +11,9 @@
     export let cardId: string;
     export let x: number;
     export let y: number;
+    export let zoomLevel: number = 1;
+    export let lowDetailMode: boolean = false;
+    export let ultraLowDetailMode: boolean = false;
     export let width: number;
     export let title: string;
     export let color: string = "rgba(255, 255, 255, 0.18)";
@@ -27,9 +30,13 @@
             alt: string;
             title?: string;
             caption?: string;
+            imageFit?: "cover" | "contain";
+            imageHeight?: number;
         }>;
         caption?: string;
         cols?: number;
+        imageFit?: "cover" | "contain";
+        imageHeight?: number;
     }> = [];
 
     // Helper function to detect if content has multiple goals (for grid layout)
@@ -130,6 +137,8 @@
 <div
     class="canvas-card"
     class:no-header={hideHeader}
+    class:low-zoom={zoomLevel <= 0.5 || lowDetailMode}
+    class:ultra-low-zoom={ultraLowDetailMode}
     data-card-id={cardId}
     style="
         left: {x}px;
@@ -190,17 +199,22 @@
                         class="image-gallery"
                         class:single-image-gallery={(section.cols || 3) === 1 &&
                             section.images.length === 1}
-                        style="grid-template-columns: repeat({section.cols ||
-                            3}, 1fr);"
+                        style="grid-template-columns: repeat({section.cols || 3}, 1fr);"
                     >
                         {#each section.images as image}
+                            {@const resolvedFit = image.imageFit || section.imageFit || "cover"}
+                            {@const resolvedHeight = image.imageHeight || section.imageHeight || 250}
                             <div class="gallery-entry">
                                 {#if image.title}
                                     <p class="image-source-title">
                                         <strong>{@html renderTextWithLinks(image.title)}</strong>
                                     </p>
                                 {/if}
-                                <div class="gallery-item">
+                                <div
+                                    class="gallery-item"
+                                    class:image-fit-contain={resolvedFit === "contain"}
+                                    style="--gallery-image-height: {resolvedHeight}px;"
+                                >
                                     <img
                                         src={image.src}
                                         alt={image.alt}
@@ -232,9 +246,25 @@
         border-radius: 16px;
         background: var(--canvas-card-background);
         box-shadow: 0 12px 32px var(--canvas-card-shadow);
+        -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
         overflow: hidden;
         transition: all 0.3s ease;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        isolation: isolate;
+    }
+
+    .canvas-card.low-zoom {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        box-shadow: 0 8px 20px var(--canvas-card-shadow);
+    }
+
+    .canvas-card.ultra-low-zoom {
+        background: var(--canvas-card-solid-background, #ffffff);
+        box-shadow: none;
+        transition: none;
     }
 
     .canvas-card:hover {
@@ -407,7 +437,7 @@
         border-radius: 8px;
         overflow: hidden;
         background: rgba(0, 0, 0, 0.2);
-        height: 250px;
+        height: var(--gallery-image-height, 250px);
     }
 
     .gallery-item img {
@@ -415,6 +445,14 @@
         height: 100%;
         object-fit: cover;
         display: block;
+    }
+
+    .gallery-item.image-fit-contain img {
+        object-fit: contain;
+    }
+
+    .gallery-item.image-fit-contain {
+        background: var(--canvas-card-background);
     }
 
     .single-image-gallery .gallery-item {

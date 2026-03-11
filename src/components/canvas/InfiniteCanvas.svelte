@@ -7,22 +7,26 @@
   import CanvasTopActions from "./controls/CanvasTopActions.svelte";
   import CanvasWordCountOverlay from "./controls/CanvasWordCountOverlay.svelte";
   import CanvasSequentialNav from "./controls/CanvasSequentialNav.svelte";
+  import { cardGroups } from "./canvasGroups";
   import { connections } from "./canvasConnections";
   import {
     adjustPanForZoomAtPoint,
     computeWordCountStats,
     getCountedWords,
     resolveCardDefinitions,
+    resolveCardGroups,
   } from "./infiniteCanvasUtils";
   import type {
     CardDefinition,
     CardDefinitionInput,
     Connection,
+    ResolvedCardGroup,
     Waypoint,
   } from "./infiniteCanvasTypes";
 
   export let isPreview = true;
   export let startFullscreen = false;
+  export let showGroups = false;
 
   let isFullscreen = false;
   let isCanvasDarkMode = false;
@@ -52,6 +56,7 @@
   let cardHeights: Record<string, number> = {};
   let cardLayoutVersion = 0;
   let arrowData = [];
+  let canvasViewportArea = 1280 * 720;
   let currentNavigationCardId = "intro-overview";
   let hasHydratedCanvasViewState = false;
   const canvasViewStateStorageKey = "infinite-canvas-view-state-v1";
@@ -81,6 +86,7 @@
 
 
   let resolvedCardDefinitions: CardDefinition[] = [];
+  let resolvedCardGroups: ResolvedCardGroup[] = [];
 
   $: cardLayoutVersion,
     (resolvedCardDefinitions = resolveCardDefinitions(
@@ -90,6 +96,10 @@
 
   // Compute final card positions
   $: cards = resolvedCardDefinitions;
+
+  $: resolvedCardGroups = showGroups
+    ? resolveCardGroups(cards, cardHeights, cardGroups)
+    : [];
 
   $: availableCardIds = new Set(cards.map((card) => card.id));
 
@@ -140,6 +150,22 @@
 
   $: visibleCardIds = new Set(cards.map((card) => card.id));
 
+  $: normalizedZoom =
+    zoom *
+    Math.sqrt(
+      (1280 * 720) / Math.max(canvasViewportArea, 1),
+    );
+
+  $: lowDetailMode = normalizedZoom <= 0.42;
+
+  $: ultraLowDetailMode = isFullscreen && normalizedZoom <= 0.24;
+
+  $: useSafe2DTransform = lowDetailMode || ultraLowDetailMode;
+
+  $: contentTransform = useSafe2DTransform
+    ? `translate(${panX}px, ${panY}px) scale(${zoom})`
+    : `translate3d(${panX}px, ${panY}px, 0) scale(${zoom})`;
+
   // Reactive arrow points - recalculate when cards are mounted and card layout changes
   $: cardLayoutVersion,
     (arrowData = cardsMounted
@@ -161,6 +187,11 @@
     }
 
     layoutUpdateFrame = requestAnimationFrame(() => {
+      if (canvasElement) {
+        const rect = canvasElement.getBoundingClientRect();
+        canvasViewportArea = rect.width * rect.height;
+      }
+
       cardLayoutVersion += 1;
       layoutUpdateFrame = null;
     });
@@ -181,6 +212,16 @@
     cancelNavigationAnimation();
     clearActiveElementFocus();
     e.preventDefault();
+
+    if (!e.ctrlKey) {
+      panY -= e.deltaY;
+
+      if (hasHydratedCanvasViewState) {
+        saveCanvasViewState();
+      }
+
+      return;
+    }
 
     // Get mouse position relative to canvas
     const rect = canvasElement.getBoundingClientRect();
@@ -561,11 +602,14 @@
     width: number;
     height: number;
     centerMode: "top" | "middle";
+    fitToFrame: boolean;
+    maxZoom: number;
   } | null {
     const frameCardIds = getNavigationFrameCardIds(cardId);
     const frameCards = frameCardIds
       .map((id) => cards.find((card) => card.id === id))
       .filter(Boolean);
+    const primaryCard = cards.find((card) => card.id === cardId);
 
     if (!frameCards.length) {
       return null;
@@ -605,6 +649,8 @@
       centerMode: hasCompanionImage
         ? "middle"
         : (frameCards[0].initialCenterMode || "top"),
+      fitToFrame: primaryCard?.navigationFitToFrame ?? false,
+      maxZoom: primaryCard?.navigationMaxZoom ?? 0.6,
     };
   }
 
@@ -615,22 +661,25 @@
       width: number;
       height: number;
       centerMode: "top" | "middle";
+      fitToFrame: boolean;
+      maxZoom: number;
     },
     viewportWidth: number,
     viewportHeight: number,
-    zoomLevel = 0.6,
   ): { panX: number; panY: number; zoom: number } {
     const isPhoneViewport = viewportWidth <= 640;
     const isTabletViewport = viewportWidth > 640 && viewportWidth <= 1100;
     const isCompanionFrame = frame.centerMode === "middle";
     const widthFitZoom = (viewportWidth * 0.9) / Math.max(frame.width, 1);
-    const heightFitZoom = (viewportHeight * 0.82) / Math.max(frame.height, 1);
+    const heightFitZoom = (viewportHeight * 0.95) / Math.max(frame.height, 1);
     const frameFitZoom = Math.min(widthFitZoom, heightFitZoom);
-    const resolvedZoom = isPhoneViewport
-      ? Math.max(0.15, Math.min(zoomLevel, frameFitZoom))
-      : isTabletViewport && isCompanionFrame
-        ? Math.max(0.15, Math.min(zoomLevel, frameFitZoom))
-        : zoomLevel;
+    const shouldAutoFit =
+      frame.fitToFrame ||
+      isPhoneViewport ||
+      (isTabletViewport && isCompanionFrame);
+    const resolvedZoom = shouldAutoFit
+      ? Math.max(0.15, Math.min(frame.maxZoom, frameFitZoom))
+      : frame.maxZoom;
 
     const frameCenterX = frame.x + frame.width / 2;
     const frameCenterY = frame.y + frame.height / 2;
@@ -782,6 +831,7 @@
     --border-color: {isCanvasDarkMode ? '#525252' : '#dddddd'};
     --hover-color: {isCanvasDarkMode ? '#2A2D35' : '#f1f3f4'};
     --canvas-card-background: {isCanvasDarkMode ? 'rgba(26, 29, 33, 0.92)' : 'rgba(255, 255, 255, 0.96)'};
+    --canvas-card-solid-background: {isCanvasDarkMode ? '#1A1D21' : '#ffffff'};
     --canvas-card-shadow: {isCanvasDarkMode ? 'rgba(0, 0, 0, 0.25)' : 'rgba(0, 0, 0, 0.12)'};
   "
 >
@@ -808,14 +858,16 @@
     <!-- Dot grid background -->
     <div
       class="dot-grid"
-      style="transform: translate3d({panX}px, {panY}px, 0) scale({zoom})"
+      class:safe-transform={useSafe2DTransform}
+      style="transform: {contentTransform}"
     ></div>
 
     <!-- Canvas content with transformation -->
     <div
       bind:this={canvasContentElement}
       class="canvas-content"
-      style="transform: translate3d({panX}px, {panY}px, 0) scale({zoom})"
+      class:safe-transform={useSafe2DTransform}
+      style="transform: {contentTransform}"
     >
       <!-- Arrows (rendered first so they appear below cards) -->
       <svg class="arrows-layer">
@@ -826,12 +878,43 @@
         {/if}
       </svg>
 
+      <!-- Groups -->
+      {#if showGroups}
+        {#each resolvedCardGroups as group (group.id)}
+          <div
+            class="card-group"
+            style="
+              left: {group.x}px;
+              top: {group.y}px;
+              width: {group.width}px;
+              height: {group.height}px;
+              border-color: {group.borderColor};
+              background-color: {group.backgroundColor};
+            "
+            aria-hidden="true"
+          >
+            <div
+              class="card-group__label"
+              style="
+                color: {group.labelTextColor};
+                background-color: {group.labelBackgroundColor};
+              "
+            >
+              {group.title}
+            </div>
+          </div>
+        {/each}
+      {/if}
+
       <!-- Cards -->
       {#each cards as card (card.id)}
         <CanvasCard
           cardId={card.id}
           x={card.x}
           y={card.y}
+          zoomLevel={zoom}
+          {lowDetailMode}
+          {ultraLowDetailMode}
           width={card.width}
           title={card.title}
           color={card.color}
@@ -941,6 +1024,11 @@
     backface-visibility: hidden;
   }
 
+  .dot-grid.safe-transform {
+    will-change: auto;
+    backface-visibility: visible;
+  }
+
   .canvas-content {
     position: absolute;
     top: 0;
@@ -952,6 +1040,11 @@
     backface-visibility: hidden;
   }
 
+  .canvas-content.safe-transform {
+    will-change: auto;
+    backface-visibility: visible;
+  }
+
   .arrows-layer {
     position: absolute;
     top: 0;
@@ -960,6 +1053,28 @@
     height: 2000px;
     pointer-events: none;
     overflow: visible;
+  }
+
+  .card-group {
+    position: absolute;
+    border: 1.5px solid;
+    border-radius: 14px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .card-group__label {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 0.66rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-weight: 650;
+    line-height: 1;
+    padding: 0.28rem 0.48rem;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
   }
 
   .infinite-canvas:active {

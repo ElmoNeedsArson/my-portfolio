@@ -13,14 +13,18 @@
       "cols": 2,
       "images": [
         {
-          "src": "/assets/images/eindhoven/Mod8-3.png",
+          "src": "/assets/images/Report-1.png",
           "alt": "Data Physicalization Project",
+          "imageFit": "cover",
+          "imageHeight": 430,
           "caption": "Marketing render from the Modulamp business project — a modular, sustainable bicycle lighting system. [Project Page](/modulamp)",
           "title": "Modulamp  ·  University of Twente, 2022"
         },
         {
-          "src": "/assets/images/eindhoven/Mod8-3.png",
+          "src": "/assets/images/eindhoven/arm1.jpg",
           "alt": "Data Physicalization Project",
+          "imageFit": "cover",
+          "imageHeight": 430,
           "caption": "Exomembra prototype fit test — wearable exoskeleton arm pieces developed for the cosplay and LARP community. [Project Page](/exomembra)",
           "title": "Exomembra  ·  Extracurricular Startup, 2023"
         }

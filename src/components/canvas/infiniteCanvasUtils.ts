@@ -1,6 +1,8 @@
 import type {
   CardDefinition,
   CardDefinitionInput,
+  CardGroupDefinition,
+  ResolvedCardGroup,
   WordCountStats,
 } from "./infiniteCanvasTypes";
 
@@ -123,12 +125,45 @@ export function computeWordCountStats(
   );
 }
 
+function resolvePreviousCardDepth(unit: string): number | null {
+  if (unit === "ph" || unit === "pw") {
+    return 1;
+  }
+
+  const repeatedPreviousMatch = unit.match(/^(p+)(h|w)$/);
+  if (repeatedPreviousMatch) {
+    return repeatedPreviousMatch[1].length;
+  }
+
+  const numericPreviousMatch = unit.match(/^p(\d+)(h|w)$/);
+  if (numericPreviousMatch) {
+    const depth = Number(numericPreviousMatch[1]);
+    return Number.isNaN(depth) || depth < 1 ? null : depth;
+  }
+
+  return null;
+}
+
+function getPreviousCardByDepth(
+  resolvedCards: CardDefinition[],
+  depth: number,
+): CardDefinition | null {
+  const index = resolvedCards.length - depth;
+  if (index < 0) {
+    return null;
+  }
+
+  return resolvedCards[index] ?? null;
+}
+
 export function resolveOffsetValue(
   rawOffset: number | string | undefined,
   card: CardDefinitionInput,
   cardHeight: number,
   anchorCard: CardDefinition | null,
   anchorCardHeight: number,
+  resolvedCards: CardDefinition[],
+  measuredHeights: Record<string, number>,
 ): number {
   if (typeof rawOffset === "number") {
     return rawOffset;
@@ -150,7 +185,7 @@ export function resolveOffsetValue(
     let total = 0;
 
     for (const term of terms) {
-      const match = term.match(/^([+-]?\d*\.?\d+)(ch|cw|ph|pw)?$/);
+      const match = term.match(/^([+-]?\d*\.?\d+)([a-z0-9]+)?$/);
 
       if (!match) {
         const parsedNumber = Number(normalizedOffset);
@@ -179,12 +214,31 @@ export function resolveOffsetValue(
         continue;
       }
 
-      if (unit === "ph") {
-        total += factor * anchorCardHeight;
+      const previousDepth = resolvePreviousCardDepth(unit);
+      if (previousDepth !== null) {
+        if (previousDepth === 1) {
+          if (unit.endsWith("h")) {
+            total += factor * anchorCardHeight;
+          } else {
+            total += factor * (anchorCard?.width ?? 0);
+          }
+          continue;
+        }
+
+        const referenceCard = getPreviousCardByDepth(resolvedCards, previousDepth);
+        if (!referenceCard) {
+          continue;
+        }
+
+        if (unit.endsWith("h")) {
+          total += factor * (measuredHeights[referenceCard.id] ?? 300);
+        } else {
+          total += factor * referenceCard.width;
+        }
         continue;
       }
 
-      total += factor * (anchorCard?.width ?? 0);
+      return 0;
     }
 
     return total;
@@ -233,6 +287,8 @@ export function resolveCardDefinitions(
         cardHeight,
         anchorCard,
         anchorCardHeight,
+        resolvedCards,
+        measuredHeights,
       );
 
     if (typeof card.x === "number") {
@@ -247,6 +303,8 @@ export function resolveCardDefinitions(
         cardHeight,
         anchorCard,
         anchorCardHeight,
+        resolvedCards,
+        measuredHeights,
       );
 
     if (typeof card.y === "number") {
@@ -263,4 +321,59 @@ export function resolveCardDefinitions(
 
     return resolvedCards;
   }, []);
+}
+
+export function resolveCardGroups(
+  cards: CardDefinition[],
+  measuredHeights: Record<string, number>,
+  groups: CardGroupDefinition[],
+): ResolvedCardGroup[] {
+  return groups
+    .map((group) => {
+      const cardsInGroup = cards.filter((card) =>
+        group.cardIds.includes(card.id),
+      );
+
+      if (!cardsInGroup.length) {
+        return null;
+      }
+
+      const bounds = cardsInGroup.reduce(
+        (acc, card) => {
+          const cardHeight = measuredHeights[card.id] ?? 300;
+          const rightEdge = card.x + card.width;
+          const bottomEdge = card.y + cardHeight;
+
+          return {
+            minX: Math.min(acc.minX, card.x),
+            minY: Math.min(acc.minY, card.y),
+            maxX: Math.max(acc.maxX, rightEdge),
+            maxY: Math.max(acc.maxY, bottomEdge),
+          };
+        },
+        {
+          minX: Number.POSITIVE_INFINITY,
+          minY: Number.POSITIVE_INFINITY,
+          maxX: Number.NEGATIVE_INFINITY,
+          maxY: Number.NEGATIVE_INFINITY,
+        },
+      );
+
+      const padding = group.padding ?? 40;
+
+      return {
+        id: group.id,
+        title: group.title,
+        x: bounds.minX - padding,
+        y: bounds.minY - padding,
+        width: bounds.maxX - bounds.minX + padding * 2,
+        height: bounds.maxY - bounds.minY + padding * 2,
+        borderColor: group.borderColor ?? "rgba(76, 175, 80, 0.65)",
+        backgroundColor: group.backgroundColor ?? "rgba(76, 175, 80, 0.08)",
+        labelTextColor: group.labelTextColor ?? "#194D1E",
+        labelBackgroundColor:
+          group.labelBackgroundColor ?? "rgba(233, 247, 235, 0.96)",
+      };
+    })
+    .filter((group): group is ResolvedCardGroup => group !== null);
 }

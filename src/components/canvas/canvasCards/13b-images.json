@@ -15,12 +15,16 @@
         {
           "src": "/assets/images/eindhoven/Mod8-3.png",
           "alt": "Data Physicalization Project",
+          "imageFit": "contain",
+          "imageHeight": 430,
           "title": "Interactive Media  ·  University of Twente, 2021",
           "caption": "In-game screenshot of the low-poly 3D game — all models, shaders, animations and sound designed from scratch. [Project Page](/interactive-media-project)"
         },
         {
-          "src": "/assets/images/eindhoven/Mod8-3.png",
+          "src": "/assets/images/aibpo.png",
           "alt": "Data Physicalization Project",
+          "imageFit": "contain",
+          "imageHeight": 430,
           "title": "AIBPO — Aesthetics of AI/Data  ·  TU/e Master, 2025",
           "caption": "Live performance setup for the AIBPO project — a speculative fictional company critiquing algorithmic labour management. [Project Page](/aesthetics-of-ai-data)"
         }
