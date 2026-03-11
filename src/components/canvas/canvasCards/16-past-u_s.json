@@ -1,9 +1,9 @@
 {
   "id": "past-user-and-society",
   "title": "User and Society",
-  "numberOrder": 16,
+  "numberOrder": 20,
   "width": 600,
-  "offsetX": 700,
+  "offsetX": 1300,
   "hide": false,
   "offsetY": 0,
   "color": "rgba(249, 103, 67, 0.3)",

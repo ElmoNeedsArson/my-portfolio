@@ -1,8 +1,16 @@
 <script lang="ts">
     import InfiniteCanvas from "../../components/canvas/InfiniteCanvas.svelte";
 
+    const canvasFullscreenRestoreKey = "canvas-fullscreen-restore-v1";
     const params = new URLSearchParams(window.location.search);
-    const startFullscreen = params.get("canvas") === "fullscreen";
+    const startFullscreenFromQuery = params.get("canvas") === "fullscreen";
+    const startFullscreenFromRestore =
+        window.sessionStorage.getItem(canvasFullscreenRestoreKey) === "1";
+    const startFullscreen = startFullscreenFromQuery || startFullscreenFromRestore;
+
+    if (startFullscreenFromRestore) {
+        window.sessionStorage.removeItem(canvasFullscreenRestoreKey);
+    }
 </script>
 
 <p>

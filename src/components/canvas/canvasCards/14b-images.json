@@ -1,0 +1,30 @@
+{
+  "id": "past-math-data-and-computing-img",
+  "title": "MDC Images",
+  "numberOrder": 17,
+  "width": 1200,
+  "offsetX": "1.1pw",
+  "offsetY": 0,
+  "hideHeader": true,
+  "color": "rgba(74, 144, 226, 0.35)",
+  "sections": [
+    {
+      "type": "images",
+      "cols": 2,
+      "images": [
+        {
+          "src": "/assets/images/eindhoven/Mod8-3.png",
+          "alt": "Data Physicalization Project",
+          "title": "Data Physicalization Project  ·  University of Twente, 2022",
+          "caption": "The data physicalization museum installation — 3D printed planets, physical dials, actuators, and a blow dryer outputting hot or cold air based on planetary surface temperature data. [Project Page](/physical-data)"
+        },
+        {
+          "src": "/assets/images/eindhoven/Mod8-3.png",
+          "alt": "Digital Twins in Education Project",
+          "title": "M12 Digital Twins in Education  ·  TU/e Master, 2025",
+          "caption": "The browser-based Arduino learning environment used in the M12 study — four feedback role variants tested across N=41 participants. [Project Page](/digital-twin-in-education)"
+        }
+      ]
+    }
+  ]
+}

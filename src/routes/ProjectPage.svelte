@@ -18,6 +18,13 @@
 
   // Active content provided by ProjectTabs component
   let activeContent: ContentBlock | undefined;
+  const projectBackUrlStorageKey = "project-page-back-url-v1";
+  const canvasFullscreenRestoreKey = "canvas-fullscreen-restore-v1";
+
+  type ProjectBackTarget = {
+    route: string;
+    fullscreen: boolean;
+  };
 
   // Get the back URL based on the last visited tab
   $: backUrl = getTabPathById($lastVisitedTab);
@@ -25,6 +32,33 @@
   // Handle back button functionality
   function handleBackClick(event: MouseEvent) {
     event.preventDefault();
+
+    const storedBackUrl = window.sessionStorage.getItem(projectBackUrlStorageKey);
+    if (storedBackUrl) {
+      window.sessionStorage.removeItem(projectBackUrlStorageKey);
+
+      try {
+        const parsed = JSON.parse(storedBackUrl) as Partial<ProjectBackTarget>;
+        const targetRoute =
+          typeof parsed.route === "string" && parsed.route.startsWith("/")
+            ? parsed.route
+            : "/eindhoven";
+
+        if (parsed.fullscreen === true) {
+          window.sessionStorage.setItem(canvasFullscreenRestoreKey, "1");
+        } else {
+          window.sessionStorage.removeItem(canvasFullscreenRestoreKey);
+        }
+
+        push(targetRoute);
+        return;
+      } catch {
+        window.sessionStorage.removeItem(canvasFullscreenRestoreKey);
+        push("/eindhoven");
+        return;
+      }
+    }
+
     if (window.history.length > 1) {
       window.history.back();
     } else {

@@ -1,9 +1,9 @@
 {
   "id": "past-math-data-and-computing",
   "title": "Math, Data, and Computing",
-  "numberOrder": 14,
+  "numberOrder": 16,
   "width": 600,
-  "offsetX": 700,
+  "offsetX": 1300,
   "offsetY": 0,
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [

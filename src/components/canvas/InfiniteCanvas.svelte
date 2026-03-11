@@ -12,7 +12,6 @@
     adjustPanForZoomAtPoint,
     computeWordCountStats,
     getCountedWords,
-    getNavigationTarget,
     resolveCardDefinitions,
   } from "./infiniteCanvasUtils";
   import type {
@@ -53,7 +52,16 @@
   let cardHeights: Record<string, number> = {};
   let cardLayoutVersion = 0;
   let arrowData = [];
-  let currentCardIndex = 0;
+  let currentNavigationCardId = "intro-overview";
+  let hasHydratedCanvasViewState = false;
+  const canvasViewStateStorageKey = "infinite-canvas-view-state-v1";
+
+  type CanvasViewState = {
+    panX: number;
+    panY: number;
+    zoom: number;
+    currentNavigationCardId: string;
+  };
 
   const cardModules = import.meta.glob("./canvasCards/*.json", {
     eager: true,
@@ -63,8 +71,8 @@
   const cardDefinitionsInput: CardDefinitionInput[] = Object.entries(cardModules)
     .map(([, card]) => ({ card }))
     .sort((a, b) => {
-      const aOrder = a.card.numberOrder ?? a.card.numberOrder ?? Number.POSITIVE_INFINITY;
-      const bOrder = b.card.numberOrder ?? b.card.numberOrder ?? Number.POSITIVE_INFINITY;
+      const aOrder = a.card.numberOrder ?? Number.POSITIVE_INFINITY;
+      const bOrder = b.card.numberOrder ?? Number.POSITIVE_INFINITY;
 
       return aOrder - bOrder;
     })
@@ -83,28 +91,48 @@
   // Compute final card positions
   $: cards = resolvedCardDefinitions;
 
-  $: canNavigatePrevious = currentCardIndex > 0;
-  $: canNavigateNext = currentCardIndex < cards.length - 1;
+  $: availableCardIds = new Set(cards.map((card) => card.id));
 
-  function logTitleWordBreakdown() {
-    const titleBreakdown = cards.map((card) => {
-      const words = getCountedWords(card.title);
-      return {
-        title: card.title,
-        count: words.length,
-        words,
-      };
-    });
+  $: sequentialCardIds = cards
+    .filter((card) => {
+      if (!card.id.endsWith("-img")) {
+        return true;
+      }
 
-    const total = titleBreakdown.reduce((sum, item) => sum + item.count, 0);
+      const baseCardId = card.id.slice(0, -4);
+      return !availableCardIds.has(baseCardId);
+    })
+    .map((card) => card.id);
 
-    console.groupCollapsed("Canvas title word count breakdown");
-    titleBreakdown.forEach((item) => {
-      console.log(`[${item.count}] ${item.title}:`, item.words);
-    });
-    console.log("Total title words:", total);
-    console.groupEnd();
+  $: navigationCards = cards.filter((card) => {
+    if (!card.id.endsWith("-img")) {
+      return true;
+    }
+
+    const baseCardId = card.id.slice(0, -4);
+    return !availableCardIds.has(baseCardId);
+  });
+
+  $: {
+    const normalizedCurrentCardId = getPrimaryNavigationCardId(
+      currentNavigationCardId,
+    );
+
+    if (!sequentialCardIds.includes(normalizedCurrentCardId)) {
+      currentNavigationCardId = sequentialCardIds[0] || "intro-overview";
+    } else {
+      currentNavigationCardId = normalizedCurrentCardId;
+    }
   }
+
+  $: currentSequentialIndex = sequentialCardIds.indexOf(
+    getPrimaryNavigationCardId(currentNavigationCardId),
+  );
+
+  $: canNavigatePrevious = currentSequentialIndex > 0;
+  $: canNavigateNext =
+    currentSequentialIndex >= 0 &&
+    currentSequentialIndex < sequentialCardIds.length - 1;
 
   $: wordCountStats = computeWordCountStats(cards);
 
@@ -176,6 +204,10 @@
     panY = nextPan.panY;
 
     zoom = newZoom;
+
+    if (hasHydratedCanvasViewState) {
+      saveCanvasViewState();
+    }
   }
 
   function handleMouseDown(e: MouseEvent) {
@@ -204,6 +236,10 @@
   function handleMouseUp() {
     isPanning = false;
     canvasElement.style.cursor = "grab";
+
+    if (hasHydratedCanvasViewState) {
+      saveCanvasViewState();
+    }
   }
 
   function handleTouchStart(e: TouchEvent) {
@@ -245,6 +281,10 @@
       const dx = touch2.clientX - touch1.clientX;
       const dy = touch2.clientY - touch1.clientY;
       const currentDistance = Math.sqrt(dx * dx + dy * dy);
+      const smoothedDistance =
+        lastTouchDistance > 0
+          ? lastTouchDistance * 0.7 + currentDistance * 0.3
+          : currentDistance;
       
       // Calculate zoom center (midpoint between fingers)
       const rect = canvasElement.getBoundingClientRect();
@@ -252,7 +292,7 @@
       const centerY = ((touch1.clientY + touch2.clientY) / 2) - rect.top;
       
       // Calculate new zoom based on distance change
-      const scale = currentDistance / touchStartDistance;
+      const scale = smoothedDistance / touchStartDistance;
       const newZoom = Math.max(0.15, Math.min(3, touchStartZoom * scale));
 
       const nextPan = adjustPanForZoomAtPoint({
@@ -268,7 +308,7 @@
       panY = nextPan.panY;
       
       zoom = newZoom;
-      lastTouchDistance = currentDistance;
+      lastTouchDistance = smoothedDistance;
     }
   }
 
@@ -285,6 +325,14 @@
       startY = touch.clientY - panY;
       touchStartDistance = 0;
     }
+
+    if (hasHydratedCanvasViewState) {
+      saveCanvasViewState();
+    }
+  }
+
+  function handlePageUnload() {
+    saveCanvasViewState();
   }
 
   function syncFullscreenUrl(fullscreen: boolean) {
@@ -305,6 +353,59 @@
     if (activeElement && activeElement !== document.body) {
       activeElement.blur();
     }
+  }
+
+  function loadCanvasViewState(): CanvasViewState | null {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const rawState = window.sessionStorage.getItem(canvasViewStateStorageKey);
+    if (!rawState) {
+      return null;
+    }
+
+    try {
+      const parsed = JSON.parse(rawState) as Partial<CanvasViewState>;
+
+      if (
+        typeof parsed.panX !== "number" ||
+        typeof parsed.panY !== "number" ||
+        typeof parsed.zoom !== "number"
+      ) {
+        return null;
+      }
+
+      return {
+        panX: parsed.panX,
+        panY: parsed.panY,
+        zoom: Math.max(0.15, Math.min(3, parsed.zoom)),
+        currentNavigationCardId:
+          typeof parsed.currentNavigationCardId === "string"
+            ? parsed.currentNavigationCardId
+            : "intro-overview",
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  function saveCanvasViewState() {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const state: CanvasViewState = {
+      panX,
+      panY,
+      zoom,
+      currentNavigationCardId,
+    };
+
+    window.sessionStorage.setItem(
+      canvasViewStateStorageKey,
+      JSON.stringify(state),
+    );
   }
 
   async function toggleFullscreen() {
@@ -329,7 +430,7 @@
 
     await tick();
 
-    const currentCardId = cards[currentCardIndex]?.id || "intro-overview";
+    const currentCardId = currentNavigationCardId || "intro-overview";
     centerOnCardInstant(currentCardId);
   }
 
@@ -434,27 +535,130 @@
     animationFrame = requestAnimationFrame(animateToTarget);
   }
 
-  function navigateToCard(cardId: string) {
-    const card = cards.find((c) => c.id === cardId);
-    if (!card || !canvasElement) return;
-
-    const cardIndex = cards.findIndex((c) => c.id === cardId);
-    if (cardIndex >= 0) {
-      currentCardIndex = cardIndex;
+  function getPrimaryNavigationCardId(cardId: string): string {
+    if (!cardId.endsWith("-img")) {
+      return cardId;
     }
 
-    const rect = canvasElement.getBoundingClientRect();
-    const cardElement = canvasContentElement?.querySelector(
-      `[data-card-id="${cardId}"]`,
-    ) as HTMLElement | null;
+    const baseCardId = cardId.slice(0, -4);
+    return availableCardIds.has(baseCardId) ? baseCardId : cardId;
+  }
 
-    const actualHeight = cardElement?.offsetHeight || 300;
-    const target = getNavigationTarget({
-      card,
-      cardHeight: actualHeight,
-      viewportWidth: rect.width,
-      viewportHeight: rect.height,
-    });
+  function getNavigationFrameCardIds(cardId: string): string[] {
+    const primaryCardId = getPrimaryNavigationCardId(cardId);
+    const companionImageCardId = `${primaryCardId}-img`;
+
+    if (availableCardIds.has(companionImageCardId)) {
+      return [primaryCardId, companionImageCardId];
+    }
+
+    return [primaryCardId];
+  }
+
+  function getNavigationFrame(cardId: string): {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    centerMode: "top" | "middle";
+  } | null {
+    const frameCardIds = getNavigationFrameCardIds(cardId);
+    const frameCards = frameCardIds
+      .map((id) => cards.find((card) => card.id === id))
+      .filter(Boolean);
+
+    if (!frameCards.length) {
+      return null;
+    }
+
+    const bounds = frameCards.reduce(
+      (acc, card) => {
+        const cardElement = canvasContentElement?.querySelector(
+          `[data-card-id="${card.id}"]`,
+        ) as HTMLElement | null;
+        const cardHeight = cardElement?.offsetHeight || 300;
+        const rightEdge = card.x + card.width;
+        const bottomEdge = card.y + cardHeight;
+
+        return {
+          minX: Math.min(acc.minX, card.x),
+          minY: Math.min(acc.minY, card.y),
+          maxX: Math.max(acc.maxX, rightEdge),
+          maxY: Math.max(acc.maxY, bottomEdge),
+        };
+      },
+      {
+        minX: Number.POSITIVE_INFINITY,
+        minY: Number.POSITIVE_INFINITY,
+        maxX: Number.NEGATIVE_INFINITY,
+        maxY: Number.NEGATIVE_INFINITY,
+      },
+    );
+
+    const hasCompanionImage = frameCards.length > 1;
+
+    return {
+      x: bounds.minX,
+      y: bounds.minY,
+      width: bounds.maxX - bounds.minX,
+      height: bounds.maxY - bounds.minY,
+      centerMode: hasCompanionImage
+        ? "middle"
+        : (frameCards[0].initialCenterMode || "top"),
+    };
+  }
+
+  function getNavigationTargetFromFrame(
+    frame: {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      centerMode: "top" | "middle";
+    },
+    viewportWidth: number,
+    viewportHeight: number,
+    zoomLevel = 0.6,
+  ): { panX: number; panY: number; zoom: number } {
+    const isPhoneViewport = viewportWidth <= 640;
+    const isTabletViewport = viewportWidth > 640 && viewportWidth <= 1100;
+    const isCompanionFrame = frame.centerMode === "middle";
+    const widthFitZoom = (viewportWidth * 0.9) / Math.max(frame.width, 1);
+    const heightFitZoom = (viewportHeight * 0.82) / Math.max(frame.height, 1);
+    const frameFitZoom = Math.min(widthFitZoom, heightFitZoom);
+    const resolvedZoom = isPhoneViewport
+      ? Math.max(0.15, Math.min(zoomLevel, frameFitZoom))
+      : isTabletViewport && isCompanionFrame
+        ? Math.max(0.15, Math.min(zoomLevel, frameFitZoom))
+        : zoomLevel;
+
+    const frameCenterX = frame.x + frame.width / 2;
+    const frameCenterY = frame.y + frame.height / 2;
+
+    const panX = viewportWidth / 2 - frameCenterX * resolvedZoom;
+    const panY =
+      frame.centerMode === "middle"
+        ? viewportHeight / 2 - frameCenterY * resolvedZoom
+        : viewportHeight * 0.15 - frame.y * resolvedZoom;
+
+    return {
+      panX,
+      panY,
+      zoom: resolvedZoom,
+    };
+  }
+
+  function navigateToCard(cardId: string) {
+    if (!canvasElement) return;
+
+    const navigationCardId = getPrimaryNavigationCardId(cardId);
+    const frame = getNavigationFrame(navigationCardId);
+    if (!frame) return;
+
+    currentNavigationCardId = navigationCardId;
+
+    const rect = canvasElement.getBoundingClientRect();
+    const target = getNavigationTargetFromFrame(frame, rect.width, rect.height);
 
     targetPanX = target.panX;
     targetPanY = target.panY;
@@ -467,32 +671,25 @@
   }
 
   function navigateToAdjacentCard(direction: -1 | 1) {
-    const nextIndex = currentCardIndex + direction;
-    if (nextIndex < 0 || nextIndex >= cards.length) return;
+    if (currentSequentialIndex < 0) return;
 
-    navigateToCard(cards[nextIndex].id);
+    const nextIndex = currentSequentialIndex + direction;
+    if (nextIndex < 0 || nextIndex >= sequentialCardIds.length) return;
+
+    navigateToCard(sequentialCardIds[nextIndex]);
   }
 
   function centerOnCardInstant(cardId: string) {
-    const card = cards.find((c) => c.id === cardId);
-    if (!card || !canvasElement) return;
+    if (!canvasElement) return;
 
-    const cardIndex = cards.findIndex((c) => c.id === cardId);
-    if (cardIndex >= 0) {
-      currentCardIndex = cardIndex;
-    }
+    const navigationCardId = getPrimaryNavigationCardId(cardId);
+    const frame = getNavigationFrame(navigationCardId);
+    if (!frame) return;
+
+    currentNavigationCardId = navigationCardId;
 
     const rect = canvasElement.getBoundingClientRect();
-    const cardElement = canvasContentElement?.querySelector(
-      `[data-card-id="${cardId}"]`,
-    ) as HTMLElement | null;
-    const actualHeight = cardElement?.offsetHeight || 300;
-    const target = getNavigationTarget({
-      card,
-      cardHeight: actualHeight,
-      viewportWidth: rect.width,
-      viewportHeight: rect.height,
-    });
+    const target = getNavigationTargetFromFrame(frame, rect.width, rect.height);
 
     zoom = target.zoom;
     panX = target.panX;
@@ -500,8 +697,6 @@
   }
 
   onMount(async () => {
-    //logTitleWordBreakdown();
-
     if (startFullscreen) {
       isFullscreen = true;
       document.body.style.overflow = "hidden";
@@ -538,11 +733,23 @@
     }
 
     window.addEventListener("resize", scheduleLayoutRecalculation);
+    window.addEventListener("pagehide", handlePageUnload);
+    window.addEventListener("beforeunload", handlePageUnload);
     scheduleLayoutRecalculation();
 
     await tick();
 
-    centerOnCardInstant("intro-overview");
+    const persistedState = loadCanvasViewState();
+    if (persistedState) {
+      panX = persistedState.panX;
+      panY = persistedState.panY;
+      zoom = persistedState.zoom;
+      currentNavigationCardId = persistedState.currentNavigationCardId;
+    } else {
+      centerOnCardInstant("intro-overview");
+    }
+
+    hasHydratedCanvasViewState = true;
   });
 
   onDestroy(() => {
@@ -556,6 +763,10 @@
 
     cardResizeObserver?.disconnect();
     window.removeEventListener("resize", scheduleLayoutRecalculation);
+    window.removeEventListener("pagehide", handlePageUnload);
+    window.removeEventListener("beforeunload", handlePageUnload);
+    saveCanvasViewState();
+    document.body.style.overflow = "";
   });
 </script>
 
@@ -597,14 +808,14 @@
     <!-- Dot grid background -->
     <div
       class="dot-grid"
-      style="transform: translate({panX}px, {panY}px) scale({zoom})"
+      style="transform: translate3d({panX}px, {panY}px, 0) scale({zoom})"
     ></div>
 
     <!-- Canvas content with transformation -->
     <div
       bind:this={canvasContentElement}
       class="canvas-content"
-      style="transform: translate({panX}px, {panY}px) scale({zoom})"
+      style="transform: translate3d({panX}px, {panY}px, 0) scale({zoom})"
     >
       <!-- Arrows (rendered first so they appear below cards) -->
       <svg class="arrows-layer">
@@ -663,7 +874,11 @@
     />
 
     <!-- Canvas Navigation Widget -->
-    <CanvasNavigation {cards} onNavigate={navigateToCard} {isFullscreen} />
+    <CanvasNavigation
+      cards={navigationCards}
+      onNavigate={navigateToCard}
+      {isFullscreen}
+    />
   </div>
 </div>
 
@@ -693,6 +908,8 @@
     background: var(--secondary-background-color);
     border-radius: 9px;
     user-select: none;
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
 
   .infinite-canvas.preview {
@@ -709,8 +926,8 @@
     position: absolute;
     left: -10000px;
     top: -10000px;
-    width: 20000px;
-    height: 20000px;
+    width: 40000px;
+    height: 40000px;
     background-image: radial-gradient(
       circle,
       var(--muted-color) 2px,
@@ -720,6 +937,8 @@
     background-position: 0 0;
     transform-origin: 10000px 10000px;
     pointer-events: none;
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   .canvas-content {
@@ -729,6 +948,8 @@
     transform-origin: 0 0;
     width: 100%;
     height: 100%;
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   .arrows-layer {

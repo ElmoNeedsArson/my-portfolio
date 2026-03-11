@@ -1,4 +1,13 @@
 <script lang="ts">
+    import { push } from "svelte-spa-router";
+
+    const projectBackUrlStorageKey = "project-page-back-url-v1";
+
+    type ProjectBackTarget = {
+        route: string;
+        fullscreen: boolean;
+    };
+
     export let cardId: string;
     export let x: number;
     export let y: number;
@@ -13,7 +22,12 @@
     export let sections: Array<{
         type: "content" | "images";
         content?: string;
-        images?: Array<{ src: string; alt: string; caption?: string }>;
+        images?: Array<{
+            src: string;
+            alt: string;
+            title?: string;
+            caption?: string;
+        }>;
         caption?: string;
         cols?: number;
     }> = [];
@@ -39,7 +53,7 @@
                 if (match) {
                     return {
                         title: match[1].trim(),
-                        description: match[2].trim(),
+                        description: renderTextWithLinks(match[2].trim()),
                     };
                 }
                 return null;
@@ -55,8 +69,61 @@
             .map((p) => {
                 const isQuote =
                     p.trim().startsWith('"') && p.trim().endsWith('"');
-                return { text: p, isQuote };
+                return { text: renderTextWithLinks(p), isQuote };
             });
+    }
+
+    function renderTextWithLinks(text: string): string {
+        return text.replace(
+            /\[([^\]]+)\]\((\/[^)\s]+)\)/g,
+            '<button type="button" class="inline-link" data-slug="$2" tabindex="0" aria-label="Navigate to $1">$1</button>',
+        );
+    }
+
+    function canvasContentLinkHandler(node: HTMLElement) {
+        function handleClick(event: MouseEvent) {
+            const target = event.target as HTMLElement;
+            const button = target.closest(
+                "button.inline-link[data-slug]",
+            ) as HTMLButtonElement | null;
+
+            if (!button || !node.contains(button)) {
+                return;
+            }
+
+            event.preventDefault();
+            const slug = button.getAttribute("data-slug");
+            if (!slug) {
+                return;
+            }
+
+            const routeFromHash = window.location.hash.startsWith("#/")
+                ? window.location.hash.slice(1)
+                : "/eindhoven";
+            const fullscreen =
+                new URLSearchParams(window.location.search).get("canvas") ===
+                "fullscreen";
+
+            const backTarget: ProjectBackTarget = {
+                route: routeFromHash,
+                fullscreen,
+            };
+
+            window.sessionStorage.setItem(
+                projectBackUrlStorageKey,
+                JSON.stringify(backTarget),
+            );
+
+            push(slug.startsWith("/") ? slug : `/${slug}`);
+        }
+
+        node.addEventListener("click", handleClick);
+
+        return {
+            destroy() {
+                node.removeEventListener("click", handleClick);
+            },
+        };
     }
 </script>
 
@@ -81,6 +148,7 @@
         class:centered-content={contentAlign === "center"}
         class:intro-layout={!!introTitle}
         class:intro-large={introLarge}
+        use:canvasContentLinkHandler
     >
         {#if introTitle}
             <div class="intro-content-block">
@@ -120,11 +188,18 @@
                 {:else if section.type === "images" && section.images}
                     <div
                         class="image-gallery"
+                        class:single-image-gallery={(section.cols || 3) === 1 &&
+                            section.images.length === 1}
                         style="grid-template-columns: repeat({section.cols ||
                             3}, 1fr);"
                     >
                         {#each section.images as image}
                             <div class="gallery-entry">
+                                {#if image.title}
+                                    <p class="image-source-title">
+                                        <strong>{@html renderTextWithLinks(image.title)}</strong>
+                                    </p>
+                                {/if}
                                 <div class="gallery-item">
                                     <img
                                         src={image.src}
@@ -134,14 +209,16 @@
                                 </div>
                                 {#if image.caption}
                                     <p class="image-source-caption">
-                                        <i>{image.caption}</i>
+                                        <i>{@html renderTextWithLinks(image.caption)}</i>
                                     </p>
                                 {/if}
                             </div>
                         {/each}
                     </div>
                     {#if section.caption}
-                        <p class="image-caption"><i>{section.caption}</i></p>
+                        <p class="image-caption">
+                            <i>{@html renderTextWithLinks(section.caption)}</i>
+                        </p>
                     {/if}
                 {/if}
             {/each}
@@ -258,6 +335,22 @@
         opacity: 0.85;
     }
 
+    .card-content :global(.inline-link) {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        font: inherit;
+        color: var(--primary-text-color);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        cursor: pointer;
+    }
+
+    .card-content :global(.inline-link:hover) {
+        opacity: 0.85;
+    }
+
     .card-content :global(strong) {
         font-weight: 700;
     }
@@ -324,6 +417,16 @@
         display: block;
     }
 
+    .single-image-gallery .gallery-item {
+        height: auto;
+        background: transparent;
+    }
+
+    .single-image-gallery .gallery-item img {
+        height: auto;
+        object-fit: initial;
+    }
+
     .image-caption {
         font-size: 0.9rem;
         color: var(--muted-color);
@@ -336,6 +439,13 @@
         line-height: 1.35;
         color: var(--muted-color);
         opacity: 0.95;
+    }
+
+    .image-source-title {
+        margin: 0;
+        font-size: 1.3rem;
+        line-height: 1.35;
+        color: var(--primary-text-color);
     }
 
     @media print {

@@ -1,0 +1,30 @@
+{
+  "id": "past-technology-and-realization-img",
+  "title": "T&R Images",
+  "numberOrder": 19,
+  "width": 1200,
+  "offsetX": "1.1pw",
+  "offsetY": 0,
+  "hideHeader": true,
+  "color": "rgba(74, 144, 226, 0.35)",
+  "sections": [
+    {
+      "type": "images",
+      "cols": 2,
+      "images": [
+        {
+          "src": "/assets/images/eindhoven/Mod8-3.png",
+          "alt": "Data Physicalization Project",
+          "title": "Obsidian 3D Embed Plugin  ·  Extracurricular, 2024",
+          "caption": "The Obsidian plugin rendering a 3D model directly inside a markdown note — over 2400 installations as of writing. [Project Page](/obsidian-plugin)"
+        },
+        {
+          "src": "/assets/images/eindhoven/Mod8-3.png",
+          "alt": "Data Physicalization Project",
+          "title": "Tactone  ·  TU/e Master, 2025",
+          "caption": "Tactone — a modular soft robotics perception tool with pneumatic silicone pads, LDR sensors, and real-time audio modulation. [Project Page](/tactone)"
+        }
+      ]
+    }
+  ]
+}
