@@ -5,6 +5,7 @@
   "width": 600,
   "offsetX": 1700,
   "offsetY": 0,
+  "navigationFitToFrame": true,
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [
     {

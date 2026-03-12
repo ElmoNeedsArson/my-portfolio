@@ -6,6 +6,7 @@
   "offsetX": 0,
   "relativeToCardId": "past-math-data-and-computing",
   "offsetY": "1.1ph",
+  "navigationFitToFrame": true,
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [
     {
