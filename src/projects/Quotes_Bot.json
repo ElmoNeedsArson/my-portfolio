@@ -23,9 +23,19 @@
         "caption": ""
     },
     "date": "2025-06",
-    "languages": ["JavaScript", "SQL"],
-    "tools": ["Discord.js", "SQLite"],
-    "tags": ["Discord Bot", "JavaScript", "SQLite"],
+    "languages": [
+        "JavaScript",
+        "SQL"
+    ],
+    "tools": [
+        "Discord.js",
+        "SQLite"
+    ],
+    "tags": [
+        "Discord Bot",
+        "JavaScript",
+        "SQLite"
+    ],
     "expertise": [
         {
             "area": "Math, Data and Computing",
@@ -66,11 +76,27 @@
             },
             {
                 "subtitle": "Motivation",
-                "text": "To give myself a side project to do, I decided to make a discord bot for this purpose. I scraped the entire channel clean, and got a 7 year old document from the first 2 years when we did it in a whatsapp group. And transformed/sanitized all the data into one type of format. See the repo for the code I used here. After unicoding all data I generated an SQlite db, containing all the quotes, authors, dates, and other relevant information." 
+                "text": "To give myself a side project to do, I decided to make a discord bot for this purpose. I scraped the entire channel clean, and got a 7 year old document from the first 2 years when we did it in a whatsapp group. And transformed/sanitized all the data into one type of format. See the repo for the code I used here. After unicoding all data I generated an SQlite db, containing all the quotes, authors, dates, and other relevant information."
             },
             {
                 "subtitle": "Functionality",
-                "text": "The bot itself is made with discord.js. Its main features are the addition of new quotes to the database, and a daily quote. The bot will select a quote at random from the database (as long as it hasnt already been sent). And posts it in the discord. Everyone can then vote on this quote with emoji reactions 1-5. Which gets stored in a votes database. As of writing this the bot has handled 280+ quotes, and has built up a pretty solid leaderboard and database."
+                "text": "The bot itself is made with discord.js. Its main features are the addition of new quotes to the database, and a daily quote. The bot will select a quote at random from the database (as long as it hasnt already been sent). And posts it in the discord. Everyone can then vote on this quote with emoji reactions 1-5. Which gets stored in a votes database. As of writing this the bot has handled 500+ quotes, and has built up a pretty solid leaderboard and database.",
+                "gallery": {
+                    "columns": 0,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "../assets/images/quotes-bot1.png",
+                            "alt": "Quotes Bot Example 1"
+                        },
+                        {
+                            "type": "image",
+                            "src": "../assets/images/quotes-bot2.png",
+                            "alt": "Quotes Bot Example 2"
+                        }
+                    ],
+                    "caption": "Examples of daily quotes bot in discord, with numeric voting options"
+                }
             },
             {
                 "subtitle": "Commands",

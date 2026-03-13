@@ -87,6 +87,18 @@
         );
     }
 
+    function clearCanvasFullscreenQueryParam() {
+        const url = new URL(window.location.href);
+
+        if (url.searchParams.get("canvas") !== "fullscreen") {
+            return;
+        }
+
+        url.searchParams.delete("canvas");
+        const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+        window.history.replaceState(window.history.state, "", nextUrl);
+    }
+
     function canvasContentLinkHandler(node: HTMLElement) {
         function handleClick(event: MouseEvent) {
             const target = event.target as HTMLElement;
@@ -121,6 +133,7 @@
                 JSON.stringify(backTarget),
             );
 
+            clearCanvasFullscreenQueryParam();
             push(slug.startsWith("/") ? slug : `/${slug}`);
         }
 

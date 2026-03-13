@@ -23,9 +23,22 @@
         "caption": ""
     },
     "date": "2026-02",
-    "languages": ["JavaScript"],
-    "tools": ["Discord.js", "Google Sheets API", "QuickChart", "Node.js"],
-    "tags": ["Discord Bot", "Automation", "Data Visualization", "Google Sheets", "JavaScript"],
+    "languages": [
+        "JavaScript"
+    ],
+    "tools": [
+        "Discord.js",
+        "Google Sheets API",
+        "QuickChart",
+        "Node.js"
+    ],
+    "tags": [
+        "Discord Bot",
+        "Automation",
+        "Data Visualization",
+        "Google Sheets",
+        "JavaScript"
+    ],
     "content": {
         "overview": "This project is a Discord bot that tracks team work sessions directly from slash commands and writes results to Google Sheets in real time. Users can clock in, clock out with task notes, and manually add missed time. The bot also visualizes worked hours and pooled company funds in chart embeds, making operational data visible in-channel without opening external dashboards.",
         "keyFeatures": [
@@ -41,7 +54,7 @@
                 "text": "The bot was built to simplify internal hour tracking and pool accounting inside a Discord-first workflow. Instead of switching between chat and spreadsheets manually, team members can register work sessions directly where they already communicate.",
                 "gallery": {
                     "columns": 0,
-                    "media": [],
+                    "media": [  ],
                     "caption": ""
                 },
                 "ThreeJSScene": {

@@ -63,6 +63,7 @@
   const canvasViewStateStorageKey = "infinite-canvas-view-state-v1";
 
   type CanvasViewState = {
+    version: 1;
     panX: number;
     panY: number;
     zoom: number;
@@ -393,10 +394,17 @@
   }
 
   function handlePageUnload() {
+    if (!hasHydratedCanvasViewState) {
+      return;
+    }
+
     saveCanvasViewState();
   }
 
-  function syncFullscreenUrl(fullscreen: boolean) {
+  function syncFullscreenUrl(
+    fullscreen: boolean,
+    mode: "replace" | "push" = "replace",
+  ) {
     const url = new URL(window.location.href);
 
     if (fullscreen) {
@@ -406,7 +414,54 @@
     }
 
     const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+    const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+    if (nextUrl === currentUrl) {
+      return;
+    }
+
+    if (mode === "push") {
+      window.history.pushState(window.history.state, "", nextUrl);
+      return;
+    }
+
     window.history.replaceState(window.history.state, "", nextUrl);
+  }
+
+  function applyFullscreenUiState(fullscreen: boolean) {
+    if (fullscreen) {
+      document.body.style.overflow = "hidden";
+      return;
+    }
+
+    document.body.style.overflow = "";
+    showWordCountOverlay = false;
+  }
+
+  async function recenterAfterFullscreenChange() {
+    cancelNavigationAnimation();
+    await tick();
+
+    const currentCardId = currentNavigationCardId || "intro-overview";
+    centerOnCardInstant(currentCardId);
+  }
+
+  async function syncFullscreenStateFromUrl() {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const shouldBeFullscreen =
+      new URLSearchParams(window.location.search).get("canvas") ===
+      "fullscreen";
+
+    if (shouldBeFullscreen === isFullscreen) {
+      return;
+    }
+
+    isFullscreen = shouldBeFullscreen;
+    applyFullscreenUiState(isFullscreen);
+    await recenterAfterFullscreenChange();
   }
 
   function clearActiveElementFocus() {
@@ -430,14 +485,19 @@
       const parsed = JSON.parse(rawState) as Partial<CanvasViewState>;
 
       if (
+        parsed.version !== 1 ||
         typeof parsed.panX !== "number" ||
         typeof parsed.panY !== "number" ||
-        typeof parsed.zoom !== "number"
+        typeof parsed.zoom !== "number" ||
+        !Number.isFinite(parsed.panX) ||
+        !Number.isFinite(parsed.panY) ||
+        !Number.isFinite(parsed.zoom)
       ) {
         return null;
       }
 
       return {
+        version: 1,
         panX: parsed.panX,
         panY: parsed.panY,
         zoom: Math.max(0.15, Math.min(3, parsed.zoom)),
@@ -457,6 +517,7 @@
     }
 
     const state: CanvasViewState = {
+      version: 1,
       panX,
       panY,
       zoom,
@@ -471,28 +532,9 @@
 
   async function toggleFullscreen() {
     isFullscreen = !isFullscreen;
-    syncFullscreenUrl(isFullscreen);
-
-    // Hide body scrollbar when fullscreen
-    if (isFullscreen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-      showWordCountOverlay = false;
-    }
-
-    if (animationFrame !== null) {
-      cancelAnimationFrame(animationFrame);
-      animationFrame = null;
-    }
-    targetPanX = null;
-    targetPanY = null;
-    targetZoom = null;
-
-    await tick();
-
-    const currentCardId = currentNavigationCardId || "intro-overview";
-    centerOnCardInstant(currentCardId);
+    syncFullscreenUrl(isFullscreen, isFullscreen ? "push" : "replace");
+    applyFullscreenUiState(isFullscreen);
+    await recenterAfterFullscreenChange();
   }
 
   function toggleDarkMode() {
@@ -768,10 +810,11 @@
   onMount(async () => {
     prefersMobileSafeRendering = detectMobileSafeRenderingMode();
 
-    if (startFullscreen) {
-      isFullscreen = true;
-      document.body.style.overflow = "hidden";
-      syncFullscreenUrl(true);
+    isFullscreen = startFullscreen;
+    applyFullscreenUiState(isFullscreen);
+
+    if (isFullscreen) {
+      syncFullscreenUrl(true, "push");
     }
 
     // Wait for cards to be in DOM
@@ -804,6 +847,8 @@
     }
 
     window.addEventListener("resize", handleWindowResize);
+    window.addEventListener("popstate", syncFullscreenStateFromUrl);
+    window.addEventListener("hashchange", syncFullscreenStateFromUrl);
     window.addEventListener("pagehide", handlePageUnload);
     window.addEventListener("beforeunload", handlePageUnload);
     scheduleLayoutRecalculation();
@@ -834,9 +879,13 @@
 
     cardResizeObserver?.disconnect();
     window.removeEventListener("resize", handleWindowResize);
+    window.removeEventListener("popstate", syncFullscreenStateFromUrl);
+    window.removeEventListener("hashchange", syncFullscreenStateFromUrl);
     window.removeEventListener("pagehide", handlePageUnload);
     window.removeEventListener("beforeunload", handlePageUnload);
-    saveCanvasViewState();
+    if (hasHydratedCanvasViewState) {
+      saveCanvasViewState();
+    }
     document.body.style.overflow = "";
   });
 </script>
