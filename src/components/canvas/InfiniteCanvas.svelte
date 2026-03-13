@@ -57,6 +57,7 @@
   let cardLayoutVersion = 0;
   let arrowData = [];
   let canvasViewportArea = 1280 * 720;
+  let prefersMobileSafeRendering = false;
   let currentNavigationCardId = "intro-overview";
   let hasHydratedCanvasViewState = false;
   const canvasViewStateStorageKey = "infinite-canvas-view-state-v1";
@@ -156,9 +157,11 @@
       (1280 * 720) / Math.max(canvasViewportArea, 1),
     );
 
-  $: lowDetailMode = normalizedZoom <= 0.42;
+  $: lowDetailMode = prefersMobileSafeRendering || normalizedZoom <= 0.42;
 
-  $: ultraLowDetailMode = isFullscreen && normalizedZoom <= 0.24;
+  $: ultraLowDetailMode =
+    prefersMobileSafeRendering ||
+    (isFullscreen && normalizedZoom <= 0.24);
 
   $: useSafe2DTransform = lowDetailMode || ultraLowDetailMode;
 
@@ -195,6 +198,23 @@
       cardLayoutVersion += 1;
       layoutUpdateFrame = null;
     });
+  }
+
+  function detectMobileSafeRenderingMode(): boolean {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    const noHover = window.matchMedia("(hover: none)").matches;
+    const narrowViewport = window.innerWidth <= 900;
+
+    return (coarsePointer && noHover) || narrowViewport;
+  }
+
+  function handleWindowResize() {
+    prefersMobileSafeRendering = detectMobileSafeRenderingMode();
+    scheduleLayoutRecalculation();
   }
 
   function cancelNavigationAnimation() {
@@ -746,6 +766,8 @@
   }
 
   onMount(async () => {
+    prefersMobileSafeRendering = detectMobileSafeRenderingMode();
+
     if (startFullscreen) {
       isFullscreen = true;
       document.body.style.overflow = "hidden";
@@ -781,7 +803,7 @@
       });
     }
 
-    window.addEventListener("resize", scheduleLayoutRecalculation);
+    window.addEventListener("resize", handleWindowResize);
     window.addEventListener("pagehide", handlePageUnload);
     window.addEventListener("beforeunload", handlePageUnload);
     scheduleLayoutRecalculation();
@@ -811,7 +833,7 @@
     }
 
     cardResizeObserver?.disconnect();
-    window.removeEventListener("resize", scheduleLayoutRecalculation);
+    window.removeEventListener("resize", handleWindowResize);
     window.removeEventListener("pagehide", handlePageUnload);
     window.removeEventListener("beforeunload", handlePageUnload);
     saveCanvasViewState();

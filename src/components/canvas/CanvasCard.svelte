@@ -486,8 +486,16 @@
         color: var(--primary-text-color);
     }
 
+    @media (hover: none), (pointer: coarse), (max-width: 900px) {
+        .canvas-card {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+    }
+
     @media print {
         .canvas-card {
+            -webkit-backdrop-filter: none !important;
             backdrop-filter: none !important;
         }
     }
