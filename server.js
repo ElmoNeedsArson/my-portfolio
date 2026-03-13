@@ -128,10 +128,14 @@ app.use((req, _res, next) => {
     next();
 });
 
-app.use(express.static(distPath));
+app.use(express.static(distPath, {
+  maxAge: "7d",
+  immutable: true
+}));
 
 app.get("*", (_req, res) => {
-    res.sendFile(path.join(distPath, "index.html"));
+  res.set("Cache-Control", "no-cache");
+  res.sendFile(path.join(distPath, "index.html"));
 });
 
 app.listen(PORT, () => {
