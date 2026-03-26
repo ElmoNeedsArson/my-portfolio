@@ -2,6 +2,7 @@ import express from "express";
 import { mkdir, appendFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import fs from "node:fs";
 
 const app = express();
 app.disable("x-powered-by")
@@ -133,7 +134,15 @@ app.use(express.static(distPath, {
   immutable: true
 }));
 
-app.get("*", (_req, res) => {
+app.get("*", (req, res) => {
+  // Check if a file actually exists at the requested path
+  const filePath = path.join(distPath, req.path);
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+    // Let static middleware handle it
+    express.static(distPath)(req, res, () => {});
+    return;
+  }
+  // Otherwise, serve index.html for SPA routing
   res.set("Cache-Control", "no-cache");
   res.sendFile(path.join(distPath, "index.html"));
 });
