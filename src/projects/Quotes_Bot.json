@@ -86,12 +86,12 @@
                     "media": [
                         {
                             "type": "image",
-                            "src": "../assets/images/quotes-bot1.png",
+                            "src": "/assets/images/quotes-bot1.png",
                             "alt": "Quotes Bot Example 1"
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/quotes-bot2.png",
+                            "src": "/assets/images/quotes-bot2.png",
                             "alt": "Quotes Bot Example 2"
                         }
                     ],
