@@ -34,6 +34,17 @@
   let canvasElement: HTMLElement;
   let canvasContentElement: HTMLElement;
   let zoom = 0.58;
+
+  type LightboxImage = { src: string; alt: string; caption?: string };
+  let lightboxImage: LightboxImage | null = null;
+
+  function openLightbox(e: CustomEvent<LightboxImage>) {
+    lightboxImage = e.detail;
+  }
+
+  function closeLightbox() {
+    lightboxImage = null;
+  }
   let panX = 800;
   let panY = 4;
   let isPanning = false;
@@ -995,6 +1006,7 @@
           introTitle={card.introTitle}
           introSubtitle={card.introSubtitle}
           introLarge={card.introLarge || false}
+          on:openLightbox={openLightbox}
         />
       {/each}
     </div>
@@ -1034,13 +1046,103 @@
       {isFullscreen}
     />
   </div>
+
+  {#if lightboxImage}
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div
+      class="lightbox-overlay"
+      on:click={closeLightbox}
+      on:keydown={(e) => e.key === "Escape" && closeLightbox()}
+    >
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      <div class="lightbox-inner" on:click|stopPropagation>
+        <button class="lightbox-close" on:click={closeLightbox} aria-label="Close image">×</button>
+        <img src={lightboxImage.src} alt={lightboxImage.alt} class="lightbox-img" draggable="false" />
+        {#if lightboxImage.caption}
+          <p class="lightbox-caption">{lightboxImage.caption}</p>
+        {/if}
+      </div>
+    </div>
+  {/if}
 </div>
+
+<svelte:window on:keydown={(e) => e.key === "Escape" && closeLightbox()} />
 
 <style>
   .canvas-wrapper {
     position: relative;
     width: 100%;
     margin-bottom: 2.5rem;
+  }
+
+  .lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.77);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    cursor: zoom-out;
+    animation: lightbox-fade-in 0.18s ease;
+  }
+
+  @keyframes lightbox-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .lightbox-inner {
+    position: relative;
+    max-width: min(90vw, 1200px);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: default;
+  }
+
+  .lightbox-img {
+    display: block;
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  }
+
+  .lightbox-caption {
+    margin: 0.75rem 0 0 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    max-width: 640px;
+    line-height: 1.5;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: -2.5rem;
+    right: 0;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+  }
+
+  .lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.22);
   }
 
   .canvas-wrapper.fullscreen {

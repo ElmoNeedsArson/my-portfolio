@@ -1,5 +1,10 @@
 <script lang="ts">
     import { push } from "svelte-spa-router";
+    import { createEventDispatcher } from "svelte";
+
+    const dispatch = createEventDispatcher<{
+        openLightbox: { src: string; alt: string; caption?: string };
+    }>();
 
     const projectBackUrlStorageKey = "project-page-back-url-v1";
 
@@ -22,22 +27,37 @@
     export let introTitle: string | undefined = undefined;
     export let introSubtitle: string | undefined = undefined;
     export let introLarge: boolean = false;
-    export let sections: Array<{
-        type: "content" | "images";
+    type SectionImage = {
+        src: string;
+        alt: string;
+        title?: string;
+        caption?: string;
+        imageFit?: "cover" | "contain";
+        imageHeight?: number;
+        colSpan?: number;
+    };
+
+    type CanvasSection = {
+        type: "content" | "images" | "row";
+        // content
         content?: string;
-        images?: Array<{
-            src: string;
-            alt: string;
-            title?: string;
-            caption?: string;
-            imageFit?: "cover" | "contain";
-            imageHeight?: number;
-        }>;
+        // images
+        title?: string;
+        images?: SectionImage[];
         caption?: string;
         cols?: number;
         imageFit?: "cover" | "contain";
         imageHeight?: number;
-    }> = [];
+        // row
+        sections?: CanvasSection[];
+        gap?: string;
+        // layout
+        flex?: number;
+        width?: string;
+        imageFrame?: "browser" | "none";
+    };
+
+    export let sections: CanvasSection[] = [];
 
     // Helper function to detect if content has multiple goals (for grid layout)
     function hasGoalsGrid(content: string): boolean {
@@ -85,6 +105,14 @@
             /\[([^\]]+)\]\((\/[^)\s]+)\)/g,
             '<button type="button" class="inline-link" data-slug="$2" tabindex="0" aria-label="Navigate to $1">$1</button>',
         );
+    }
+
+    function handleImageClick(image: SectionImage) {
+        dispatch("openLightbox", {
+            src: image.src,
+            alt: image.alt,
+            caption: image.caption,
+        });
     }
 
     function clearCanvasFullscreenQueryParam() {
@@ -208,45 +236,162 @@
                         {/each}
                     {/if}
                 {:else if section.type === "images" && section.images}
+                    <div class="images-section-block">
+                        <div class="images-section-top">
+                            {#if section.title}
+                                <p class="image-section-title"><strong>{@html renderTextWithLinks(section.title)}</strong></p>
+                            {/if}
+                            <div
+                                class="image-gallery"
+                                class:single-image-gallery={(section.cols || 3) === 1 &&
+                                    section.images.length === 1}
+                                style="grid-template-columns: repeat({section.cols || 3}, 1fr);"
+                            >
+                                {#each section.images as image}
+                                    {@const resolvedFit = image.imageFit || section.imageFit || "cover"}
+                                    {@const resolvedHeight = image.imageHeight || section.imageHeight || 250}
+                                    <div class="gallery-entry" class:has-browser-frame={section.imageFrame === "browser"} style={image.colSpan ? `grid-column: span ${image.colSpan}` : ""}>
+                                        {#if section.imageFrame === "browser"}
+                                            <div class="browser-chrome">
+                                                <span class="chrome-dot chrome-dot-red"></span>
+                                                <span class="chrome-dot chrome-dot-yellow"></span>
+                                                <span class="chrome-dot chrome-dot-green"></span>
+                                            </div>
+                                        {/if}
+                                        {#if image.title}
+                                            <p class="image-source-title">
+                                                <strong>{@html renderTextWithLinks(image.title)}</strong>
+                                            </p>
+                                        {/if}
+                                        <div
+                                            class="gallery-item"
+                                            class:image-fit-contain={resolvedFit === "contain"}
+                                            style="--gallery-image-height: {resolvedHeight}px;"
+                                            role="button"
+                                            tabindex="0"
+                                            aria-label="View image: {image.alt}"
+                                            on:click={() => handleImageClick(image)}
+                                            on:keydown={(e) => e.key === "Enter" && handleImageClick(image)}
+                                        >
+                                            <img
+                                                src={image.src}
+                                                alt={image.alt}
+                                                draggable="false"
+                                            />
+                                        </div>
+                                        {#if image.caption}
+                                            <p class="image-source-caption">
+                                                <i>{@html renderTextWithLinks(image.caption)}</i>
+                                            </p>
+                                        {/if}
+                                    </div>
+                                {/each}
+                            </div>
+                        </div>
+                        {#if section.caption}
+                            <p class="image-caption">
+                                <i>{@html renderTextWithLinks(section.caption)}</i>
+                            </p>
+                        {/if}
+                    </div>
+                {:else if section.type === "row" && section.sections}
+                    {@const _gap = section.gap || "1.5rem"}
+                    {@const _n = section.sections.length}
+                    {@const gridCols = section.sections.map(c =>
+                        c.width?.endsWith("%")
+                            ? `calc(${c.width} - ${_gap} * ${_n - 1} / ${_n})`
+                            : c.width ? c.width : c.flex ? `${c.flex}fr` : "1fr"
+                    ).join(" ")}
                     <div
-                        class="image-gallery"
-                        class:single-image-gallery={(section.cols || 3) === 1 &&
-                            section.images.length === 1}
-                        style="grid-template-columns: repeat({section.cols || 3}, 1fr);"
+                        class="section-row"
+                        style="grid-template-columns: {gridCols};{section.gap ? ` gap: ${section.gap}` : ''}"
                     >
-                        {#each section.images as image}
-                            {@const resolvedFit = image.imageFit || section.imageFit || "cover"}
-                            {@const resolvedHeight = image.imageHeight || section.imageHeight || 250}
-                            <div class="gallery-entry">
-                                {#if image.title}
-                                    <p class="image-source-title">
-                                        <strong>{@html renderTextWithLinks(image.title)}</strong>
-                                    </p>
-                                {/if}
-                                <div
-                                    class="gallery-item"
-                                    class:image-fit-contain={resolvedFit === "contain"}
-                                    style="--gallery-image-height: {resolvedHeight}px;"
-                                >
-                                    <img
-                                        src={image.src}
-                                        alt={image.alt}
-                                        draggable="false"
-                                    />
-                                </div>
-                                {#if image.caption}
-                                    <p class="image-source-caption">
-                                        <i>{@html renderTextWithLinks(image.caption)}</i>
-                                    </p>
+                        {#each section.sections as child}
+                            <div class="section-row-item">
+                                {#if child.type === "content" && child.content}
+                                    {@const isGoalsGrid = hasGoalsGrid(child.content)}
+                                    {#if isGoalsGrid}
+                                        {@const goals = parseGoals(child.content)}
+                                        <div class="goals-grid">
+                                            {#each goals as goal}
+                                                <div class="goal-item">
+                                                    <h4 class="goal-title">{goal.title}</h4>
+                                                    <p class="goal-description">
+                                                        {@html goal.description}
+                                                    </p>
+                                                </div>
+                                            {/each}
+                                        </div>
+                                    {:else}
+                                        {@const paragraphs = parseParagraphs(child.content)}
+                                        {#each paragraphs as paragraph}
+                                            {#if paragraph.isQuote}
+                                                <div class="quote">
+                                                    <p>{@html paragraph.text}</p>
+                                                </div>
+                                            {:else}
+                                                <p>{@html paragraph.text}</p>
+                                            {/if}
+                                        {/each}
+                                    {/if}
+                                {:else if child.type === "images" && child.images}
+                                    <div class="images-section-block">
+                                        <div class="images-section-top">
+                                            {#if child.title}
+                                                <p class="image-section-title"><strong>{@html renderTextWithLinks(child.title)}</strong></p>
+                                            {/if}
+                                            <div
+                                                class="image-gallery"
+                                                class:single-image-gallery={(child.cols || 3) === 1 && child.images.length === 1}
+                                                style="grid-template-columns: repeat({child.cols || 3}, 1fr);"
+                                            >
+                                                {#each child.images as image}
+                                                    {@const resolvedFit = image.imageFit || child.imageFit || "cover"}
+                                                    {@const resolvedHeight = image.imageHeight || child.imageHeight || 250}
+                                                    <div class="gallery-entry" class:has-browser-frame={child.imageFrame === "browser"} style={image.colSpan ? `grid-column: span ${image.colSpan}` : ""}>
+                                                        {#if child.imageFrame === "browser"}
+                                                            <div class="browser-chrome">
+                                                                <span class="chrome-dot chrome-dot-red"></span>
+                                                                <span class="chrome-dot chrome-dot-yellow"></span>
+                                                                <span class="chrome-dot chrome-dot-green"></span>
+                                                            </div>
+                                                        {/if}
+                                                        {#if image.title}
+                                                            <p class="image-source-title">
+                                                                <strong>{@html renderTextWithLinks(image.title)}</strong>
+                                                            </p>
+                                                        {/if}
+                                                        <div
+                                                            class="gallery-item"
+                                                            class:image-fit-contain={resolvedFit === "contain"}
+                                                            style="--gallery-image-height: {resolvedHeight}px;"
+                                                            role="button"
+                                                            tabindex="0"
+                                                            aria-label="View image: {image.alt}"
+                                                            on:click={() => handleImageClick(image)}
+                                                            on:keydown={(e) => e.key === "Enter" && handleImageClick(image)}
+                                                        >
+                                                            <img src={image.src} alt={image.alt} draggable="false" />
+                                                        </div>
+                                                        {#if image.caption}
+                                                            <p class="image-source-caption">
+                                                                <i>{@html renderTextWithLinks(image.caption)}</i>
+                                                            </p>
+                                                        {/if}
+                                                    </div>
+                                                {/each}
+                                            </div>
+                                        </div>
+                                        {#if child.caption}
+                                            <p class="image-caption">
+                                                <i>{@html renderTextWithLinks(child.caption)}</i>
+                                            </p>
+                                        {/if}
+                                    </div>
                                 {/if}
                             </div>
                         {/each}
                     </div>
-                    {#if section.caption}
-                        <p class="image-caption">
-                            <i>{@html renderTextWithLinks(section.caption)}</i>
-                        </p>
-                    {/if}
                 {/if}
             {/each}
         {/if}
@@ -434,9 +579,40 @@
         opacity: 0.8;
     }
 
+    .images-section-block {
+        background: rgba(255, 255, 255, 0.028);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        padding: 0.875rem 0;
+        margin: 0.5rem 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .section-row-item .images-section-block {
+        margin: 0;
+        flex: 1;
+    }
+
+    .images-section-top {
+        flex: 1;
+    }
+
+    .images-section-block .image-section-title {
+        margin-top: 0;
+        padding: 0 1rem;
+    }
+
+    .images-section-block .image-gallery {
+        margin-top: 0.75rem;
+        margin-bottom: 0;
+    }
+
+
     .image-gallery {
         display: grid;
-        gap: 1rem;
+        gap: 1.5rem;
         margin: 1.5rem 0;
     }
 
@@ -446,11 +622,53 @@
         gap: 0.4rem;
     }
 
+    /* Browser frame wrapper */
+    .has-browser-frame {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.15);
+        gap: 0;
+    }
+
+    .browser-chrome {
+        height: 26px;
+        background: rgba(255, 255, 255, 0.07);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        gap: 5px;
+        flex-shrink: 0;
+    }
+
+    .chrome-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .chrome-dot-red    { background: rgba(255, 95,  87,  0.75); }
+    .chrome-dot-yellow { background: rgba(255, 189, 46,  0.75); }
+    .chrome-dot-green  { background: rgba(40,  201, 64,  0.75); }
+
+    .has-browser-frame .gallery-item {
+        border-radius: 0;
+    }
+
     .gallery-item {
         border-radius: 8px;
         overflow: hidden;
         background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.06);
         height: var(--gallery-image-height, 250px);
+        cursor: zoom-in;
+        transition: opacity 0.15s ease;
+    }
+
+    .gallery-item:hover {
+        opacity: 0.88;
     }
 
     .gallery-item img {
@@ -481,7 +699,7 @@
     .image-caption {
         font-size: 0.9rem;
         color: var(--muted-color);
-        margin-top: -0.5rem !important;
+        padding: 0.75rem 1rem 0;
     }
 
     .image-source-caption {
@@ -497,6 +715,32 @@
         font-size: 1.3rem;
         line-height: 1.35;
         color: var(--primary-text-color);
+    }
+
+    .section-row {
+        display: grid;
+        gap: 1.5rem;
+        align-items: stretch;
+        margin: 0.5rem 0;
+    }
+
+    .section-row-item {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .image-section-title {
+        margin: 1.25rem 0 0 0;
+        font-size: 1.15rem;
+        line-height: 1.35;
+        color: var(--primary-text-color);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        padding-bottom: 0.4rem;
+    }
+
+    .image-section-title:first-child {
+        margin-top: 0;
     }
 
     @media (hover: none), (pointer: coarse), (max-width: 900px) {

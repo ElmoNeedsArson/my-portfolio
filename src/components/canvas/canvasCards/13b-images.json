@@ -2,31 +2,60 @@
   "id": "past-creativity-and-aesthetics-img",
   "title": "C&A Images",
   "numberOrder": 15,
-  "width": 1200,
+  "width": 1600,
   "offsetX": "1.1pw",
   "offsetY": 0,
   "hideHeader": true,
   "color": "rgba(74, 144, 226, 0.35)",
   "sections": [
     {
-      "type": "images",
-      "cols": 2,
-      "images": [
+      "type": "row",
+      "sections": [
         {
-          "src": "/assets/images/eindhoven/Mod8-3.png",
-          "alt": "Data Physicalization Project",
-          "imageFit": "contain",
-          "imageHeight": 430,
+          "type": "images",
+          "width": "33%",
           "title": "Interactive Media  ·  University of Twente, 2021",
-          "caption": "In-game screenshot of the low-poly 3D game — all models, shaders, animations and sound designed from scratch. [Project Page](/interactive-media-project)"
+          "caption": "Low-poly 3D game built entirely from scratch — models, shaders, animations, and sound all designed in-house for a consistent visual identity. [Project Page](/interactive-media-project)",
+          "cols": 1,
+          "imageHeight": 350,
+          "imageFit": "cover",
+          "images": [
+            {
+              "src": "/assets/images/interactive_media/jetpack.png",
+              "alt": "In-game jetpack asset"
+            },
+            {
+              "src": "/assets/images/interactive_media/Planet.png",
+              "alt": "Planet environment scene"
+            }
+          ]
         },
         {
-          "src": "/assets/images/aibpo.png",
-          "alt": "Data Physicalization Project",
-          "imageFit": "contain",
-          "imageHeight": 430,
+          "type": "images",
+          "width": "67%",
           "title": "AIBPO — Aesthetics of AI/Data  ·  TU/e Master, 2025",
-          "caption": "Live performance setup for the AIBPO project — a speculative fictional company critiquing algorithmic labour management. [Project Page](/aesthetics-of-ai-data)"
+          "caption": "Live performance setup for the AIBPO project — a speculative fictional company critiquing algorithmic labour management through audience participation and staged escalation. [Project Page](/aesthetics-of-ai-data)",
+          "cols": 2,
+          "imageHeight": 350,
+          "imageFit": "cover",
+          "images": [
+            {
+              "src": "/assets/images/aibpo.png",
+              "alt": "AIBPO live performance setup"
+            },
+            {
+              "src": "/assets/images/AIBPO/timeline.png",
+              "alt": "AIBPO performance timeline"
+            },
+            {
+              "src": "/assets/images/AIBPO/presentation1.png",
+              "alt": "AIBPO presentation snapshot"
+            },
+            {
+              "src": "/assets/images/AIBPO/sketches.png",
+              "alt": "AIBPO concept sketches"
+            }
+          ]
         }
       ]
     }

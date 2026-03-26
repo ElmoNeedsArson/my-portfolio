@@ -2,27 +2,83 @@
   "id": "past-math-data-and-computing-img",
   "title": "MDC Images",
   "numberOrder": 17,
-  "width": 1200,
+  "width": 1600,
   "offsetX": "1.1pw",
   "offsetY": 0,
   "hideHeader": true,
   "color": "rgba(74, 144, 226, 0.35)",
   "sections": [
     {
-      "type": "images",
-      "cols": 2,
-      "images": [
+      "type": "row",
+      "sections": [
         {
-          "src": "/assets/images/eindhoven/Mod8-3.png",
-          "alt": "Data Physicalization Project",
-          "title": "Data Physicalization Project  ·  University of Twente, 2022",
-          "caption": "The data physicalization museum installation — 3D printed planets, physical dials, actuators, and a blow dryer outputting hot or cold air based on planetary surface temperature data. [Project Page](/physical-data)"
+          "type": "images",
+          "title": "Data Physicalization  ·  University of Twente, 2022",
+          "caption": "Museum installation visualizing astronaut data through physical 3D-printed models, actuators, and a blow dryer outputting hot or cold air based on planetary surface temperatures. [Project Page](/physical-data)",
+          "cols": 1,
+          "width": "33%",
+          "imageHeight": 350,
+          "imageFit": "cover",
+          "images": [
+            {
+              "src": "/assets/images/Physical_Data.png",
+              "alt": "Data physicalization installation overview"
+            },
+            {
+              "src": "/assets/images/Physical_Data1.png",
+              "alt": "Data physicalization installation detail"
+            },
+            {
+              "src": "/assets/images/Physical_Data3.png",
+              "alt": "Data physicalization installation interaction"
+            }
+          ]
         },
         {
-          "src": "/assets/images/eindhoven/Mod8-3.png",
-          "alt": "Digital Twins in Education Project",
+          "type": "images",
           "title": "M12 Digital Twins in Education  ·  TU/e Master, 2025",
-          "caption": "The browser-based Arduino learning environment used in the M12 study — four feedback role variants tested across N=41 participants. [Project Page](/digital-twin-in-education)"
+          "caption": "Browser-based Arduino learning environment testing four AI feedback roles across N=41 novice programmers — measuring self-efficacy and perceived difficulty. [Project Page](/digital-twin-in-education)",
+          "cols": 1,
+          "width": "33%",
+          "imageHeight": 350,
+          "imageFit": "cover",
+          "images": [
+            {
+              "src": "/assets/images/M12.png",
+              "alt": "M12 project overview"
+            },
+            {
+              "src": "/assets/images/M12_1.png",
+              "alt": "M12 prototype interface"
+            },
+            {
+              "src": "/assets/images/M12_2.png",
+              "alt": "M12 feedback role design"
+            }
+          ]
+        },
+        {
+          "type": "images",
+          "title": "Portfolio Websites  ·  2020-2025",
+          "caption": "An iterative portfolio spanning three technology stacks — from hand-coded HTML/CSS in 2020, through WordPress in 2022, to the current data-driven Svelte application. [Project Page](/portfolio-websites)",
+          "cols": 1,
+          "width": "34%",
+          "imageHeight": 350,
+          "imageFit": "cover",
+          "images": [
+            {
+              "src": "/assets/images/1st_Website.jpg",
+              "alt": "Portfolio website first iteration"
+            },
+            {
+              "src": "/assets/images/website_json_project.png",
+              "alt": "Portfolio website second iteration"
+            },
+            {
+              "src": "/assets/images/website_search.png",
+              "alt": "Portfolio website third iteration"
+            }
+          ]
         }
       ]
     }

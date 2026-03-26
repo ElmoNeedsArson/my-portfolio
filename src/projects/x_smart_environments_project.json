@@ -73,6 +73,19 @@
       }, 
       {
         "text": "I would love to expand this project and explain more, but since we are not finished yet I will have to wait until after the coming 2 weeks. Then I will add more pictures and explanatory comments… - This is clearly a lie, since its been 4 years since I did this project… but I will leave it like this for authenticity."
+      },
+      {
+        "gallery": {
+          "columns": 2,
+          "media": [
+            {
+              "type": "image",
+              "src": "../assets/images/smart_environments/watch_drawing.jpg",
+              "alt": "Promotional image I made for showcasing the plugin",
+              "caption": "A drawing of the watch we designed for this project"
+             }
+          ]
+        }
       }
     ]
   }

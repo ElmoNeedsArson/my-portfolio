@@ -2,31 +2,60 @@
   "id": "past-business-and-entrepreneurship-img",
   "title": "B&E Images",
   "numberOrder": 13,
-  "width": 1200,
+  "width": 1600,
   "offsetX": "1.1pw",
   "offsetY": 0,
   "hideHeader": true,
   "color": "rgba(74, 144, 226, 0.35)",
   "sections": [
     {
-      "type": "images",
-      "cols": 2,
-      "images": [
+      "type": "row",
+      "sections": [
         {
-          "src": "/assets/images/Report-1.png",
-          "alt": "Data Physicalization Project",
-          "imageFit": "cover",
-          "imageHeight": 430,
+          "type": "images",
+          "width": "33%",
+          "title": "Modulamp  ·  University of Twente, 2022",
           "caption": "Marketing render from the Modulamp business project — a modular, sustainable bicycle lighting system. [Project Page](/modulamp)",
-          "title": "Modulamp  ·  University of Twente, 2022"
+          "cols": 1,
+          "imageHeight": 350,
+          "imageFit": "cover",
+          "images": [
+            {
+              "src": "/assets/images/Report-1.png",
+              "alt": "Modulamp marketing render"
+            },
+            {
+              "src": "/assets/images/modulamp_still.png",
+              "alt": "Modulamp product line overview"
+            }
+          ]
         },
         {
-          "src": "/assets/images/eindhoven/arm1.jpg",
-          "alt": "Data Physicalization Project",
+          "type": "images",
+          "width": "67%",
+          "title": "Exomembra  ·  Extracurricular Startup, 2023",
+          "caption": "Wearable exoskeleton costume pieces developed for the cosplay and LARP community as a rapid prototyping pathway toward the medical market. [Project Page](/exomembra)",
+          "cols": 2,
+          "imageHeight": 350,
           "imageFit": "cover",
-          "imageHeight": 430,
-          "caption": "Exomembra prototype fit test — wearable exoskeleton arm pieces developed for the cosplay and LARP community. [Project Page](/exomembra)",
-          "title": "Exomembra  ·  Extracurricular Startup, 2023"
+          "images": [
+            {
+              "src": "/assets/images/eindhoven/arm1.jpg",
+              "alt": "Exomembra arm prototype fit test"
+            },
+            {
+              "src": "/assets/images/Exomembra/arm2.jpg",
+              "alt": "Exomembra arm detail"
+            },
+            {
+              "src": "/assets/images/Exomembra/deco2.jpg",
+              "alt": "Exomembra decorative piece 2"
+            },
+            {
+              "src": "/assets/images/Exomembra/decoImg1.jpg",
+              "alt": "Exomembra decoration detail"
+            }
+          ]
         }
       ]
     }

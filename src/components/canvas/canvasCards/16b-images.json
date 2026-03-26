@@ -2,27 +2,52 @@
   "id": "past-user-and-society-img",
   "title": "U&S Images",
   "numberOrder": 21,
-  "width": 1200,
+  "width": 1600,
   "offsetX": "1.1pw",
   "offsetY": 0,
   "hideHeader": true,
   "color": "rgba(74, 144, 226, 0.35)",
   "sections": [
     {
-      "type": "images",
-      "cols": 2,
-      "images": [
-        {
-          "src": "/assets/images/eindhoven/Mod8-3.png",
-          "alt": "Data Physicalization Project",
-          "title": "Student Management Tool  ·  Extracurricular, 2024",
-          "caption": "The Electron.js desktop application built for my tutoring job — replacing a slow Google Drive folder system with a faster, API-connected interface. [Project Page](/student-management-tool)"
+      "type": "row",
+      "sections": [
+                {
+          "type": "images",
+          "width": "33%",
+          "title": "WordBond  ·  TU/e Master, 2025",
+          "caption": "AI-powered shared reading tool helping visually impaired parents narrate physical children's books with their sighted children using OCR, LLM correction, hand-tracking, and TTS. [Project Page](/wordbond)",
+          "cols": 1,
+          "imageHeight": 350,
+          "imageFit": "contain",
+          "images": [
+            {
+              "src": "/assets/images/wordbond1.png",
+              "alt": "WordBond app logo and branding"
+            },
+            {
+              "src": "/assets/images/wordbond2.png",
+              "alt": "wordbond in progress"
+            }
+          ]
         },
         {
-          "src": "/assets/images/eindhoven/Mod8-3.png",
-          "alt": "Data Physicalization Project",
-          "title": "WordBond  ·  TU/e Master, 2025",
-          "caption": "WordBond — an AI-powered shared reading tool helping visually impaired parents read physical children's books with their sighted children. [Project Page](/wordbond)"
+          "type": "images",
+          "width": "67%",
+          "title": "Student Management Tool  ·  Extracurricular, 2024",
+          "caption": "The Electron.js desktop application built for my tutoring job — replacing a slow Google Drive folder system with a faster, API-connected interface. [Project Page](/student-management-tool)",
+          "cols": 1,
+          "imageHeight": 350,
+          "imageFit": "cover",
+          "images": [
+            {
+              "src": "/assets/images/eindhoven/lms-1.png",
+              "alt": "Student Management Tool screenshot 1"
+            },
+            {
+              "src": "/assets/images/eindhoven/lms-3.png",
+              "alt": "Student Management Tool screenshot 3"
+            }
+          ]
         }
       ]
     }

@@ -2,27 +2,57 @@
   "id": "past-technology-and-realization-img",
   "title": "T&R Images",
   "numberOrder": 19,
-  "width": 1200,
+  "width": 1600,
   "offsetX": "1.1pw",
   "offsetY": 0,
   "hideHeader": true,
   "color": "rgba(74, 144, 226, 0.35)",
   "sections": [
     {
-      "type": "images",
-      "cols": 2,
-      "images": [
+      "type": "row",
+      "sections": [
         {
-          "src": "/assets/images/eindhoven/Mod8-3.png",
-          "alt": "Data Physicalization Project",
+          "type": "images",
           "title": "Obsidian 3D Embed Plugin  ·  Extracurricular, 2024",
-          "caption": "The Obsidian plugin rendering a 3D model directly inside a markdown note — over 2400 installations as of writing. [Project Page](/obsidian-plugin)"
+          "caption": "TypeScript plugin rendering interactive 3D models directly inside Obsidian markdown notes via Three.js — over 2400 installations as of writing. [Project Page](/obsidian-plugin)",
+          "cols": 1,
+          "width": "33%",
+          "imageHeight": 350,
+          "imageFit": "cover",
+          "images": [
+            {
+              "src": "/assets/images/3D_Embed_1.png",
+              "alt": "Obsidian 3D Embed plugin showcase 1"
+            },
+            {
+              "src": "/assets/images/3D_Embed_2.png",
+              "alt": "Obsidian 3D Embed plugin showcase 2"
+            }
+          ]
         },
         {
-          "src": "/assets/images/eindhoven/Mod8-3.png",
-          "alt": "Data Physicalization Project",
+          "type": "images",
           "title": "Tactone  ·  TU/e Master, 2025",
-          "caption": "Tactone — a modular soft robotics perception tool with pneumatic silicone pads, LDR sensors, and real-time audio modulation. [Project Page](/tactone)"
+          "caption": "Modular soft robotics perception tool — pneumatic silicone pads with LDR sensors and real-time audio modulation for exploring the aesthetics of soft robots. [Project Page](/tactone)",
+          "width": "67%",
+          "cols": 2,
+          "imageHeight": 350,
+          "imageFit": "cover",
+          "images": [
+            {
+              "src": "/assets/images/tactone2.png",
+              "alt": "Tactone pad detail"
+            },
+            {
+              "src": "/assets/images/tactone3.png",
+              "alt": "Tactone interaction setup"
+            },
+            {
+              "src": "/assets/images/tactone4.png",
+              "alt": "Tactone modularity guide",
+              "colSpan": 2
+            }
+          ]
         }
       ]
     }

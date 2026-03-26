@@ -84,6 +84,29 @@
             },
             {
                 "text": "This module was one of the best worked out and enjoyable modules thusfar. We got a lot of freedom as students to work on a project And make it out own. The goal of the project this module was to design your own game, including all the audio, models, animations and game logic. Me and my groupmate started work on our game immediately. We started off with all the assets that we would require for the game. So all 3D models. We wanted to do this all ourselves in order to keep a consistent style throughout the game. We found the visuals of the game to be very important. We spend a lot of time on them looking at making shaders, particle systems and actual good looking models and animations. \n\nFor this project a total of 270 hours between me and my groupmate were spend on making the game and report. We really enjoyed the project however we wished that we took on a smaller project."
+            },
+            {
+                "gallery": {
+                    "columns": 2,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "../assets/images/interactive_media/jetpack.png",
+                            "alt": "Promotional image I made for showcasing the plugin"
+                        },
+                        {
+                            "type": "image",
+                            "src": "../assets/images/interactive_media/Planet.png",
+                            "alt": "Promotional image I made for showcasing the plugin"
+                        },
+                        {
+                            "type": "image",
+                            "src": "../assets/images/interactive_media/GUI_overlay.png",
+                            "alt": "Promotional image I made for showcasing the plugin"
+                        }
+                    ],
+                    "caption": "Some snapshots of the game environment and assets we created for the project"
+                }
             }
         ]
     }

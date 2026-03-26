@@ -106,6 +106,44 @@
                     "caption": "Personal Reflection",
                     "downloadName": "Personal-Reflection.pdf"
                 }
+            },
+            {
+                "title": "Gallery",
+                "gallery": {
+                    "columns": 2,
+                    "media": [
+                        {
+                            "type": "image",
+                            "src": "../assets/images/AIBPO/timeline.png",
+                            "alt": "AIBPO Performance"
+                        },
+                        {
+                            "type": "image",
+                            "src": "../assets/images/AIBPO/presentation1.png",
+                            "alt": "AIBPO Soundboard"
+                        },
+                        {
+                            "type": "image",
+                            "src": "../assets/images/AIBPO/slide1.png",
+                            "alt": "AIBPO Soundboard"
+                        },
+                        {
+                            "type": "image",
+                            "src": "../assets/images/AIBPO/sketches.png",
+                            "alt": "AIBPO Soundboard"
+                        }
+                    ],
+                    "caption": "Gallery of images from the AIBPO project, including performance snapshots and prototype components."
+                }
+            },
+                        {
+                "title": "Pictorial",
+                "pdf": {
+                    "type": "pdf",
+                    "src": "/assets/pdfs/AIBPO_Pictorial.pdf",
+                    "caption": "Pictorial",
+                    "downloadName": "AIBPO_Pictorial.pdf"
+                }
             }
         ]
     }

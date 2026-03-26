@@ -32,7 +32,7 @@ export const connections: Connection[] = [
     toSide: "left",
     waypoints: [
       { relativeTo: "from", offsetX: 0, offsetY: 200 },
-      { relativeTo: "to", offsetX: -300, offsetY: 2735 },
+      { relativeTo: "to", offsetX: -300, offsetY: 2875 },
       { relativeTo: "to", offsetX: -300, offsetY: 0 },
     ],
   },
