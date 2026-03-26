@@ -129,10 +129,8 @@ app.use((req, _res, next) => {
     next();
 });
 
-app.use(express.static(distPath, {
-  maxAge: "7d",
-  immutable: true
-}));
+app.use("/_app", express.static(path.join(distPath, "_app"), { maxAge: "1y", immutable: true }));
+app.use(express.static(distPath, { maxAge: "1d" }));
 
 app.get("*", (req, res) => {
   // Check if a file actually exists at the requested path
