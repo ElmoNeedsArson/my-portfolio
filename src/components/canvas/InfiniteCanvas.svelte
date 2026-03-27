@@ -818,6 +818,29 @@
     panY = target.panY;
   }
 
+  function handleBeforePrint() {
+    if (!canvasContentElement) return;
+    const allCards = resolvedCardDefinitions;
+    if (allCards.length === 0) return;
+
+    const minX = Math.min(...allCards.map((c) => c.x));
+    const minY = Math.min(...allCards.map((c) => c.y));
+    const padding = 40;
+    const translateX = -minX + padding;
+    const translateY = -minY + padding;
+
+    canvasContentElement.style.setProperty(
+      "transform",
+      `translate(${translateX}px, ${translateY}px)`,
+      "important",
+    );
+  }
+
+  function handleAfterPrint() {
+    if (!canvasContentElement) return;
+    canvasContentElement.style.removeProperty("transform");
+  }
+
   onMount(async () => {
     prefersMobileSafeRendering = detectMobileSafeRenderingMode();
 
@@ -862,6 +885,8 @@
     window.addEventListener("hashchange", syncFullscreenStateFromUrl);
     window.addEventListener("pagehide", handlePageUnload);
     window.addEventListener("beforeunload", handlePageUnload);
+    window.addEventListener("beforeprint", handleBeforePrint);
+    window.addEventListener("afterprint", handleAfterPrint);
     scheduleLayoutRecalculation();
 
     await tick();
@@ -894,6 +919,8 @@
     window.removeEventListener("hashchange", syncFullscreenStateFromUrl);
     window.removeEventListener("pagehide", handlePageUnload);
     window.removeEventListener("beforeunload", handlePageUnload);
+    window.removeEventListener("beforeprint", handleBeforePrint);
+    window.removeEventListener("afterprint", handleAfterPrint);
     if (hasHydratedCanvasViewState) {
       saveCanvasViewState();
     }
@@ -1268,11 +1295,6 @@
       border-radius: 0;
       transform: scale(0.6);
       transform-origin: top left;
-    }
-
-    .canvas-content {
-      position: static !important;
-      transform: none !important;
     }
 
     .dot-grid {
