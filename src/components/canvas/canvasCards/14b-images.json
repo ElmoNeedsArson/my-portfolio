@@ -60,7 +60,7 @@
         {
           "type": "images",
           "title": "Portfolio Websites  ·  2020-2025",
-          "caption": "An iterative portfolio spanning three technology stacks — from hand-coded HTML/CSS in 2020, through WordPress in 2022, to the current data-driven Svelte application. [Project Page](/portfolio-websites)",
+          "caption": "An iterative portfolio spanning three technology stacks — from hand-coded HTML/CSS in 2020, through WordPress in 2022, to the current data-driven Svelte application. [Iterative Page](/portfolio-websites) & [Svelte Page](/portfolio-website-svelte)",
           "cols": 1,
           "width": "34%",
           "imageHeight": 350,

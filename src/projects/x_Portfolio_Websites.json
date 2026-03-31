@@ -83,7 +83,7 @@
       },
       {
         "title": "Current Iteration - 2025",
-        "text": "Even though the readymade ecosystem of using wordpress is great. For a static website of a creative developer, we could do better. The site you are currently seeing is this site. I am particularly fond of the tags, languages and tools filtering systems. This allows me to query and navigate my projects so much better, and in a more interactive way. \n\nThis site was built with svelte, and normal css. This was my first svelte project, but I get why people like it so much. Although its easy to get lost in reactive variables and stores."
+        "text": "Even though the readymade ecosystem of using wordpress is great. For a static website of a creative developer, we could do better. The site you are currently seeing is this site. I am particularly fond of the tags, languages and tools filtering systems. This allows me to query and navigate my projects so much better, and in a more interactive way. \n\nThis site was built with svelte, and normal css. This was my first svelte project, but I get why people like it so much. Although its easy to get lost in reactive variables and stores. Read more [here](/portfolio-website-svelte)."
       }
     ]
   }

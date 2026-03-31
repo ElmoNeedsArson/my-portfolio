@@ -81,10 +81,35 @@
                         display: false
                     },
                     tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `Rating: ${context.parsed.r.toFixed(1)}/10`;
+                        enabled: false,
+                        external: function(context) {
+                            let tooltipEl = document.getElementById('radar-tooltip');
+                            if (!tooltipEl) {
+                                tooltipEl = document.createElement('div');
+                                tooltipEl.id = 'radar-tooltip';
+                                document.body.appendChild(tooltipEl);
                             }
+
+                            const tooltipModel = context.tooltip;
+                            if (tooltipModel.opacity === 0) {
+                                tooltipEl.style.opacity = '0';
+                                return;
+                            }
+
+                            const dataIndex = tooltipModel.dataPoints?.[0]?.dataIndex;
+                            const rating = tooltipModel.dataPoints?.[0]?.parsed.r;
+                            const area = expertiseAreas[dataIndex];
+                            const expertise = expertiseData.find(e => e.area === area);
+
+                            tooltipEl.innerHTML = `
+                                <div class="radar-tip-rating">Rating: ${rating?.toFixed(1)}/10</div>
+                                ${expertise?.reason ? `<div class="radar-tip-reason"><span class="radar-tip-label">Reason:</span> ${expertise.reason}</div>` : ''}
+                            `;
+
+                            const position = context.chart.canvas.getBoundingClientRect();
+                            tooltipEl.style.opacity = '1';
+                            tooltipEl.style.left = position.left + window.scrollX + tooltipModel.caretX + 'px';
+                            tooltipEl.style.top = position.top + window.scrollY + tooltipModel.caretY + 'px';
                         }
                     }
                 },
@@ -136,6 +161,7 @@
         if (chart) {
             chart.destroy();
         }
+        document.getElementById('radar-tooltip')?.remove();
     });
 
     $: if (chart) {
@@ -190,6 +216,37 @@
     canvas {
         width: 100%;
         height: auto;
+    }
+
+    :global(#radar-tooltip) {
+        position: absolute;
+        pointer-events: none;
+        background: var(--background-color, #1a1a1a);
+        border: 1px solid var(--border-color, #444);
+        border-radius: 8px;
+        padding: 0.5rem 0.65rem;
+        max-width: 220px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+    }
+
+    :global(#radar-tooltip .radar-tip-rating) {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--primary-text-color, #fff);
+        margin-bottom: 0.25rem;
+    }
+
+    :global(#radar-tooltip .radar-tip-reason) {
+        font-size: 0.7rem;
+        color: #9ca3af;
+        line-height: 1.4;
+    }
+
+    :global(#radar-tooltip .radar-tip-label) {
+        font-weight: 600;
+        color: #6b7280;
     }
 
     @media (max-width: 1200px) {
