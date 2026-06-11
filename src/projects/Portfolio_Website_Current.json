@@ -3,6 +3,7 @@
   "slug": "portfolio-website-svelte",
   "title": "This Website",
   "type": "card",
+  "installations": 0,
   "shortDesc": "A data-driven Svelte portfolio built as a navigable dataset, projects structured in JSON, filterable by tags, tools, and languages",
   "thumbnail": {
     "type": "image",
@@ -25,7 +26,7 @@
   "date": "2026-03",
   "languages": ["JavaScript", "HTML", "CSS", "Svelte"],
   "tools": ["SvelteKit", "Node.js", "docker", "express.js"],
-  "tags": ["Web Development", "Portfolio", "Personal Website", "Data", "Design"],
+  "tags": ["Web Dev", "Portfolio", "Data", "Design", "Personal Website"],
   "expertise": [
     {
       "area": "Math, Data and Computing",

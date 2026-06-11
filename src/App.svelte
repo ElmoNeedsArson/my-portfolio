@@ -10,11 +10,10 @@
   import { darkMode } from "./lib/darkModeStore";
   import { location } from "svelte-spa-router";
 
-  const routes = getHomeRoutes().reduce((acc, routePath) => {
-    acc[routePath] = Home;
-    return acc;
-  }, {});
-  routes["/:slug"] = Project;
+  const routes = Object.fromEntries([
+    ...getHomeRoutes().map((r) => [r, Home]),
+    ["/:slug", Project],
+  ]);
 
   // Control navigation style based on current route
   $: {
@@ -25,6 +24,15 @@
   // Scroll to top on route change
   $: if ($location) {
     window.scrollTo(0, 0);
+  }
+
+  // Track page views
+  $: if ($location) {
+    fetch("/api/pageview", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ route: $location }),
+    }).catch(() => {});
   }
 
   // // Force light mode on Eindhoven tab

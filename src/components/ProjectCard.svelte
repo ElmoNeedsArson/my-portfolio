@@ -2,7 +2,7 @@
   import type { Project } from "../types";
   import { darkMode } from "../lib/darkModeStore";
   import { navigateToSearch } from "../lib/searchNavigation";
-  import { CloudDownload, Pin } from "@lucide/svelte";
+  import { CloudDownload, Eye, Pin } from "@lucide/svelte";
   import { link } from "svelte-spa-router";
   import { createEventDispatcher, onMount, tick } from "svelte";
 
@@ -24,29 +24,27 @@
     $darkMode || !project.thumbnailLight
       ? project.thumbnail
       : project.thumbnailLight;
-  // $: console.log(
-  //   "Selected thumbnail for project",
-  //   project.title,
-  //   "is",
-  //   selectedThumb,
-  // );
   $: imageUrl = getSrc(selectedThumb) ?? "";
   $: imageFilter = selectedThumb?.invert ? "invert(0.9)" : "none";
 
   let liveInstallations: number | null = null;
+  let liveVisits: number | null = null;
   let metaRowElement: HTMLDivElement | null = null;
   let tagsElement: HTMLDivElement | null = null;
-  let counterElement: HTMLDivElement | null = null;
   let fullCounterMeasureElement: HTMLSpanElement | null = null;
   let showDownloadWord = true;
 
   $: isObsidian3DPlugin = project.slug === "obsidian-plugin";
+  $: isPortfolioWebsite = project.slug === "portfolio-website-svelte";
   $: displayInstallations =
     isObsidian3DPlugin && liveInstallations !== null
       ? liveInstallations
+      : isPortfolioWebsite && liveVisits !== null
+      ? liveVisits
       : project.installations;
   $: hasInstallations = typeof displayInstallations === "number";
-  $: installationCount = hasInstallations
+  $: counterLabel = isPortfolioWebsite ? "visits" : "downloads";
+  $: installationCount = typeof displayInstallations === "number"
     ? displayInstallations.toLocaleString()
     : "";
 
@@ -79,48 +77,30 @@
   }
 
   onMount(() => {
-    if (!isObsidian3DPlugin) {
-      return;
-    }
+    if (!isObsidian3DPlugin && !isPortfolioWebsite) return;
 
     let isDisposed = false;
 
-    const loadInstallations = async () => {
+    const endpoint = isObsidian3DPlugin ? "/api/obsidian-downloads" : "/api/site-visits";
+    const key = isObsidian3DPlugin ? "downloads" : "visits";
+
+    (async () => {
       try {
-        const response = await fetch("/api/obsidian-downloads");
-        if (!response.ok) {
-          return;
+        const res = await fetch(endpoint);
+        if (!res.ok) return;
+        const value = (await res.json())?.[key];
+        if (isDisposed || typeof value !== "number" || !Number.isFinite(value)) return;
+        if (isObsidian3DPlugin) {
+          if (value > 0) liveInstallations = value;
+        } else {
+          liveVisits = value;
         }
+      } catch {}
+    })();
 
-        const payload = await response.json();
-        const downloads = payload?.downloads;
-
-        if (
-          !isDisposed &&
-          typeof downloads === "number" &&
-          Number.isFinite(downloads) &&
-          downloads > 0
-        ) {
-          liveInstallations = downloads;
-        }
-      } catch {
-        // keep JSON fallback when API is unavailable
-      }
-    };
-
-    loadInstallations();
-
-    const resizeObserver = new ResizeObserver(() => {
-      updateDownloadWordVisibility();
-    });
-
-    if (metaRowElement) {
-      resizeObserver.observe(metaRowElement);
-    }
-
-    if (tagsElement) {
-      resizeObserver.observe(tagsElement);
-    }
+    const resizeObserver = new ResizeObserver(updateDownloadWordVisibility);
+    if (metaRowElement) resizeObserver.observe(metaRowElement);
+    if (tagsElement) resizeObserver.observe(tagsElement);
 
     return () => {
       isDisposed = true;
@@ -163,13 +143,16 @@
             <div
               class="installation-counter"
               aria-label="Project installations"
-              bind:this={counterElement}
             >
-              <CloudDownload size={14} />
+              {#if isPortfolioWebsite}
+                <Eye size={14} />
+              {:else}
+                <CloudDownload size={14} />
+              {/if}
               <span class="installation-counter-text">
                 <span>{installationCount}</span>
                 {#if showDownloadWord}
-                  <span>downloads</span>
+                  <span>{counterLabel}</span>
                 {/if}
               </span>
               <span
@@ -177,7 +160,7 @@
                 aria-hidden="true"
                 bind:this={fullCounterMeasureElement}
               >
-                {installationCount} downloads
+                {installationCount} {counterLabel}
               </span>
             </div>
           {/if}

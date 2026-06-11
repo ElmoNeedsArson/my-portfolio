@@ -1,5 +1,5 @@
 import express from "express";
-import { mkdir, appendFile, stat, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
@@ -12,50 +12,33 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distPath = path.join(__dirname, "dist");
 const logsDirPath = path.join(__dirname, "visitLogs");
-const homeVisitsLogPath = path.join(logsDirPath, "home-visits.log");
-const maxHomeVisitsLogBytes = 5 * 1024 * 1024;
 
 let cachedDownloads = null;
 let lastFetchMs = 0;
 
-function getClientIp(req) {
-    const forwardedFor = req.headers["x-forwarded-for"];
+const visitCountsPath = path.join(logsDirPath, "visit-counts.json");
+let totalVisits = 0;
+let visitsByRoute = {};
 
-    if (typeof forwardedFor === "string" && forwardedFor.length > 0) {
-        return forwardedFor.split(",")[0].trim();
-    }
-
-    return req.ip || req.socket?.remoteAddress || "unknown";
-}
-
-async function truncateHomeVisitsLogIfTooLarge() {
+async function loadVisitCounts() {
     try {
-        const fileStats = await stat(homeVisitsLogPath);
-
-        if (fileStats.size >= maxHomeVisitsLogBytes) {
-            await writeFile(homeVisitsLogPath, "", "utf8");
-        }
+        const raw = await fs.promises.readFile(visitCountsPath, "utf8");
+        const parsed = JSON.parse(raw);
+        if (typeof parsed.total === "number") totalVisits = parsed.total;
+        if (parsed.routes && typeof parsed.routes === "object") visitsByRoute = parsed.routes;
     } catch {
-        // File may not exist yet, ignore.
+        // File doesn't exist yet, start from 0.
     }
 }
 
-async function logHomeVisit(req) {
-    const userAgent = String(req.headers["user-agent"] || "unknown").slice(0, 500);
-    const ip = getClientIp(req);
-    const timestamp = new Date().toISOString();
-
-    const logLine = JSON.stringify({
-        timestamp,
-        route: "/",
-        ip,
-        userAgent,
-    }) + "\n";
-
+async function persistVisitCounts() {
     try {
         await mkdir(logsDirPath, { recursive: true });
-        await truncateHomeVisitsLogIfTooLarge();
-        await appendFile(homeVisitsLogPath, logLine, "utf8");
+        await writeFile(
+            visitCountsPath,
+            JSON.stringify({ total: totalVisits, routes: visitsByRoute }, null, 2),
+            "utf8",
+        );
     } catch {
         // Silent failure by design.
     }
@@ -112,21 +95,28 @@ app.get("/api/obsidian-downloads", async (_req, res) => {
     res.json({ downloads: cachedDownloads, updatedAt: lastFetchMs });
 });
 
-app.use((req, _res, next) => {
-    if (req.method !== "GET" || req.path !== "/") {
-        next();
-        return;
+app.post("/api/pageview", express.json({ limit: "1kb" }), (req, res) => {
+    res.json({ ok: true });
+
+    const userAgent = String(req.headers["user-agent"] || "").toLowerCase();
+    if (userAgent.includes("bot")) return;
+
+    const route = req.body?.route;
+    const sanitizedRoute =
+        typeof route === "string" && route.startsWith("/") && route.length <= 200
+            ? route
+            : null;
+
+    totalVisits++;
+    if (sanitizedRoute) {
+        visitsByRoute[sanitizedRoute] = (visitsByRoute[sanitizedRoute] ?? 0) + 1;
     }
+    void persistVisitCounts();
+});
 
-    const userAgent = String(req.headers["user-agent"] || "");
-
-    if (userAgent.toLowerCase().includes("bot")) {
-        next();
-        return;
-    }
-
-    void logHomeVisit(req);
-    next();
+app.get("/api/site-visits", (_req, res) => {
+    res.set("Cache-Control", "no-store");
+    res.json({ visits: totalVisits, routes: visitsByRoute });
 });
 
 app.use("/_app", express.static(path.join(distPath, "_app"), { maxAge: "1y", immutable: true }));
@@ -145,6 +135,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(distPath, "index.html"));
 });
 
+await loadVisitCounts();
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
