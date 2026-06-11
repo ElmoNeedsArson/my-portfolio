@@ -26,8 +26,8 @@
     let categoryDropdownOpen = false;
     let searchInputElement: HTMLInputElement;
 
-    let categoryDropdown: HTMLElement;
-    let categoryButtonElement: HTMLElement;
+    let categoryDropdown: HTMLElement | undefined;
+    let categoryButtonElement: HTMLElement | undefined;
 
     function positionDropdown() {
         if (categoryDropdownOpen && categoryButtonElement && categoryDropdown) {
@@ -65,12 +65,12 @@
         searchInput = ""; // i think this is more user friendly
     }
 
-    function toggleCategoryDropdown(event: MouseEvent) {
+    function toggleCategoryDropdown(_event: MouseEvent) {
         categoryDropdownOpen = !categoryDropdownOpen;
         if (categoryDropdownOpen) positionDropdown(); //places it in the right spot for a fixed display
     }
 
-    function handleSuggestionClick(suggestion: string) {
+    function handleSuggestionClick(event: MouseEvent, suggestion: string) {
         event.stopPropagation(); //otherwise the results modal immediately closes
         // console.log(
         //     "Suggestion clicked: " +
@@ -215,8 +215,8 @@
                         {#each suggestions as suggestion}
                             <button
                                 class="suggestion-item"
-                                on:click={() =>
-                                    handleSuggestionClick(suggestion)}
+                                on:click={(e) =>
+                                    handleSuggestionClick(e, suggestion)}
                             >
                                 <svelte:component
                                     this={currentCategory?.icon}
@@ -252,7 +252,7 @@
         align-items: flex-start;
         justify-content: center;
         padding-top: 10vh;
-        z-index: 1000;
+        z-index: 1500;
     }
 
     .search-container {
@@ -318,7 +318,7 @@
         border-radius: 6px;
         margin-top: 0.25rem;
         box-shadow: 0 4px 12px var(--box-shadow);
-        z-index: 1001;
+        z-index: 1501;
         min-width: 180px;
     }
 
