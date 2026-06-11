@@ -1,5 +1,6 @@
 <script lang="ts">
   import { params, push } from "svelte-spa-router";
+  import SvelteSeo from "svelte-seo";
   import type { Project, ContentBlock } from "../types";
   import ProjectOutline from "../components/ProjectPageNavigator.svelte";
   import ExpertiseRadarChart from "../components/visualizations/ExpertiseRadarChart.svelte";
@@ -66,6 +67,17 @@
     }
   }
 </script>
+
+<SvelteSeo
+  title={project ? `${project.title} | Jesse Strijker` : "Jesse Strijker | Portfolio"}
+  description={project?.shortDesc ?? "Portfolio of Jesse Strijker."}
+  openGraph={{
+    title: project ? `${project.title} | Jesse Strijker` : "Jesse Strijker | Portfolio",
+    description: project?.shortDesc ?? "",
+    url: `https://portfolio.jessestrijker.com/#/project/${slug}`,
+    type: "website",
+  }}
+/>
 
 <main>
   {#if project}
