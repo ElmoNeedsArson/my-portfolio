@@ -35,6 +35,7 @@ export interface GalleryObject {
   media: Array<MediaObject>;
   columns?: number;
   caption?: string;
+  maxWidth?: string;
 }
 
 export interface ProjectSection {

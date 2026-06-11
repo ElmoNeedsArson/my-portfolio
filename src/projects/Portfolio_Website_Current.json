@@ -25,7 +25,7 @@
   },
   "date": "2026-03",
   "languages": ["JavaScript", "HTML", "CSS", "Svelte"],
-  "tools": ["SvelteKit", "Node.js", "docker", "express.js"],
+  "tools": ["SvelteKit", "Node.js", "docker", "express.js", "D3.js"],
   "tags": ["Web Dev", "Portfolio", "Data", "Design", "Personal Website"],
   "expertise": [
     {

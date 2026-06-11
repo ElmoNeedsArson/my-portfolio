@@ -1,0 +1,20 @@
+{
+  "id": "skills-sunburst",
+  "title": "Skills & Technologies",
+  "numberOrder": 25,
+  "relativeToCardId": "intro-overview",
+  "offsetX": 0,
+  "offsetY": 650,
+  "width": 1200,
+  "color": "rgba(74, 144, 226, 0.2)",
+  "sections": [
+    {
+      "type": "content",
+      "content": "An overview of all the languages, frameworks, and tools used across my projects. Hover any segment to see the projects that use it."
+    },
+    {
+      "type": "visualization",
+      "visualizationType": "sunburst"
+    }
+  ]
+}
