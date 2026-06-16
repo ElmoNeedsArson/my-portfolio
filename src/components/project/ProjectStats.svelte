@@ -26,7 +26,7 @@
         const endpoint = isObsidianPlugin
             ? "/api/obsidian-downloads"
             : "/api/site-visits";
-        const key = isObsidianPlugin ? "downloads" : "total visits";
+        const key = isObsidianPlugin ? "downloads" : "visits";
 
         (async () => {
             try {

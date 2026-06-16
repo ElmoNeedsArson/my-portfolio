@@ -1409,6 +1409,8 @@
       onNavigate={navigateToCard}
       {isFullscreen}
     />
+
+    <div class="canvas-zoom-hint" aria-hidden="true">ctrl+scroll to zoom</div>
   </div>
 
   {#if lightboxImage}
@@ -1543,6 +1545,20 @@
     border-radius: 0;
     height: 100vh;
     height: 100dvh;
+  }
+
+  .canvas-zoom-hint {
+    position: absolute;
+    left: 1rem;
+    bottom: 0.8rem;
+    z-index: 4;
+    color: var(--primary-text-color);
+    font-size: 0.72rem;
+    line-height: 1;
+    letter-spacing: 0;
+    pointer-events: none;
+    user-select: none;
+    background: var(--background-color);
   }
 
   .dot-grid {
@@ -1754,7 +1770,8 @@
     }
 
     :global(.canvas-action-button),
-    :global(.canvas-navigation) {
+    :global(.canvas-navigation),
+    .canvas-zoom-hint {
       display: none !important;
     }
   }
