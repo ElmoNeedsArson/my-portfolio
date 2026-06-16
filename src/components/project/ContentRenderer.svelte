@@ -1,8 +1,10 @@
 <script lang="ts">
     import { push } from "svelte-spa-router";
-    import type { ContentBlock, GalleryObject, MediaObject } from "../../types";
+    import type { ContentBlock, GalleryObject, MediaObject, Project } from "../../types";
+    import ProjectStats from "./ProjectStats.svelte";
 
     export let content: ContentBlock | undefined;
+    export let statsProject: Project | undefined = undefined;
 
     function getSrc(img: string | { src?: string } | undefined) {
         if (!img) return undefined;
@@ -47,6 +49,7 @@
             media: gallery.media ?? [],
             caption: gallery.caption,
             columns: gallery.columns ?? 2,
+            maxWidth: gallery.maxWidth,
         };
     }
 
@@ -85,6 +88,9 @@
         <div id="overview" class="overview-text">
             {@html renderTextWithLinks(content.overview)}
         </div>
+    {/if}
+    {#if statsProject}
+        <ProjectStats project={statsProject} />
     {/if}
 
     {#if content?.keyFeatures}
@@ -198,7 +204,7 @@
                 {@const galleryData = getGalleryData(section.gallery)}
                 <div
                     class="gallery"
-                    style={`grid-template-columns: repeat(${galleryData.columns ?? 2}, 1fr);`}
+                    style={`grid-template-columns: repeat(${galleryData.columns ?? 2}, 1fr);${galleryData.maxWidth ? ` max-width: ${galleryData.maxWidth}; margin-left: auto; margin-right: auto;` : ''}`}
                 >
                     {#each galleryData.media as item}
                         <div class="gallery-item">

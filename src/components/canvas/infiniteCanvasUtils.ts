@@ -6,14 +6,6 @@ import type {
   WordCountStats,
 } from "./infiniteCanvasTypes";
 
-type NavigationTargetInput = {
-  card: CardDefinition;
-  cardHeight: number;
-  viewportWidth: number;
-  viewportHeight: number;
-  zoomLevel?: number;
-};
-
 export function adjustPanForZoomAtPoint({
   focusX,
   focusY,
@@ -40,41 +32,22 @@ export function adjustPanForZoomAtPoint({
   };
 }
 
-export function getNavigationTarget({
-  card,
-  cardHeight,
-  viewportWidth,
-  viewportHeight,
-  zoomLevel = 0.6,
-}: NavigationTargetInput): { panX: number; panY: number; zoom: number } {
-  const isPhoneViewport = viewportWidth <= 640;
-  const widthFitZoom = (viewportWidth * 0.9) / Math.max(card.width, 1);
-  const resolvedZoom = isPhoneViewport
-    ? Math.max(0.15, Math.min(zoomLevel, widthFitZoom))
-    : zoomLevel;
-
-  const cardCenterX = card.x + card.width / 2;
-  const cardTopY = card.y;
-  const cardCenterY = card.y + cardHeight / 2;
-  const centerMode = card.initialCenterMode || "top";
-
-  const panX = viewportWidth / 2 - cardCenterX * resolvedZoom;
-  const panY =
-    centerMode === "middle"
-      ? viewportHeight / 2 - cardCenterY * resolvedZoom
-      : viewportHeight * 0.15 - cardTopY * resolvedZoom;
-
-  return {
-    panX,
-    panY,
-    zoom: resolvedZoom,
-  };
+function isWordChar(char: string | undefined): boolean {
+  return char !== undefined && /[\p{L}\p{N}]/u.test(char);
 }
 
 export function getCountedWords(text: string): string[] {
   const cleanedText = text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
     .replace(/\*\*/g, " ")
-    .replace(/[`#>*_\[\]()\-–—]/g, " ")
+    .replace(
+      /[-–—]+/gu,
+      (match, offset: number, string: string) =>
+        isWordChar(string[offset - 1]) && isWordChar(string[offset + match.length])
+          ? match
+          : " "
+    )
+    .replace(/[`#>*_\[\]()]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 
@@ -86,39 +59,47 @@ export function countWords(text: string): number {
   return getCountedWords(text).length;
 }
 
+function countSectionWords(section: CardSection, stats: WordCountStats): void {
+  if (section.type === "content" && section.content) {
+    stats.contentWords += countWords(section.content);
+  }
+
+  if (section.caption) {
+    const sectionCaptionWords = countWords(section.caption);
+    if (sectionCaptionWords > 0) {
+      stats.captionWords += sectionCaptionWords;
+      stats.captionCount += 1;
+    }
+  }
+
+  if (section.images?.length) {
+    for (const image of section.images) {
+      if (image.caption) {
+        const imageCaptionWords = countWords(image.caption);
+        if (imageCaptionWords > 0) {
+          stats.captionWords += imageCaptionWords;
+          stats.captionCount += 1;
+        }
+      }
+    }
+  }
+
+  if (section.sections?.length) {
+    for (const nested of section.sections) {
+      countSectionWords(nested, stats);
+    }
+  }
+}
+
 export function computeWordCountStats(
   cards: Pick<CardDefinition, "title" | "sections">[],
 ): WordCountStats {
   return cards.reduce<WordCountStats>(
     (stats, card) => {
       stats.titleWords += countWords(card.title);
-
       for (const section of card.sections) {
-        if (section.type === "content" && section.content) {
-          stats.contentWords += countWords(section.content);
-        }
-
-        if (section.caption) {
-          const sectionCaptionWords = countWords(section.caption);
-          if (sectionCaptionWords > 0) {
-            stats.captionWords += sectionCaptionWords;
-            stats.captionCount += 1;
-          }
-        }
-
-        if (section.images?.length) {
-          for (const image of section.images) {
-            if (image.caption) {
-              const imageCaptionWords = countWords(image.caption);
-              if (imageCaptionWords > 0) {
-                stats.captionWords += imageCaptionWords;
-                stats.captionCount += 1;
-              }
-            }
-          }
-        }
+        countSectionWords(section, stats);
       }
-
       return stats;
     },
     { titleWords: 0, contentWords: 0, captionWords: 0, captionCount: 0 },
@@ -264,8 +245,6 @@ export function resolveCardDefinitions(
         resolvedCards.find((resolved) => resolved.id === card.relativeToCardId) ??
         null;
 
-      // If the target card is unavailable (for example hidden), fall back to
-      // the previous resolved card so relative positioning still works.
       if (!anchorCard && resolvedCards.length > 0) {
         anchorCard = resolvedCards[resolvedCards.length - 1];
       }
@@ -360,14 +339,16 @@ export function resolveCardGroups(
       );
 
       const padding = group.padding ?? 40;
+      const paddingX = group.paddingX ?? padding;
+      const paddingY = group.paddingY ?? padding;
 
       return {
         id: group.id,
         title: group.title,
-        x: bounds.minX - padding,
-        y: bounds.minY - padding,
-        width: bounds.maxX - bounds.minX + padding * 2,
-        height: bounds.maxY - bounds.minY + padding * 2,
+        x: bounds.minX - paddingX,
+        y: bounds.minY - paddingY,
+        width: bounds.maxX - bounds.minX + paddingX * 2,
+        height: bounds.maxY - bounds.minY + paddingY * 2,
         borderColor: group.borderColor ?? "rgba(76, 175, 80, 0.65)",
         backgroundColor: group.backgroundColor ?? "rgba(76, 175, 80, 0.08)",
         labelTextColor: group.labelTextColor ?? "#194D1E",

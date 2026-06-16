@@ -1,0 +1,67 @@
+{
+  "id": "professional-identity-img",
+  "title": "Professional Identity Images",
+  "numberOrder": 4.5,
+  "width": 1400,
+  "relativeToCardId": "professional-identity",
+  "offsetX": 0,
+  "offsetY": "1.02ph",
+  "hideHeader": true,
+  "paddingY": "0",
+  "color": "rgba(74, 144, 226, 0.35)",
+  "sections": [
+    {
+      "type": "row",
+      "sections": [
+        {
+          "type": "images",
+          "figureId": "wordbond",
+          "width": "33%",
+          "title": "Wordbond  ·  Research Through Design",
+          "caption": "Research through design method \\cite{stappers2017}, applied to wordbond, an accessibility tool for visually impaired parents.",
+          "cols": 1,
+          "imageHeight": 230,
+          "imageFit": "contain",
+          "images": [
+            {
+              "src": "/assets/images/wordbond2.png",
+              "alt": "Wordbond accessibility tool, research through design approach"
+            }
+          ]
+        },
+        {
+          "type": "images",
+          "figureId": "fmp-hcd",
+          "width": "33%",
+          "title": "FMP  ·  Human-Centered Design",
+          "caption": "FMP: human-centered design approach, understanding users first \\cite{braga2019}.",
+          "cols": 1,
+          "imageHeight": 230,
+          "imageFit": "contain",
+          "images": [
+            {
+              "src": "/assets/images/conversationInterviewDrawing_selfmade.jpeg",
+              "alt": "FMP human-centered design approach, conversation and interview drawing"
+            }
+          ]
+        },
+        {
+          "type": "images",
+          "figureId": "tactone",
+          "width": "33%",
+          "title": "Tactone  ·  Material-Driven Design",
+          "caption": "Tactone: material-driven design for soft robotic perception \\cite{karana2015}.",
+          "cols": 1,
+          "imageHeight": 230,
+          "imageFit": "contain",
+          "images": [
+            {
+              "src": "/assets/images/tactone6.png",
+              "alt": "Tactone, material-driven design for soft robotic perception"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

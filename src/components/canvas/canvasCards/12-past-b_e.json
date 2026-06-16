@@ -3,14 +3,15 @@
   "title": "Business and Entrepreneurship",
   "numberOrder": 12,
   "width": 600,
-  "offsetX": 1700,
-  "offsetY": 0,
+  "relativeToCardId": "professional-identity",
+  "offsetX": 3200,
+  "offsetY": -2160,
   "navigationFitToFrame": true,
-  "color": "rgba(249, 103, 67, 0.3)",
+  "color": "rgba(138, 107, 166, 0.35)",
   "sections": [
     {
       "type": "content",
-      "content": "Modulamp was the first project where I had to think about a product as a business, of course with every project you do you attempt to remain in the realm of staying realistic, but financial modeling, market analysis, sustainability positioning, are an extra step. Now all of those are useful, but entirely on paper, with no real users, no supplier conversations, no willingness-to-pay data. \n\nExomembra made that gap concrete. <b>Co-founding a startup</b> meant the business questions couldn't stay theoretical. We assumed online visibility would work (webshop, SEO, Google Ads, influencers); it didn't, our audience was too niche. Showing up in person at events like Castlefest and Elfia did more than anything we tried online, but it also took more time than a small team could sustain. What both projects showed me, is that the parts of business design I found easier, structuring a case, communicating a proposition, are also the parts that stay comfortable because they don't require much from the outside world. The harder parts do: finding customers, sustaining momentum, finding out where your assumptions were wrong."
+      "content": "Modulamp (\\ref{modulamp}) was the first project where I had to approach a product as a business. Every project requires a degree of realism, but this one added financial modelling, market analysis, and sustainability positioning on top. Now all of those are useful, but entirely on paper, with no real users, no supplier conversations, no willingness-to-pay data. \n\nExomembra (\\ref{exomembra}) made that gap concrete. <b>Co-founding a startup</b> meant the business questions couldn't stay theoretical. We assumed online visibility would work (webshop, SEO, Google Ads, influencers); it didn't, our audience was too niche. Showing up in person at events like Castlefest and Elfia did more than anything we tried online. What both projects showed me: the parts of business design I found easier, structuring a case, communicating a proposition, are also the parts that dont require much from the outside world. The harder/uncomfortable parts do: finding customers, sustaining momentum, finding out where your assumptions were wrong."
     }
   ]
 }

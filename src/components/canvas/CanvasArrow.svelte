@@ -1,86 +1,112 @@
 <script lang="ts">
     export let points: Array<{ x: number; y: number }>;
-    
-    const cornerRadius = 30; // Adjust this to make corners more or less rounded
+    export let dashed = false;
+    export let fromSide: 'top' | 'bottom' | 'left' | 'right' | undefined = undefined;
+    export let toSide: 'top' | 'bottom' | 'left' | 'right' | undefined = undefined;
 
-    // Build path from multiple points with rounded corners
-    $: pathD = (() => {
-        if (points.length === 0) return '';
-        if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
-        if (points.length === 2) {
-            return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`;
+    function sideDir(side: string): { x: number; y: number } {
+        switch (side) {
+            case 'right':  return { x:  1, y:  0 };
+            case 'left':   return { x: -1, y:  0 };
+            case 'bottom': return { x:  0, y:  1 };
+            case 'top':    return { x:  0, y: -1 };
+            default:       return { x:  1, y:  0 };
         }
-        
-        // Start at first point
-        let path = `M ${points[0].x} ${points[0].y}`;
-        
-        // Process each segment, adding rounded corners at waypoints
-        for (let i = 1; i < points.length - 1; i++) {
-            const prev = points[i - 1];
-            const current = points[i];
-            const next = points[i + 1];
-            
-            // Calculate vectors
-            const dx1 = current.x - prev.x;
-            const dy1 = current.y - prev.y;
-            const dx2 = next.x - current.x;
-            const dy2 = next.y - current.y;
-            
-            // Calculate distances
-            const dist1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
-            const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-            
-            // Use smaller of the two distances or cornerRadius
-            const radius = Math.min(cornerRadius, dist1 / 2, dist2 / 2);
-            
-            // Calculate the point before the corner
-            const beforeCorner = {
-                x: current.x - (dx1 / dist1) * radius,
-                y: current.y - (dy1 / dist1) * radius
-            };
-            
-            // Calculate the point after the corner
-            const afterCorner = {
-                x: current.x + (dx2 / dist2) * radius,
-                y: current.y + (dy2 / dist2) * radius
-            };
-            
-            // Draw line to before corner, then quadratic curve through corner
-            path += ` L ${beforeCorner.x} ${beforeCorner.y}`;
-            path += ` Q ${current.x} ${current.y} ${afterCorner.x} ${afterCorner.y}`;
-        }
-        
-        // Draw line to final point
-        path += ` L ${points[points.length - 1].x} ${points[points.length - 1].y}`;
-        
-        return path;
-    })();
+    }
 
-    // Calculate arrowhead angle from last two points
+    let pathD = '';
+    let lastCP2: { x: number; y: number } | null = null;
+
+    $: {
+        lastCP2 = null;
+
+        if (points.length === 0) {
+            pathD = '';
+        } else if (points.length === 1) {
+            pathD = `M ${points[0].x} ${points[0].y}`;
+        } else if (points.length === 2 && fromSide && toSide) {
+            const p0 = points[0];
+            const p1 = points[1];
+            const d0 = sideDir(fromSide);
+            const d1 = sideDir(toSide);
+
+            const dx = Math.abs(p1.x - p0.x);
+            const dy = Math.abs(p1.y - p0.y);
+            const s0 = Math.max((Math.abs(d0.x) > 0 ? dx : dy) * 0.4, 100);
+            const s1 = Math.max((Math.abs(d1.x) > 0 ? dx : dy) * 0.4, 100);
+
+            const cp1 = { x: p0.x + d0.x * s0, y: p0.y + d0.y * s0 };
+            const cp2 = { x: p1.x + d1.x * s1, y: p1.y + d1.y * s1 };
+            lastCP2 = cp2;
+            pathD = `M ${p0.x} ${p0.y} C ${cp1.x} ${cp1.y} ${cp2.x} ${cp2.y} ${p1.x} ${p1.y}`;
+        } else {
+            const n = points.length;
+            let path = `M ${points[0].x} ${points[0].y}`;
+
+            for (let i = 0; i < n - 1; i++) {
+                const p0 = i > 0 ? points[i - 1] : points[0];
+                const p1 = points[i];
+                const p2 = points[i + 1];
+                const p3 = i + 2 < n ? points[i + 2] : points[n - 1];
+
+                let cp1x: number, cp1y: number;
+                if (i === 0 && fromSide) {
+                    const d0 = sideDir(fromSide);
+                    const dx = Math.abs(p2.x - p1.x);
+                    const dy = Math.abs(p2.y - p1.y);
+                    const s = Math.max(dx, dy) * 0.35;
+                    cp1x = p1.x + d0.x * s;
+                    cp1y = p1.y + d0.y * s;
+                } else {
+                    cp1x = p1.x + (p2.x - p0.x) / 6;
+                    cp1y = p1.y + (p2.y - p0.y) / 6;
+                }
+
+                let cp2x: number, cp2y: number;
+                if (i === n - 2 && toSide) {
+                    const d1 = sideDir(toSide);
+                    const dx = Math.abs(p2.x - p1.x);
+                    const dy = Math.abs(p2.y - p1.y);
+                    const s = Math.max(dx, dy) * 0.35;
+                    cp2x = p2.x + d1.x * s;
+                    cp2y = p2.y + d1.y * s;
+                } else {
+                    cp2x = p2.x - (p3.x - p1.x) / 6;
+                    cp2y = p2.y - (p3.y - p1.y) / 6;
+                }
+
+                path += ` C ${cp1x} ${cp1y} ${cp2x} ${cp2y} ${p2.x} ${p2.y}`;
+                if (i === n - 2) lastCP2 = { x: cp2x, y: cp2y };
+            }
+
+            pathD = path;
+        }
+    }
+
     $: lastPoint = points[points.length - 1];
-    $: secondLastPoint = points[points.length - 2] || lastPoint;
-    $: angle = Math.atan2(
-        lastPoint.y - secondLastPoint.y,
-        lastPoint.x - secondLastPoint.x
-    ) * (180 / Math.PI);
+    $: angle = (() => {
+        if (!lastPoint) return 0;
+        const ref = lastCP2 ?? (points.length >= 2 ? points[points.length - 2] : lastPoint);
+        return Math.atan2(lastPoint.y - ref.y, lastPoint.x - ref.x) * (180 / Math.PI);
+    })();
 </script>
 
 <g class="arrow">
-    <!-- Arrow path -->
     <path
         d={pathD}
         fill="none"
         stroke="currentColor"
-        stroke-opacity="0.7"
-        stroke-width="10" />
-        <!-- stroke-dasharray="5,5" -->
+        stroke-opacity={dashed ? 0.45 : 0.7}
+        stroke-width={dashed ? 5 : 10}
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-dasharray={dashed ? "14,9" : undefined} />
 
-    <!-- Arrowhead at the last point -->
     {#if points.length > 0}
         <polygon
-            points="-13,-6.5 0,0 -13,6.5"
+            points={dashed ? "-8,-4 0,0 -8,4" : "-13,-6.5 0,0 -13,6.5"}
             fill="currentColor"
-            fill-opacity="0.95"
+            fill-opacity={dashed ? 0.6 : 0.95}
             transform="translate({lastPoint.x}, {lastPoint.y}) rotate({angle})"
         />
     {/if}
@@ -100,7 +126,6 @@
         stroke-opacity: 1;
     }
 
-    /* Print styles for PDF export */
     @media print {
         .arrow path,
         .arrow polygon {

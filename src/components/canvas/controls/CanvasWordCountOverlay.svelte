@@ -19,7 +19,7 @@
 <style>
   .word-count-overlay {
     position: absolute;
-    top: 5rem;
+    top: calc(5rem + 44px);
     right: 3rem;
     z-index: 1001;
     min-width: 260px;

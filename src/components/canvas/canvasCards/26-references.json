@@ -1,0 +1,16 @@
+{
+  "id": "references",
+  "title": "References",
+  "numberOrder": 35,
+  "relativeToCardId": "skills-sunburst",
+  "offsetX": 0,
+  "offsetY": "1.1ph",
+  "width": 1200,
+  "color": "rgba(74, 144, 226, 0.2)",
+  "sections": [
+    {
+      "type": "sveltecomponent",
+      "componentName": "references"
+    }
+  ]
+}

@@ -1,13 +1,25 @@
 <script lang="ts">
-  import { X, Moon, Sun, FileText } from "@lucide/svelte";
+  import { X, Moon, Sun, FileText, Map } from "@lucide/svelte";
 
   export let isCanvasDarkMode = false;
   export let onToggleWordCount: () => void;
   export let onToggleDarkMode: () => void;
   export let onClose: () => void;
+  export let onViewOverview: () => void;
 </script>
 
 <div class="canvas-top-actions">
+  <button
+    class="canvas-action-button overview"
+    on:click={onViewOverview}
+    type="button"
+    aria-label="View all canvas content"
+    title="View overview"
+  >
+    <Map size={18} />
+    Overview
+  </button>
+
   <button
     class="canvas-action-button word-count"
     on:click={onToggleWordCount}
@@ -79,9 +91,13 @@
     padding: 0.5rem 0.75rem;
   }
 
+  .canvas-action-button.overview {
+    padding: 0.5rem 0.75rem;
+  }
+
   .canvas-top-actions {
     position: absolute;
-    top: 1.25rem;
+    top: calc(44px + 0.5rem);
     right: 1.25rem;
     z-index: 10;
     display: flex;

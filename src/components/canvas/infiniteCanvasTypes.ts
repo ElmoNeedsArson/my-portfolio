@@ -1,6 +1,19 @@
+import type { EAKey } from "../../lib/expertiseAreas";
+
+export type ChipDef = {
+  label: string;
+  color: string;
+};
+
 export type CardSection = {
-  type: "content" | "images";
+  type: "content" | "images" | "sveltecomponent" | "row" | "chips" | "pullquote";
+  chips?: ChipDef[];
+  accent?: string;
   content?: string;
+  columns?: number;
+  figureId?: string;
+  homeEA?: EAKey;
+  eaTags?: EAKey[];
   images?: Array<{
     src: string;
     alt: string;
@@ -8,11 +21,15 @@ export type CardSection = {
     caption?: string;
     imageFit?: "cover" | "contain";
     imageHeight?: number;
+    figureId?: string;
   }>;
   caption?: string;
   cols?: number;
   imageFit?: "cover" | "contain";
   imageHeight?: number;
+  componentName?: string;
+  componentProps?: Record<string, unknown>;
+  sections?: CardSection[];
 };
 
 export type CardDefinition = {
@@ -24,6 +41,8 @@ export type CardDefinition = {
   width: number;
   color: string;
   sections: CardSection[];
+  columns?: number;
+  paddingY?: string;
   hide?: boolean;
   hideHeader?: boolean;
   contentAlign?: "left" | "center";
@@ -33,6 +52,7 @@ export type CardDefinition = {
   initialCenterMode?: "top" | "middle";
   navigationFitToFrame?: boolean;
   navigationMaxZoom?: number;
+  navigationTopFactor?: number;
 };
 
 export type CardDefinitionInput = Omit<CardDefinition, "x" | "y"> & {
@@ -46,9 +66,10 @@ export type CardDefinitionInput = Omit<CardDefinition, "x" | "y"> & {
 export type CardGroupDefinition = {
   id: string;
   title: string;
-  // Explicit card ids this group should wrap.
   cardIds: string[];
   padding?: number;
+  paddingX?: number;
+  paddingY?: number;
   borderColor?: string;
   backgroundColor?: string;
   labelTextColor?: string;
@@ -80,6 +101,7 @@ export type Connection = {
   to: string;
   toSide: "top" | "bottom" | "left" | "right";
   waypoints?: Waypoint[];
+  dashed?: boolean;
 };
 
 export type WordCountStats = {

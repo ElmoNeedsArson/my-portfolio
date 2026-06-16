@@ -6,7 +6,7 @@
   "width": 600,
   "offsetX": 2700,
   "hide": false,
-  "offsetY": "0.5ppph + 0.5ch",
+  "offsetY": "0.5ppph",
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [
     {

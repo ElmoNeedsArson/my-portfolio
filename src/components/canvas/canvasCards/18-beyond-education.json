@@ -1,16 +1,17 @@
 {
   "id": "beyond-education",
   "title": "Beyond Education",
-  "numberOrder": 23,
-  "width": 800,
+  "numberOrder": 29,
+  "width": 1200,
   "navigationFitToFrame": true,
   "relativeToCardId": "professional-identity",
-  "offsetX": 5000,
+  "offsetX": 9000,
   "offsetY": 0,
+  "columns": 2,
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [
     {
       "type": "content",
-      "content": "When I started this master's, I knew reflection would be part of it. My plan was roughly: write it the day before the deadline and move on. That approach did not survive contact with this program. Here, reflection is not a box to tick, you are genuinely forced to sit down and think about what you are doing and why. And at first, this was of course mostly annoying. But over time it became one of the most valuable parts of the degree, because it made me confront questions I would otherwise have postponed indefinitely.\n\nThe biggest realization that came out of it is this: this master's helped me develop a lot personally, but professionally, it is not the direction I like most. Through all the projects, what consistently energized me was the technical core: programming and electronics. Building the systems, debugging them, making hardware and software actually work together. With this degree I could chase that in industry to some extent, but not in the way I really want to. I would always be approaching it from the design side rather than the engineering side.\n\nSo my next step is a master's in Robotics at the University of Twente. It is the degree that matches what I actually want to be doing day to day, and it builds directly on the technical depth I kept gravitating toward here. Looking further ahead, I want to move toward the space sector, ESA or commercial space companies. That is the long-term direction that excites me most: deeply technical work on systems where the engineering genuinely matters.\n\nNone of this makes the past two years a detour. I would not have arrived at this clarity without being forced to reflect on it, which is, in a slightly ironic way, exactly what this master's taught me to do."    }
+      "content": "When I started this master's, my plan for writing reflections was: write it the day before the deadline and move on... That approach did not survive contact with this program. I was forced to sit down and think about what I am doing and why. And at first, this was mostly annoying. But over time it became one of the most valuable parts of the degree (duh), because it made me confront questions I would otherwise have postponed indefinitely.\n\nThe biggest thing that came out of it is: this master's helped me develop personally. Professionally, it showed me that the work I actually want to be doing isn't the design side, it's the technical core underneath it: programming, electronics, making hardware and software genuinely work together. That's the part that pulled me in across every project. I could chase it from a design role, and the human-centered view I've built here is real and worth contributing, but I'd always be reaching at the engineering from the outside.\n\nSo I'm being deliberate about it. My next step is a master's in Robotics at the University of Twente, the degree that matches what I want to be doing day to day, building directly on the technical depth I kept gravitating toward here: software, control, the hardware-and-algorithm layer. Looking further ahead, I want to move toward the space sector, ESA or commercial.\n\nA direction I'd wanted for a long time and wasn't decisive enough to chase until this program forced me to sit with the question. The design vision doesn't disappear, it stays something I can act on from a design role when I choose to. None of this makes the past two years a detour. That clarity is, in a slightly ironic way, exactly what this master's taught me to find."}
   ]
 }

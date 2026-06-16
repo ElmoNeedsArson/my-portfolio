@@ -3,7 +3,6 @@
 :root {
   --primary-text-color: #ffffff;
   --secondary-text-color: #F96743;
-  /* --background-color: #1C1E22; */
   --background-color: #010409;
   --secondary-background-color: #1A1D21;
   --header-color: #23272F;
@@ -21,6 +20,21 @@
 
   --canvas-card-background: rgba(26, 29, 33, 0.92);
   --canvas-card-shadow: rgba(0, 0, 0, 1);
+
+  --ea-b_e-base:   #8A6BA6;
+  --ea-b_e-tint:   rgba(138, 107, 166, 0.35);
+
+  --ea-c_a-base:   #C76B4A;
+  --ea-c_a-tint:   rgba(199, 107,  74, 0.35);
+
+  --ea-m_d_c-base: #C99A3B;
+  --ea-m_d_c-tint: rgba(201, 154,  59, 0.35);
+
+  --ea-t_r-base:   #3E7CA6;
+  --ea-t_r-tint:   rgba( 62, 124, 166, 0.35);
+
+  --ea-u_s-base:   #6E8B5B;
+  --ea-u_s-tint:   rgba(110, 139,  91, 0.35);
 }
 
 [data-theme="light"] {
@@ -44,8 +58,6 @@
 }
 
 body {
-  /* font-family: "Fira Sans", sans-serif; */
-  /* font-family: "Space Grotesk", sans-serif; */
   font-family: "Alexandria";
   margin: 0;
   padding: 0;

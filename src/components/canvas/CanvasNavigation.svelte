@@ -9,29 +9,26 @@
     let viewportWidth = 0;
     
     let isDragging = false;
-    let hasDragged = false; // Track if actual dragging occurred
+    let hasDragged = false;
     let dragStartX = 0;
     let dragStartY = 0;
     let initialClickX = 0;
     let initialClickY = 0;
     let navElement: HTMLElement;
-    let posX: number | null = null; // Position from left (null = use right positioning)
-    let posY: number | null = null; // Position from top (null = use bottom positioning)
+    let posX: number | null = null;
+    let posY: number | null = null;
     let isExpanded = false;
-    
-    // Start in bottom right
+
     let rightOffset = 20;
-    let bottomOffset = 20;
+    $: defaultTopOffset = isFullscreen ? 64 : 20;
 
     $: isCompactViewport = viewportWidth <= MOBILE_BREAKPOINT;
-    
-    const DRAG_THRESHOLD = 5; // Minimum pixels to move before considered a drag
-    
-    // Reset position when fullscreen mode changes
+
+    const DRAG_THRESHOLD = 5;
+
     $: isFullscreen, resetPosition();
 
     $: if (isCompactViewport) {
-        // Keep compact mode anchored and predictable after rotation/resizing.
         posX = null;
         posY = null;
     }
@@ -42,16 +39,14 @@
     }
     
     function handleMouseDown(event: MouseEvent) {
-        // Stop event from reaching canvas (prevent canvas pan)
         event.stopPropagation();
 
-        // On compact/mobile, prioritize tap-to-open over dragging the widget.
         if (isCompactViewport) {
             return;
         }
-        
+
         if ((event.target as HTMLElement).closest('.nav-item')) {
-            return; // Don't drag when clicking nav items
+            return;
         }
         
         isDragging = true;
@@ -65,7 +60,6 @@
         const parent = navElement.parentElement?.getBoundingClientRect();
         if (!parent) return;
         
-        // Convert to left/top positioning for dragging
         posX = rect.left - parent.left;
         posY = rect.top - parent.top;
         
@@ -76,14 +70,12 @@
     
     function handleMouseMove(event: MouseEvent) {
         if (!isDragging) return;
-        
-        // Check if moved beyond threshold
+
         const deltaX = Math.abs(event.clientX - initialClickX);
         const deltaY = Math.abs(event.clientY - initialClickY);
-        
+
         if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
             if (!hasDragged) {
-                // First time exceeding threshold - collapse menu
                 isExpanded = false;
                 hasDragged = true;
             }
@@ -100,7 +92,6 @@
     }
     
     function handleHeaderClick() {
-        // Only toggle if we didn't drag
         if (!hasDragged) {
             isExpanded = !isExpanded;
         }
@@ -116,21 +107,18 @@
     }
     
     function handleWheel(event: WheelEvent) {
-        // Stop wheel events from reaching the canvas (prevent zoom)
         event.stopPropagation();
     }
 
     function handleTouchStart(event: TouchEvent) {
-        // Stop event from reaching canvas (prevent canvas pan)
         event.stopPropagation();
 
-        // On compact/mobile, prioritize tap-to-open over dragging the widget.
         if (isCompactViewport) {
             return;
         }
-        
+
         if ((event.target as HTMLElement).closest('.nav-item')) {
-            return; // Don't drag when touching nav items
+            return;
         }
         
         const touch = event.touches[0];
@@ -145,7 +133,6 @@
         const parent = navElement.parentElement?.getBoundingClientRect();
         if (!parent) return;
         
-        // Convert to left/top positioning for dragging
         posX = rect.left - parent.left;
         posY = rect.top - parent.top;
         
@@ -157,16 +144,14 @@
         if (!isDragging || event.touches.length === 0) return;
         
         const touch = event.touches[0];
-        
-        // Check if moved beyond threshold
+
         const deltaX = Math.abs(touch.clientX - initialClickX);
         const deltaY = Math.abs(touch.clientY - initialClickY);
-        
+
         if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
-            event.preventDefault(); // Prevent scrolling
-            
+            event.preventDefault();
+
             if (!hasDragged) {
-                // First time exceeding threshold - collapse menu
                 isExpanded = false;
                 hasDragged = true;
             }
@@ -219,11 +204,12 @@
     bind:this={navElement}
     class="canvas-navigation"
     class:compact={isCompactViewport}
+    class:fullscreen={isFullscreen}
     class:dragging={isDragging}
     class:expanded={isExpanded}
     style="{isCompactViewport
         ? ''
-        : `${posX !== null ? `left: ${posX}px;` : `left: ${rightOffset}px;`} ${posY !== null ? `top: ${posY}px;` : `top: ${bottomOffset}px;`}` }"
+        : `${posX !== null ? `left: ${posX}px;` : `left: ${rightOffset}px;`} ${posY !== null ? `top: ${posY}px;` : `top: ${defaultTopOffset}px;`}` }"
     on:mousedown={handleMouseDown}
     on:wheel={handleWheel}
     on:touchstart={handleTouchStart}
@@ -259,6 +245,7 @@
 {#if isCompactViewport && isExpanded}
     <div
         class="compact-nav-panel"
+        class:fullscreen={isFullscreen}
         on:wheel|stopPropagation
         on:touchstart|stopPropagation
         on:touchmove|stopPropagation
@@ -400,6 +387,10 @@
         border-radius: 999px;
     }
 
+    .canvas-navigation.compact.fullscreen {
+        top: calc(44px + 0.75rem);
+    }
+
     .canvas-navigation.compact .nav-header {
         cursor: pointer;
         border-bottom: none;
@@ -435,6 +426,10 @@
         overflow-y: auto;
         overflow-x: hidden;
         scrollbar-gutter: stable;
+    }
+
+    .compact-nav-panel.fullscreen {
+        top: calc(44px + 0.75rem + 3.35rem);
     }
 
     .compact-nav-panel::-webkit-scrollbar {

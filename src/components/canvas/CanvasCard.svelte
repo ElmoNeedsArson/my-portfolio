@@ -1,9 +1,25 @@
 <script lang="ts">
     import { push } from "svelte-spa-router";
     import { createEventDispatcher } from "svelte";
+    import type { Component } from "svelte";
+    import SunburstChart from "../visualizations/SunburstChart.svelte";
+    import ReferencesCard from "../visualizations/ReferencesCard.svelte";
+    import { citationNumberMap } from "../../lib/citationStore";
+    import { figureNumberMap, figureCardMap } from "../../lib/figureStore";
+    import { EA_AREAS } from "../../lib/expertiseAreas";
+
+    const EA_SHORT: Record<string, string> = {
+        b_e: 'B&E', c_a: 'C&A', m_d_c: 'M,D&C', t_r: 'T&R', u_s: 'U&S',
+    };
+
+    const componentRegistry: Record<string, Component> = {
+        sunburst: SunburstChart,
+        references: ReferencesCard,
+    };
 
     const dispatch = createEventDispatcher<{
         openLightbox: { src: string; alt: string; caption?: string };
+        navigateTo: { cardId: string; sourceCardId: string };
     }>();
 
     const projectBackUrlStorageKey = "project-page-back-url-v1";
@@ -27,6 +43,9 @@
     export let introTitle: string | undefined = undefined;
     export let introSubtitle: string | undefined = undefined;
     export let introLarge: boolean = false;
+    export let columns: number | undefined = undefined;
+    export let imagesVisible: boolean = true;
+    export let paddingY: string | undefined = undefined;
     type SectionImage = {
         src: string;
         alt: string;
@@ -35,31 +54,38 @@
         imageFit?: "cover" | "contain";
         imageHeight?: number;
         colSpan?: number;
+        figureId?: string;
     };
 
+    type ChipDef = { label: string; color: string };
+
     type CanvasSection = {
-        type: "content" | "images" | "row";
-        // content
+        type: "content" | "images" | "row" | "sveltecomponent" | "chips" | "pullquote";
+        chips?: ChipDef[];
+        accent?: string;
         content?: string;
-        // images
+        columns?: number;
         title?: string;
         images?: SectionImage[];
         caption?: string;
         cols?: number;
         imageFit?: "cover" | "contain";
         imageHeight?: number;
-        // row
+        homeEA?: string;
+        eaTags?: string[];
         sections?: CanvasSection[];
         gap?: string;
-        // layout
         flex?: number;
         width?: string;
         imageFrame?: "browser" | "none";
+        figureId?: string;
+        componentName?: string;
+        component?: Component;
+        componentProps?: Record<string, unknown>;
     };
 
     export let sections: CanvasSection[] = [];
 
-    // Helper function to detect if content has multiple goals (for grid layout)
     function hasGoalsGrid(content: string): boolean {
         const goalHeaderMatches =
             content.match(/<(?:b|strong)>\s*[^<]+:\s*<\/(?:b|strong)>/gi) ||
@@ -68,7 +94,6 @@
         return goalHeaderMatches.length >= 4;
     }
 
-    // Parse goals into grid items if detected
     function parseGoals(content: string) {
         return content
             .split("\n\n")
@@ -88,7 +113,6 @@
             .filter((g) => g !== null);
     }
 
-    // Split content by double newlines and detect quotes
     function parseParagraphs(content: string) {
         return content
             .split("\n\n")
@@ -101,10 +125,68 @@
     }
 
     function renderTextWithLinks(text: string): string {
-        return text.replace(
+        const withCitations = text.replace(/\\cite\{([^}]+)\}/g, (_, id) => {
+            const num = $citationNumberMap[id];
+            const label = num !== undefined ? `[${num}]` : `[?]`;
+            const unknownClass = num !== undefined ? "" : " citation-unknown";
+            return `<button type="button" class="citation-ref${unknownClass}" data-cite-card="references" tabindex="0">${label}</button>`;
+        });
+        const withFigureRefs = withCitations.replace(/\\ref\{([^}]+)\}/g, (_, id) => {
+            const num = $figureNumberMap[id];
+            const targetCardId = $figureCardMap[id];
+            const label = num !== undefined ? `Figure ${num}` : `Figure ?`;
+            if (targetCardId) {
+                return `<button type="button" class="figure-ref" data-figure-card="${targetCardId}" tabindex="0">${label}</button>`;
+            }
+            return label;
+        });
+        const withLinks = withFigureRefs.replace(
             /\[([^\]]+)\]\((\/[^)\s]+)\)/g,
             '<button type="button" class="inline-link" data-slug="$2" tabindex="0" aria-label="Navigate to $1">$1</button>',
         );
+        const withExternalLinks = withLinks.replace(
+            /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+            '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>',
+        );
+        return withExternalLinks.replace(
+            /\[hl:([a-z_,]+)\]([\s\S]*?)\[\/hl\]/g,
+            (_, eaKeys, innerText) => {
+                const keys: string[] = eaKeys.split(',');
+                const firstEa = EA_AREAS[keys[0] as keyof typeof EA_AREAS];
+                if (!firstEa) return innerText;
+                let bg: string;
+                if (keys.length === 1) {
+                    bg = firstEa.tint.replace(/[\d.]+\)$/, '0.15)');
+                } else {
+                    const stops = keys.flatMap((key, i) => {
+                        const ea = EA_AREAS[key as keyof typeof EA_AREAS];
+                        const c = ea ? ea.tint.replace(/[\d.]+\)$/, '0.22)') : 'transparent';
+                        const pct = Math.round((i / keys.length) * 100);
+                        const pctEnd = Math.round(((i + 1) / keys.length) * 100);
+                        return [`${c} ${pct}%`, `${c} ${pctEnd}%`];
+                    });
+                    bg = `linear-gradient(178deg, ${stops.join(', ')})`;
+                }
+                const chips = keys.map((key) => {
+                    const ea = EA_AREAS[key as keyof typeof EA_AREAS];
+                    if (!ea) return '';
+                    const short = EA_SHORT[key] ?? key;
+                    const chipStyle = `background:${ea.base}30;border:1px solid ${ea.base};color:${ea.base};`;
+                    return `<span class="ea-hl-chip" aria-hidden="true" style="${chipStyle}">${short}</span>`;
+                }).join('');
+                return `<span class="ea-hl" data-ea="${eaKeys}" style="background:${bg};border-radius:3px;">${chips}${innerText}</span>`;
+            }
+        );
+    }
+
+    function hasHighlights(content: string): boolean {
+        return content.includes('[hl:');
+    }
+
+    function figureLabel(figureId: string | undefined): string {
+        if (!figureId) return "";
+        const num = $figureNumberMap[figureId];
+        return num !== undefined ? `Figure ${num}: ` : "";
     }
 
     function handleImageClick(image: SectionImage) {
@@ -130,6 +212,31 @@
     function canvasContentLinkHandler(node: HTMLElement) {
         function handleClick(event: MouseEvent) {
             const target = event.target as HTMLElement;
+
+            const citationButton = target.closest(
+                "button.citation-ref[data-cite-card]",
+            ) as HTMLButtonElement | null;
+
+            if (citationButton && node.contains(citationButton)) {
+                event.preventDefault();
+                event.stopPropagation();
+                const targetCardId = citationButton.getAttribute("data-cite-card");
+                if (targetCardId) dispatch("navigateTo", { cardId: targetCardId, sourceCardId: cardId });
+                return;
+            }
+
+            const figureButton = target.closest(
+                "button.figure-ref[data-figure-card]",
+            ) as HTMLButtonElement | null;
+
+            if (figureButton && node.contains(figureButton)) {
+                event.preventDefault();
+                event.stopPropagation();
+                const targetCardId = figureButton.getAttribute("data-figure-card");
+                if (targetCardId) dispatch("navigateTo", { cardId: targetCardId, sourceCardId: cardId });
+                return;
+            }
+
             const button = target.closest(
                 "button.inline-link[data-slug]",
             ) as HTMLButtonElement | null;
@@ -198,8 +305,121 @@
         class:centered-content={contentAlign === "center"}
         class:intro-layout={!!introTitle}
         class:intro-large={introLarge}
+        style={paddingY !== undefined ? `padding-top: ${paddingY}; padding-bottom: ${paddingY};` : undefined}
         use:canvasContentLinkHandler
     >
+        {#snippet contentBlock(s: CanvasSection)}
+            {@const isGoalsGrid = hasGoalsGrid(s.content ?? "")}
+            {#if isGoalsGrid}
+                {@const goals = parseGoals(s.content ?? "")}
+                <div class="goals-grid">
+                    {#each goals as goal}
+                        <div class="goal-item">
+                            <h4 class="goal-title">{goal.title}</h4>
+                            <p class="goal-description">
+                                {@html goal.description}
+                            </p>
+                        </div>
+                    {/each}
+                </div>
+            {:else}
+                {@const paragraphs = parseParagraphs(s.content ?? "")}
+                {@const effectiveCols = s.columns}
+                <div
+                    class:multi-col-content={!!effectiveCols}
+                    class:has-highlights={hasHighlights(s.content ?? "")}
+                    style={effectiveCols ? `column-count: ${effectiveCols}` : undefined}
+                >
+                    {#each paragraphs as paragraph}
+                        {#if paragraph.isQuote}
+                            <div class="quote">
+                                <p>{@html paragraph.text}</p>
+                            </div>
+                        {:else}
+                            <p>{@html paragraph.text}</p>
+                        {/if}
+                    {/each}
+                </div>
+            {/if}
+        {/snippet}
+
+        {#snippet imagesBlock(s: CanvasSection)}
+            <div class="images-section-block">
+                <div class="images-section-top">
+                    {#if s.title}
+                        <p class="image-section-title"><strong>{@html renderTextWithLinks(s.title)}</strong></p>
+                    {/if}
+                    <div
+                        class="image-gallery"
+                        class:single-image-gallery={(s.cols || 3) === 1 &&
+                            (s.images?.length ?? 0) === 1}
+                        style="grid-template-columns: repeat({s.cols || 3}, 1fr);"
+                    >
+                        {#each s.images ?? [] as image}
+                            {@const resolvedFit = image.imageFit || s.imageFit || "cover"}
+                            {@const resolvedHeight = image.imageHeight || s.imageHeight || 250}
+                            <div class="gallery-entry" class:has-browser-frame={s.imageFrame === "browser"} style={image.colSpan ? `grid-column: span ${image.colSpan}` : ""}>
+                                {#if s.imageFrame === "browser"}
+                                    <div class="browser-chrome">
+                                        <span class="chrome-dot chrome-dot-red"></span>
+                                        <span class="chrome-dot chrome-dot-yellow"></span>
+                                        <span class="chrome-dot chrome-dot-green"></span>
+                                    </div>
+                                {/if}
+                                {#if image.title}
+                                    <p class="image-source-title">
+                                        <strong>{@html renderTextWithLinks(image.title)}</strong>
+                                    </p>
+                                {/if}
+                                <div
+                                    class="gallery-item"
+                                    class:image-fit-contain={resolvedFit === "contain"}
+                                    style="--gallery-image-height: {resolvedHeight}px;"
+                                    role="button"
+                                    tabindex="0"
+                                    aria-label="View image: {image.alt}"
+                                    on:click={() => handleImageClick(image)}
+                                    on:keydown={(e) => e.key === "Enter" && handleImageClick(image)}
+                                >
+                                    <img
+                                        src={image.src}
+                                        alt={image.alt}
+                                        draggable="false"
+                                        decoding="async"
+                                        style={imagesVisible ? undefined : "display:none"}
+                                    />
+                                </div>
+                                {#if image.caption}
+                                    <p class="image-source-caption">
+                                        <i>{@html renderTextWithLinks(figureLabel(image.figureId) + image.caption)}</i>
+                                    </p>
+                                {/if}
+                            </div>
+                        {/each}
+                    </div>
+                </div>
+                {#if s.caption}
+                    <p class="image-caption">
+                        <i>{@html renderTextWithLinks(figureLabel(s.figureId) + s.caption)}</i>
+                    </p>
+                {/if}
+                {#if s.homeEA || (s.eaTags && s.eaTags.length)}
+                    <div class="project-ea-chips">
+                        {#if s.homeEA && EA_AREAS[s.homeEA as keyof typeof EA_AREAS]}
+                            {@const ea = EA_AREAS[s.homeEA as keyof typeof EA_AREAS]}
+                            <span class="project-ea-chip chip-home" style="background:{ea.base}30;border:1px solid {ea.base};color:{ea.base};">{EA_SHORT[s.homeEA] ?? s.homeEA}</span>
+                        {/if}
+                        {#each (s.eaTags ?? []) as key}
+                            {#if EA_AREAS[key as keyof typeof EA_AREAS]}
+                                {@const ea = EA_AREAS[key as keyof typeof EA_AREAS]}
+                                <span class="project-ea-chip chip-cross" style="border:1px dashed {ea.base}88;color:{ea.base}CC;">{EA_SHORT[key] ?? key}</span>
+                            {/if}
+                        {/each}
+                    </div>
+                {/if}
+            </div>
+        {/snippet}
+
         {#if introTitle}
             <div class="intro-content-block">
                 <h2 class="intro-title">{introTitle}</h2>
@@ -208,91 +428,35 @@
                 {/if}
             </div>
         {:else}
+            <div class:multi-col-content={!!columns} style={columns ? `column-count: ${columns}` : undefined}>
             {#each sections as section}
                 {#if section.type === "content" && section.content}
-                    {@const isGoalsGrid = hasGoalsGrid(section.content)}
-                    {#if isGoalsGrid}
-                        {@const goals = parseGoals(section.content)}
-                        <div class="goals-grid">
-                            {#each goals as goal}
-                                <div class="goal-item">
-                                    <h4 class="goal-title">{goal.title}</h4>
-                                    <p class="goal-description">
-                                        {@html goal.description}
-                                    </p>
-                                </div>
-                            {/each}
-                        </div>
-                    {:else}
-                        {@const paragraphs = parseParagraphs(section.content)}
-                        {#each paragraphs as paragraph}
-                            {#if paragraph.isQuote}
-                                <div class="quote">
-                                    <p>{@html paragraph.text}</p>
-                                </div>
-                            {:else}
-                                <p>{@html paragraph.text}</p>
-                            {/if}
-                        {/each}
-                    {/if}
+                    {@render contentBlock(section)}
                 {:else if section.type === "images" && section.images}
-                    <div class="images-section-block">
-                        <div class="images-section-top">
-                            {#if section.title}
-                                <p class="image-section-title"><strong>{@html renderTextWithLinks(section.title)}</strong></p>
-                            {/if}
-                            <div
-                                class="image-gallery"
-                                class:single-image-gallery={(section.cols || 3) === 1 &&
-                                    section.images.length === 1}
-                                style="grid-template-columns: repeat({section.cols || 3}, 1fr);"
-                            >
-                                {#each section.images as image}
-                                    {@const resolvedFit = image.imageFit || section.imageFit || "cover"}
-                                    {@const resolvedHeight = image.imageHeight || section.imageHeight || 250}
-                                    <div class="gallery-entry" class:has-browser-frame={section.imageFrame === "browser"} style={image.colSpan ? `grid-column: span ${image.colSpan}` : ""}>
-                                        {#if section.imageFrame === "browser"}
-                                            <div class="browser-chrome">
-                                                <span class="chrome-dot chrome-dot-red"></span>
-                                                <span class="chrome-dot chrome-dot-yellow"></span>
-                                                <span class="chrome-dot chrome-dot-green"></span>
-                                            </div>
-                                        {/if}
-                                        {#if image.title}
-                                            <p class="image-source-title">
-                                                <strong>{@html renderTextWithLinks(image.title)}</strong>
-                                            </p>
-                                        {/if}
-                                        <div
-                                            class="gallery-item"
-                                            class:image-fit-contain={resolvedFit === "contain"}
-                                            style="--gallery-image-height: {resolvedHeight}px;"
-                                            role="button"
-                                            tabindex="0"
-                                            aria-label="View image: {image.alt}"
-                                            on:click={() => handleImageClick(image)}
-                                            on:keydown={(e) => e.key === "Enter" && handleImageClick(image)}
-                                        >
-                                            <img
-                                                src={image.src}
-                                                alt={image.alt}
-                                                draggable="false"
-                                            />
-                                        </div>
-                                        {#if image.caption}
-                                            <p class="image-source-caption">
-                                                <i>{@html renderTextWithLinks(image.caption)}</i>
-                                            </p>
-                                        {/if}
-                                    </div>
-                                {/each}
-                            </div>
-                        </div>
-                        {#if section.caption}
-                            <p class="image-caption">
-                                <i>{@html renderTextWithLinks(section.caption)}</i>
-                            </p>
-                        {/if}
+                    {@render imagesBlock(section)}
+                {:else if section.type === "sveltecomponent"}
+                    {@const resolvedComponent = section.component ?? (section.componentName ? componentRegistry[section.componentName] : undefined)}
+                    {#if resolvedComponent}
+                        <svelte:component this={resolvedComponent} {...(section.componentProps ?? {})} />
+                    {/if}
+                {:else if section.type === "chips" && section.chips}
+                    <div class="chip-list">
+                        {#each section.chips as chip}
+                            <span
+                                class="ea-chip"
+                                style="background:{chip.color}22;border:1px solid {chip.color}88;color:{chip.color};"
+                            >{chip.label}</span>
+                        {/each}
+                    </div>
+                {:else if section.type === "pullquote" && section.content}
+                    {@const pqParagraphs = parseParagraphs(section.content)}
+                    <div
+                        class="pullquote"
+                        style={section.accent ? `border-left-color:${section.accent}` : undefined}
+                    >
+                        {#each pqParagraphs as paragraph}
+                            <p>{@html paragraph.text}</p>
+                        {/each}
                     </div>
                 {:else if section.type === "row" && section.sections}
                     {@const _gap = section.gap || "1.5rem"}
@@ -309,91 +473,16 @@
                         {#each section.sections as child}
                             <div class="section-row-item">
                                 {#if child.type === "content" && child.content}
-                                    {@const isGoalsGrid = hasGoalsGrid(child.content)}
-                                    {#if isGoalsGrid}
-                                        {@const goals = parseGoals(child.content)}
-                                        <div class="goals-grid">
-                                            {#each goals as goal}
-                                                <div class="goal-item">
-                                                    <h4 class="goal-title">{goal.title}</h4>
-                                                    <p class="goal-description">
-                                                        {@html goal.description}
-                                                    </p>
-                                                </div>
-                                            {/each}
-                                        </div>
-                                    {:else}
-                                        {@const paragraphs = parseParagraphs(child.content)}
-                                        {#each paragraphs as paragraph}
-                                            {#if paragraph.isQuote}
-                                                <div class="quote">
-                                                    <p>{@html paragraph.text}</p>
-                                                </div>
-                                            {:else}
-                                                <p>{@html paragraph.text}</p>
-                                            {/if}
-                                        {/each}
-                                    {/if}
+                                    {@render contentBlock(child)}
                                 {:else if child.type === "images" && child.images}
-                                    <div class="images-section-block">
-                                        <div class="images-section-top">
-                                            {#if child.title}
-                                                <p class="image-section-title"><strong>{@html renderTextWithLinks(child.title)}</strong></p>
-                                            {/if}
-                                            <div
-                                                class="image-gallery"
-                                                class:single-image-gallery={(child.cols || 3) === 1 && child.images.length === 1}
-                                                style="grid-template-columns: repeat({child.cols || 3}, 1fr);"
-                                            >
-                                                {#each child.images as image}
-                                                    {@const resolvedFit = image.imageFit || child.imageFit || "cover"}
-                                                    {@const resolvedHeight = image.imageHeight || child.imageHeight || 250}
-                                                    <div class="gallery-entry" class:has-browser-frame={child.imageFrame === "browser"} style={image.colSpan ? `grid-column: span ${image.colSpan}` : ""}>
-                                                        {#if child.imageFrame === "browser"}
-                                                            <div class="browser-chrome">
-                                                                <span class="chrome-dot chrome-dot-red"></span>
-                                                                <span class="chrome-dot chrome-dot-yellow"></span>
-                                                                <span class="chrome-dot chrome-dot-green"></span>
-                                                            </div>
-                                                        {/if}
-                                                        {#if image.title}
-                                                            <p class="image-source-title">
-                                                                <strong>{@html renderTextWithLinks(image.title)}</strong>
-                                                            </p>
-                                                        {/if}
-                                                        <div
-                                                            class="gallery-item"
-                                                            class:image-fit-contain={resolvedFit === "contain"}
-                                                            style="--gallery-image-height: {resolvedHeight}px;"
-                                                            role="button"
-                                                            tabindex="0"
-                                                            aria-label="View image: {image.alt}"
-                                                            on:click={() => handleImageClick(image)}
-                                                            on:keydown={(e) => e.key === "Enter" && handleImageClick(image)}
-                                                        >
-                                                            <img src={image.src} alt={image.alt} draggable="false" />
-                                                        </div>
-                                                        {#if image.caption}
-                                                            <p class="image-source-caption">
-                                                                <i>{@html renderTextWithLinks(image.caption)}</i>
-                                                            </p>
-                                                        {/if}
-                                                    </div>
-                                                {/each}
-                                            </div>
-                                        </div>
-                                        {#if child.caption}
-                                            <p class="image-caption">
-                                                <i>{@html renderTextWithLinks(child.caption)}</i>
-                                            </p>
-                                        {/if}
-                                    </div>
+                                    {@render imagesBlock(child)}
                                 {/if}
                             </div>
                         {/each}
                     </div>
                 {/if}
             {/each}
+            </div>
         {/if}
     </div>
 </div>
@@ -529,9 +618,10 @@
         margin: 0;
         background: transparent;
         font: inherit;
-        color: var(--primary-text-color);
+        color: var(--secondary-text-color);
         text-decoration: underline;
         text-underline-offset: 2px;
+        border-radius: 9px;
         cursor: pointer;
     }
 
@@ -539,8 +629,120 @@
         opacity: 0.85;
     }
 
+    .card-content :global(.citation-ref) {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        font: inherit;
+        font-size: inherit;
+        font-weight: 600;
+        color: var(--secondary-text-color);
+        cursor: pointer;
+        text-decoration: none;
+        vertical-align: baseline;
+    }
+
+    .card-content :global(.citation-ref:hover) {
+        opacity: 0.7;
+    }
+
+    .card-content :global(.citation-unknown) {
+        color: var(--muted-color);
+    }
+
+    .card-content :global(.figure-ref) {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        font: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        color: inherit;
+        cursor: pointer;
+        text-decoration: underline;
+        text-decoration-style: solid;
+        text-underline-offset: 2px;
+        text-decoration-color: var(--secondary-text-color);
+        vertical-align: baseline;
+        opacity: 0.85;
+    }
+
+    .card-content :global(.figure-ref:hover) {
+        opacity: 1;
+    }
+
     .card-content :global(strong) {
         font-weight: 700;
+    }
+
+    .chip-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .ea-chip {
+        display: inline-block;
+        padding: 0.28rem 0.85rem;
+        border-radius: 2rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+    }
+
+    .project-ea-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        padding: 0.5rem 1rem 0.2rem;
+    }
+
+    .project-ea-chip {
+        display: inline-block;
+        padding: 0.22rem 0.72rem;
+        border-radius: 2rem;
+        font-size: 0.86rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+    }
+
+    .chip-cross {
+        background: transparent;
+    }
+
+    .pullquote {
+        border-left: 3px solid rgba(255, 255, 255, 0.32);
+        padding: 0.6rem 0 0.6rem 1.25rem;
+        margin: 0.25rem 0 1.25rem 0;
+    }
+
+    .pullquote p {
+        font-size: 1.05rem;
+        line-height: 1.65;
+        font-style: italic;
+        color: rgba(255, 255, 255, 0.85);
+        margin: 0;
+        padding-bottom: 0.5rem;
+    }
+
+    .pullquote p:last-child {
+        padding-bottom: 0;
+    }
+
+    .multi-col-content {
+        column-gap: 1.5rem;
+    }
+
+    .multi-col-content .quote {
+        break-inside: avoid;
+    }
+
+    .multi-col-content p {
+        padding-bottom: 1rem;
+        margin-bottom: 0;
     }
 
     .goals-grid {
@@ -622,7 +824,6 @@
         gap: 0.4rem;
     }
 
-    /* Browser frame wrapper */
     .has-browser-frame {
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 10px;
@@ -755,5 +956,29 @@
             -webkit-backdrop-filter: none !important;
             backdrop-filter: none !important;
         }
+    }
+
+    .has-highlights {
+        padding-right: 80px;
+    }
+
+    .card-content :global(.ea-hl) {
+        border-radius: 3px;
+    }
+
+    .card-content :global(.ea-hl-chip) {
+        float: right;
+        clear: right;
+        margin-right: -76px;
+        display: inline-block;
+        padding: 0.18rem 0.6rem;
+        border-radius: 2rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        line-height: 1.6;
+        position: relative;
+        z-index: 1;
+        white-space: nowrap;
     }
 </style>

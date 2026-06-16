@@ -17,7 +17,6 @@
   let project: Project | undefined;
   $: project = findProjectBySlug(slug);
 
-  // Active content provided by ProjectTabs component
   let activeContent: ContentBlock | undefined;
   const projectBackUrlStorageKey = "project-page-back-url-v1";
   const canvasFullscreenRestoreKey = "canvas-fullscreen-restore-v1";
@@ -27,10 +26,8 @@
     fullscreen: boolean;
   };
 
-  // Get the back URL based on the last visited tab
   $: backUrl = getTabPathById($lastVisitedTab);
 
-  // Handle back button functionality
   function handleBackClick(event: MouseEvent) {
     event.preventDefault();
 
@@ -81,7 +78,6 @@
 
 <main>
   {#if project}
-    <!-- Floating Components: Project outline/overview widget + radar chart -->
     <ProjectOutline {project} contentOverride={activeContent} />
     {#if project.expertise && project.expertise.length > 0}
       <ExpertiseRadarChart {project} />
@@ -92,23 +88,22 @@
       <h1>{project.title}</h1>
       <p class="date">{project.date}</p>
 
-      <!-- Project hero image -->
       <ProjectHero
         thumbnail={project.projectPageThumbnail}
         title={project.title}
         thumbnailHeight={project.projectPageThumbnailHeight}
       />
 
-      <!-- Tag list, languages, tools, and optionally tabs -->
       <ProjectTagList tags={project.tags} />
       <ProjectLanguagesTools languages={project.languages} tools={project.tools}/>
       <ProjectTabs {project} onContentChange={(c) => (activeContent = c)}/>
 
-      <!-- Actual content -->
-      <ContentRenderer content={activeContent} />
+      <ContentRenderer
+        content={activeContent}
+        statsProject={project.slug === "obsidian-plugin" || project.slug === "portfolio-website-svelte" ? project : undefined}
+      />
     </article>
   {:else}
-    <!-- Shown when no project matches the current url slug -->
     <p>Project not found.</p>
   {/if}
 </main>

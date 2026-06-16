@@ -1,0 +1,16 @@
+{
+  "id": "beyond-education",
+  "title": "Beyond Education",
+  "numberOrder": 29,
+  "width": 800,
+  "navigationFitToFrame": true,
+  "relativeToCardId": "professional-identity",
+  "offsetX": 7500,
+  "offsetY": 0,
+  "color": "rgba(249, 103, 67, 0.3)",
+  "sections": [
+    {
+      "type": "content",
+      "content": "When I started this master's, I knew reflection would be part of it. My plan was roughly: write it the day before the deadline and move on. That approach did not survive contact with this program. Here, reflection is not a box to tick, you are genuinely forced to sit down and think about what you are doing and why. And at first, this was of course mostly annoying. But over time it became one of the most valuable parts of the degree, because it made me confront questions I would otherwise have postponed indefinitely.\n\nThe biggest realization that came out of it is this: this master's helped me develop a lot personally, but professionally, it is not the direction I like most. Through all the projects, what consistently energized me was the technical core: programming and electronics. Building the systems, debugging them, making hardware and software actually work together. With this degree I could chase that in industry to some extent, but not in the way I really want to. I would always be approaching it from the design side rather than the engineering side.\n\nSo my next step is a master's in Robotics at the University of Twente. It is the degree that matches what I actually want to be doing day to day, and it builds directly on the technical depth I kept gravitating toward here. Looking further ahead, I want to move toward the space sector, ESA or commercial space companies. That is the long-term direction that excites me most: deeply technical work on systems where the engineering genuinely matters.\n\nNone of this makes the past two years a detour. I would not have arrived at this clarity without being forced to reflect on it, which is, in a slightly ironic way, exactly what this master's taught me to do."    }
+  ]
+}

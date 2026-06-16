@@ -6,15 +6,18 @@
   "offsetX": "1.1pw",
   "offsetY": 0,
   "hideHeader": true,
-  "color": "rgba(74, 144, 226, 0.35)",
+  "color": "rgba(62, 124, 166, 0.35)",
   "sections": [
     {
       "type": "row",
       "sections": [
         {
           "type": "images",
+          "figureId": "obsidian-plugin",
+          "homeEA": "t_r",
+          "eaTags": ["m_d_c"],
           "title": "Obsidian 3D Embed Plugin  ·  Extracurricular, 2024",
-          "caption": "TypeScript plugin rendering interactive 3D models directly inside Obsidian markdown notes via Three.js — over 2400 installations as of writing. [Project Page](/obsidian-plugin)",
+          "caption": "TypeScript plugin rendering 3D models inside Obsidian notes via Three.js, over 3700 installations. [Projectpage](/obsidian-plugin)",
           "cols": 1,
           "width": "33%",
           "imageHeight": 350,
@@ -32,8 +35,11 @@
         },
         {
           "type": "images",
+          "figureId": "tactone-tr",
+          "homeEA": "t_r",
+          "eaTags": ["c_a", "u_s"],
           "title": "Tactone  ·  TU/e Master, 2025",
-          "caption": "Modular soft robotics perception tool — pneumatic silicone pads with LDR sensors and real-time audio modulation for exploring the aesthetics of soft robots. [Project Page](/tactone)",
+          "caption": "Pneumatic silicone pads with LDR sensors and real-time audio modulation for exploring soft robot aesthetics. [Projectpage](/tactone)",
           "width": "67%",
           "cols": 2,
           "imageHeight": 350,

@@ -6,15 +6,18 @@
   "offsetX": "1.1pw",
   "offsetY": 0,
   "hideHeader": true,
-  "color": "rgba(74, 144, 226, 0.35)",
+  "color": "rgba(201, 154, 59, 0.35)",
   "sections": [
     {
       "type": "row",
       "sections": [
         {
           "type": "images",
+          "figureId": "data-physicalization-museum",
+          "homeEA": "m_d_c",
+          "eaTags": ["t_r", "c_a"],
           "title": "Data Physicalization  ·  University of Twente, 2022",
-          "caption": "Museum installation visualizing astronaut data through physical 3D-printed models, actuators, and a blow dryer outputting hot or cold air based on planetary surface temperatures. [Project Page](/physical-data)",
+          "caption": "Museum installation translating planetary datasets into 3D-printed models, actuators, and temperature output. [Projectpage](/physical-data)",
           "cols": 1,
           "width": "33%",
           "imageHeight": 350,
@@ -36,8 +39,11 @@
         },
         {
           "type": "images",
+          "figureId": "m12",
+          "homeEA": "m_d_c",
+          "eaTags": ["u_s"],
           "title": "M12 Digital Twins in Education  ·  TU/e Master, 2025",
-          "caption": "Browser-based Arduino learning environment testing four AI feedback roles across N=41 novice programmers — measuring self-efficacy and perceived difficulty. [Project Page](/digital-twin-in-education)",
+          "caption": "Arduino learning environment testing four digital-twin roles, N=41 novice programmers. [Projectpage](/digital-twin-in-education)",
           "cols": 1,
           "width": "33%",
           "imageHeight": 350,
@@ -59,8 +65,11 @@
         },
         {
           "type": "images",
+          "figureId": "portfolio-websites",
+          "homeEA": "m_d_c",
+          "eaTags": ["t_r"],
           "title": "Portfolio Websites  ·  2020-2025",
-          "caption": "An iterative portfolio spanning three technology stacks — from hand-coded HTML/CSS in 2020, through WordPress in 2022, to the current data-driven Svelte application. [Iterative Page](/portfolio-websites) & [Svelte Page](/portfolio-website-svelte)",
+          "caption": "Three iterations: hand-coded HTML/CSS, WordPress, and the current data-driven Svelte application. [Old](/portfolio-websites) & [Current](/portfolio-website-svelte)",
           "cols": 1,
           "width": "34%",
           "imageHeight": 350,

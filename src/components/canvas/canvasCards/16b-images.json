@@ -6,16 +6,19 @@
   "offsetX": "1.1pw",
   "offsetY": 0,
   "hideHeader": true,
-  "color": "rgba(74, 144, 226, 0.35)",
+  "color": "rgba(110, 139, 91, 0.35)",
   "sections": [
     {
       "type": "row",
       "sections": [
-                {
+        {
           "type": "images",
+          "figureId": "wordbond-us",
+          "homeEA": "u_s",
+          "eaTags": ["t_r", "m_d_c"],
           "width": "33%",
           "title": "WordBond  ·  TU/e Master, 2025",
-          "caption": "AI-powered shared reading tool helping visually impaired parents narrate physical children's books with their sighted children using OCR, LLM correction, hand-tracking, and TTS. [Project Page](/wordbond)",
+          "caption": "AI readingtool helping visually-impaired parents narrate books to their children using OCR, LLM correction, and TTS. [Projectpage](/wordbond)",
           "cols": 1,
           "imageHeight": 350,
           "imageFit": "contain",
@@ -32,9 +35,12 @@
         },
         {
           "type": "images",
+          "figureId": "student-management",
+          "homeEA": "u_s",
+          "eaTags": ["t_r"],
           "width": "67%",
           "title": "Student Management Tool  ·  Extracurricular, 2024",
-          "caption": "The Electron.js desktop application built for my tutoring job — replacing a slow Google Drive folder system with a faster, API-connected interface. [Project Page](/student-management-tool)",
+          "caption": "Electron.js desktop-app for tutoring job, replacing Google-Drive folder system with faster interface. [Projectpage](/student-management-tool)",
           "cols": 1,
           "imageHeight": 350,
           "imageFit": "cover",

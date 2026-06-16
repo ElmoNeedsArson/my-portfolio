@@ -4,7 +4,6 @@ import { searchProjects, type SearchCategory, type SearchResult } from './search
 export const searchResultStore = writable<SearchResult | null>(null);
 export const showSearchResultsStore = writable<boolean>(false);
 
-// combine the 2 from above in one thing that constantly updates
 export const searchState = derived(
     [searchResultStore, showSearchResultsStore],
     ([$searchResult, $showSearchResults]) => ({
@@ -13,8 +12,7 @@ export const searchState = derived(
     })
 );
 
-// pops up the search results modal
-export function navigateToSearch(searchTerm: string, category: SearchCategory) {
+export function navigateToSearch(searchTerm: string | string[], category: SearchCategory) {
     const results = searchProjects(category, searchTerm, { exactMatch: true });
     
     searchResultStore.set(results);

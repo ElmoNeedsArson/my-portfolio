@@ -6,16 +6,19 @@
   "offsetX": "1.1pw",
   "offsetY": 0,
   "hideHeader": true,
-  "color": "rgba(74, 144, 226, 0.35)",
+  "color": "rgba(138, 107, 166, 0.35)",
   "sections": [
     {
       "type": "row",
       "sections": [
         {
           "type": "images",
+          "figureId": "modulamp",
+          "homeEA": "b_e",
+          "eaTags": ["t_r"],
           "width": "33%",
           "title": "Modulamp  ·  University of Twente, 2022",
-          "caption": "Marketing render from the Modulamp business project — a modular, sustainable bicycle lighting system. [Project Page](/modulamp)",
+          "caption": "Modular, sustainable bicycle lighting system [Projectpage](/modulamp)",
           "cols": 1,
           "imageHeight": 350,
           "imageFit": "cover",
@@ -32,9 +35,12 @@
         },
         {
           "type": "images",
+          "figureId": "exomembra",
+          "homeEA": "b_e",
+          "eaTags": ["c_a", "t_r"],
           "width": "67%",
           "title": "Exomembra  ·  Extracurricular Startup, 2023",
-          "caption": "Wearable exoskeleton costume pieces developed for the cosplay and LARP community as a rapid prototyping pathway toward the medical market. [Project Page](/exomembra)",
+          "caption": "Wearable exoskeleton costume pieces for the cosplay/LARP community as a rapid prototyping pathway toward medical market. Sold at larp/cosplay events, with a webshop also created. [Projectpage](/exomembra)",
           "cols": 2,
           "imageHeight": 350,
           "imageFit": "cover",
@@ -48,12 +54,12 @@
               "alt": "Exomembra arm detail"
             },
             {
-              "src": "/assets/images/Exomembra/deco2.jpg",
+              "src": "/assets/images/eindhoven/work1.jpg",
               "alt": "Exomembra decorative piece 2"
             },
             {
-              "src": "/assets/images/Exomembra/decoImg1.jpg",
-              "alt": "Exomembra decoration detail"
+              "src": "/assets/images/eindhoven/stand1.jpg",
+              "alt": "Startup booth"
             }
           ]
         }
