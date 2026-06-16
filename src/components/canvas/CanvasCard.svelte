@@ -978,7 +978,7 @@
         float: right;
         clear: right;
         margin-right: -76px;
-        display: inline-block;
+        /* display: inline-block; */
         padding: 0.18rem 0.6rem;
         border-radius: 2rem;
         font-size: 0.72rem;
