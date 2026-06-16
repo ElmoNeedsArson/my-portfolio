@@ -10,7 +10,9 @@
   import { cardGroups } from "./canvasGroups";
   import { connections } from "./canvasConnections";
   import { ACTS, actForCard } from "../../lib/acts";
-  import { eaForCard } from "../../lib/expertiseAreas";
+  import { eaForCard, EA_AREAS } from "../../lib/expertiseAreas";
+  import { buildPentagonConnections, buildPentagonUnitFrames } from "../../lib/pentagonLayout";
+  import type { Box as PentagonBox } from "../../lib/pentagonLayout";
   import {
     adjustPanForZoomAtPoint,
     computeWordCountStats,
@@ -18,8 +20,8 @@
     resolveCardDefinitions,
     resolveCardGroups,
   } from "./infiniteCanvasUtils";
-  import { buildCitations, buildFigures, buildFigureCards } from "../../lib/citationUtils";
-  import { citationNumberMap, citedSources } from "../../lib/citationStore";
+  import { buildCitations, buildFigures, buildFigureCards, buildCitationCardMap } from "../../lib/citationUtils";
+  import { citationNumberMap, citedSources, citationCardMap } from "../../lib/citationStore";
   import { figureNumberMap, figureCardMap } from "../../lib/figureStore";
   import type {
     CardDefinition,
@@ -130,6 +132,7 @@
 
   $: figureNumberMap.set(buildFigures(cardDefinitionsInput));
   $: figureCardMap.set(buildFigureCards(cardDefinitionsInput));
+  $: citationCardMap.set(buildCitationCardMap(cardDefinitionsInput));
 
   let citationReturnCardId: string | null = null;
 
@@ -143,6 +146,10 @@
 
   $: sequentialCardIds = cards
     .filter((card) => {
+      if (card.id === "references-act1" || card.id === "references-present") {
+        return false;
+      }
+
       if (!card.id.endsWith("-img")) {
         return true;
       }
@@ -153,6 +160,10 @@
     .map((card) => card.id);
 
   $: navigationCards = cards.filter((card) => {
+    if (card.id === "references-act1" || card.id === "references-present") {
+      return false;
+    }
+
     if (!card.id.endsWith("-img")) {
       return true;
     }
@@ -182,28 +193,26 @@
     currentSequentialIndex >= 0 &&
     currentSequentialIndex < sequentialCardIds.length - 1;
 
-  $: wordCountStats = computeWordCountStats(cards.filter((c) => c.id !== "references"));
+  $: wordCountStats = computeWordCountStats(cards.filter((c) => c.id !== "references-act1" && c.id !== "references-present"));
 
   $: nonCaptionNonTitleWordTotal = wordCountStats.contentWords;
 
-  const stableCardPositions = resolveCardDefinitions(cardDefinitionsInput, {});
-
   $: actBands = (() => {
-    if (stableCardPositions.length === 0) return [];
+    if (cards.length === 0) return [];
     const PAD_X = 60;
     const PAD_TOP = 600;
-    const PAD_BOTTOM = 0;
-    const CARD_HEIGHT_ESTIMATE = 3000;
+    const PAD_BOTTOM = 200;
 
     let globalMinY = Infinity;
     let globalMaxY = -Infinity;
-    for (const card of stableCardPositions) {
+    for (const card of cards) {
+      const height = cardHeights[card.id] ?? 300;
       if (card.y - PAD_TOP < globalMinY) globalMinY = card.y - PAD_TOP;
-      if (card.y + CARD_HEIGHT_ESTIMATE + PAD_BOTTOM > globalMaxY) globalMaxY = card.y + CARD_HEIGHT_ESTIMATE + PAD_BOTTOM;
+      if (card.y + height + PAD_BOTTOM > globalMaxY) globalMaxY = card.y + height + PAD_BOTTOM;
     }
 
     return ACTS.flatMap((act) => {
-      const actCards = stableCardPositions.filter((c) => act.cardIds.includes(c.id));
+      const actCards = cards.filter((c) => act.cardIds.includes(c.id));
       if (actCards.length === 0) return [];
       let minX = Infinity;
       let maxX = -Infinity;
@@ -248,13 +257,35 @@
     ? `translate(${panX}px, ${panY}px) scale(${zoom})`
     : `translate3d(${panX}px, ${panY}px, 0) scale(${zoom})`;
 
+  function getCardBox(cardId: string): PentagonBox | null {
+    const card = cards.find((c) => c.id === cardId);
+    if (!card) return null;
+    const height = cardHeights[card.id] ?? 300;
+    return { x: card.x, y: card.y, width: card.width, height };
+  }
+
+  $: pentagonHubCenter = (() => {
+    const hub = cards.find((c) => c.id === "professional-skills");
+    if (!hub) return null;
+    const hubHeight = cardHeights[hub.id] ?? 300;
+    return { x: hub.x + hub.width / 2, y: hub.y + hubHeight / 2 };
+  })();
+
+  $: pentagonConnections = pentagonHubCenter
+    ? buildPentagonConnections(pentagonHubCenter, availableCardIds, (key) => EA_AREAS[key].base)
+    : [];
+
+  $: pentagonUnitFrames = buildPentagonUnitFrames(availableCardIds, getCardBox);
+
+  $: allConnections = [...connections, ...pentagonConnections];
+
   $: cardLayoutVersion,
     (arrowData = cardsMounted
-      ? connections
+      ? allConnections
           .filter(
             (connection) =>
-              availableCardIds.has(connection.from) &&
-              availableCardIds.has(connection.to),
+              (connection.fromPoint || availableCardIds.has(connection.from ?? "")) &&
+              (connection.toPoint || availableCardIds.has(connection.to ?? "")),
           )
           .map((connection) => ({
           connection,
@@ -292,9 +323,16 @@
     return (coarsePointer && noHover) || narrowViewport;
   }
 
-  function handleWindowResize() {
+  async function handleWindowResize() {
     prefersMobileSafeRendering = detectMobileSafeRenderingMode();
     scheduleLayoutRecalculation();
+
+    // Wait a tick so DOM updates (card sizes/layout) settle, then re-center
+    await tick();
+
+    if (currentNavigationCardId) {
+      centerOnCardInstant(currentNavigationCardId);
+    }
   }
 
   function cancelNavigationAnimation() {
@@ -748,14 +786,24 @@
     }
   }
 
+  function resolveConnectionPoint(
+    cardId: string | undefined,
+    side: "top" | "bottom" | "left" | "right",
+    literalPoint: { x: number; y: number } | undefined,
+  ): { x: number; y: number } {
+    if (literalPoint) return literalPoint;
+    if (cardId) return getCardEdgePoint(cardId, side);
+    return { x: 0, y: 0 };
+  }
+
   function resolveWaypointPoint(
     waypoint: Waypoint,
     connection: Connection,
   ): { x: number; y: number } {
     const anchorPoint =
       waypoint.relativeTo === "from"
-        ? getCardEdgePoint(connection.from, connection.fromSide)
-        : getCardEdgePoint(connection.to, connection.toSide);
+        ? resolveConnectionPoint(connection.from, connection.fromSide, connection.fromPoint)
+        : resolveConnectionPoint(connection.to, connection.toSide, connection.toPoint);
 
     return {
       x: anchorPoint.x + waypoint.offsetX,
@@ -766,8 +814,8 @@
   function getArrowPoints(
     connection: Connection,
   ): Array<{ x: number; y: number }> {
-    const start = getCardEdgePoint(connection.from, connection.fromSide);
-    const end = getCardEdgePoint(connection.to, connection.toSide);
+    const start = resolveConnectionPoint(connection.from, connection.fromSide, connection.fromPoint);
+    const end = resolveConnectionPoint(connection.to, connection.toSide, connection.toPoint);
 
     return [
       start,
@@ -843,6 +891,13 @@
     fitToFrame: boolean;
     maxZoom: number;
     topFactor: number;
+    primaryFrame: {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      centerMode: "top" | "middle";
+    };
   } | null {
     const frameCardIds = getNavigationFrameCardIds(cardId);
     const frameCards = frameCardIds
@@ -879,6 +934,10 @@
     );
 
     const hasCompanionImage = frameCards.length > 1;
+    const primaryCardElement = canvasContentElement?.querySelector(
+      `[data-card-id="${primaryCard?.id}"]`,
+    ) as HTMLElement | null;
+    const primaryCardHeight = primaryCardElement?.offsetHeight || 300;
 
     return {
       x: bounds.minX,
@@ -891,6 +950,13 @@
       fitToFrame: primaryCard?.navigationFitToFrame ?? false,
       maxZoom: primaryCard?.navigationMaxZoom ?? 0.6,
       topFactor: primaryCard?.navigationTopFactor ?? 0.22,
+      primaryFrame: {
+        x: primaryCard?.x ?? 0,
+        y: primaryCard?.y ?? 0,
+        width: primaryCard?.width ?? 0,
+        height: primaryCardHeight,
+        centerMode: primaryCard?.initialCenterMode ?? "top",
+      },
     };
   }
 
@@ -904,6 +970,13 @@
       fitToFrame: boolean;
       maxZoom: number;
       topFactor: number;
+      primaryFrame?: {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        centerMode: "top" | "middle";
+      };
     },
     viewportWidth: number,
     viewportHeight: number,
@@ -911,29 +984,57 @@
     const isPhoneViewport = viewportWidth <= 640;
     const isTabletViewport = viewportWidth > 640 && viewportWidth <= 1100;
     const isCompanionFrame = frame.centerMode === "middle";
-    const widthFitZoom = (viewportWidth * 0.9) / Math.max(frame.width, 1);
-    const heightFitZoom = (viewportHeight * 0.95) / Math.max(frame.height, 1);
-    const frameFitZoom = Math.min(widthFitZoom, heightFitZoom);
     const shouldAutoFit =
       frame.fitToFrame ||
       isPhoneViewport ||
       (isTabletViewport && isCompanionFrame);
-    const companionFrameMaxZoom = Math.min(frame.maxZoom, 0.5);
+
+    const HORIZONTAL_MARGIN = 64;
+    const TOP_SAFE_AREA = 86;
+    const BOTTOM_SAFE_AREA = 110;
+    const widthFitZoom = (viewportWidth - HORIZONTAL_MARGIN * 2) / Math.max(frame.width, 1);
+    const heightFitZoom = (viewportHeight - TOP_SAFE_AREA - BOTTOM_SAFE_AREA) / Math.max(frame.height, 1);
+    const frameFitZoom = Math.min(widthFitZoom, heightFitZoom);
+    const centerYBaseline = isPhoneViewport ? 0.47 : 0.52;
+
     const resolvedZoom = shouldAutoFit
-      ? Math.max(0.15, Math.min(isCompanionFrame ? companionFrameMaxZoom : frame.maxZoom, frameFitZoom))
-      : isCompanionFrame
-        ? companionFrameMaxZoom
-        : frame.maxZoom;
+      ? Math.max(0.15, Math.min(frame.maxZoom, frameFitZoom))
+      : frame.maxZoom;
 
     const frameCenterX = frame.x + frame.width / 2;
-    const frameCenterY = frame.y + frame.height / 2;
 
     const panX = viewportWidth / 2 - frameCenterX * resolvedZoom;
 
+    const usePrimaryTopAnchor =
+      frame.centerMode === "middle" &&
+      frame.primaryFrame &&
+      frame.primaryFrame.centerMode === "top";
+
     const panY =
-      frame.centerMode === "middle"
-        ? viewportHeight * 0.54 - frameCenterY * resolvedZoom
+      frame.centerMode === "middle" && frame.primaryFrame
+        ? usePrimaryTopAnchor
+          ? viewportHeight * frame.topFactor - frame.primaryFrame.y * resolvedZoom
+          : viewportHeight * centerYBaseline - (frame.primaryFrame.y + frame.primaryFrame.height / 2) * resolvedZoom
         : viewportHeight * frame.topFactor - frame.y * resolvedZoom;
+
+    const frameTopPos = panY + frame.y * resolvedZoom;
+    const frameBottomPos = panY + (frame.y + frame.height) * resolvedZoom;
+
+    if (frameBottomPos > viewportHeight - 22) {
+      return {
+        panX,
+        panY: panY - (frameBottomPos - (viewportHeight - 22)),
+        zoom: resolvedZoom,
+      };
+    }
+
+    if (frameTopPos < 22) {
+      return {
+        panX,
+        panY: panY + (22 - frameTopPos),
+        zoom: resolvedZoom,
+      };
+    }
 
     return {
       panX,
@@ -1163,9 +1264,29 @@
       <svg class="arrows-layer">
         {#if arrowData}
           {#each arrowData as {connection, points}}
-            <CanvasArrow {points} dashed={connection.dashed ?? false} fromSide={connection.fromSide} toSide={connection.toSide} />
+            <CanvasArrow
+              {points}
+              dashed={connection.dashed ?? false}
+              fromSide={connection.fromSide}
+              toSide={connection.toSide}
+              color={connection.color}
+              opacity={connection.opacity}
+              gradient={connection.gradient}
+              straight={connection.straight ?? false}
+            />
           {/each}
         {/if}
+
+        {#each pentagonUnitFrames as frame (frame.eaKey)}
+          {@const b = frame.box}
+          {@const c = 36}
+          <g class="unit-bracket" style="color:{EA_AREAS[frame.eaKey].base}">
+            <path d="M {b.x} {b.y + c} L {b.x} {b.y} L {b.x + c} {b.y}" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+            <path d="M {b.x + b.width - c} {b.y} L {b.x + b.width} {b.y} L {b.x + b.width} {b.y + c}" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+            <path d="M {b.x + b.width} {b.y + b.height - c} L {b.x + b.width} {b.y + b.height} L {b.x + b.width - c} {b.y + b.height}" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+            <path d="M {b.x + c} {b.y + b.height} L {b.x} {b.y + b.height} L {b.x} {b.y + b.height - c}" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+          </g>
+        {/each}
       </svg>
 
       {#if showGroups}
@@ -1294,10 +1415,13 @@
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       class="lightbox-overlay"
+      tabindex="0"
+      role="button"
       on:click={closeLightbox}
       on:keydown={(e) => e.key === "Escape" && closeLightbox()}
     >
       <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div class="lightbox-inner" on:click|stopPropagation>
         <button class="lightbox-close" on:click={closeLightbox} aria-label="Close image">×</button>
         <img src={lightboxImage.src} alt={lightboxImage.alt} class="lightbox-img" draggable="false" />
@@ -1469,6 +1593,11 @@
     height: 2000px;
     pointer-events: none;
     overflow: visible;
+  }
+
+  .unit-bracket {
+    pointer-events: none;
+    opacity: 0.85;
   }
 
   .context-bar {

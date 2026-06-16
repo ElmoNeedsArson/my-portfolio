@@ -3,6 +3,14 @@
     export let dashed = false;
     export let fromSide: 'top' | 'bottom' | 'left' | 'right' | undefined = undefined;
     export let toSide: 'top' | 'bottom' | 'left' | 'right' | undefined = undefined;
+    export let color: string | undefined = undefined;
+    export let opacity: number | undefined = undefined;
+    export let gradient: [string, string] | undefined = undefined;
+    export let straight = false;
+
+    const gradientId = `arrow-grad-${Math.random().toString(36).slice(2)}`;
+    $: strokeValue = gradient ? `url(#${gradientId})` : (color ?? 'currentColor');
+    $: strokeOpacityValue = opacity ?? (dashed ? 0.45 : 0.7);
 
     function sideDir(side: string): { x: number; y: number } {
         switch (side) {
@@ -15,15 +23,14 @@
     }
 
     let pathD = '';
-    let lastCP2: { x: number; y: number } | null = null;
 
     $: {
-        lastCP2 = null;
-
         if (points.length === 0) {
             pathD = '';
         } else if (points.length === 1) {
             pathD = `M ${points[0].x} ${points[0].y}`;
+        } else if (straight) {
+            pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
         } else if (points.length === 2 && fromSide && toSide) {
             const p0 = points[0];
             const p1 = points[1];
@@ -37,7 +44,6 @@
 
             const cp1 = { x: p0.x + d0.x * s0, y: p0.y + d0.y * s0 };
             const cp2 = { x: p1.x + d1.x * s1, y: p1.y + d1.y * s1 };
-            lastCP2 = cp2;
             pathD = `M ${p0.x} ${p0.y} C ${cp1.x} ${cp1.y} ${cp2.x} ${cp2.y} ${p1.x} ${p1.y}`;
         } else {
             const n = points.length;
@@ -76,7 +82,6 @@
                 }
 
                 path += ` C ${cp1x} ${cp1y} ${cp2x} ${cp2y} ${p2.x} ${p2.y}`;
-                if (i === n - 2) lastCP2 = { x: cp2x, y: cp2y };
             }
 
             pathD = path;
@@ -84,32 +89,27 @@
     }
 
     $: lastPoint = points[points.length - 1];
-    $: angle = (() => {
-        if (!lastPoint) return 0;
-        const ref = lastCP2 ?? (points.length >= 2 ? points[points.length - 2] : lastPoint);
-        return Math.atan2(lastPoint.y - ref.y, lastPoint.x - ref.x) * (180 / Math.PI);
-    })();
 </script>
 
 <g class="arrow">
+    {#if gradient}
+        <defs>
+            <linearGradient id={gradientId} x1={points[0]?.x} y1={points[0]?.y} x2={lastPoint?.x} y2={lastPoint?.y} gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color={gradient[0]} />
+                <stop offset="100%" stop-color={gradient[1]} />
+            </linearGradient>
+        </defs>
+    {/if}
+
     <path
         d={pathD}
         fill="none"
-        stroke="currentColor"
-        stroke-opacity={dashed ? 0.45 : 0.7}
-        stroke-width={dashed ? 5 : 10}
+        stroke={strokeValue}
+        stroke-opacity={strokeOpacityValue}
+        stroke-width={dashed ? 6 : 13}
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-dasharray={dashed ? "14,9" : undefined} />
-
-    {#if points.length > 0}
-        <polygon
-            points={dashed ? "-8,-4 0,0 -8,4" : "-13,-6.5 0,0 -13,6.5"}
-            fill="currentColor"
-            fill-opacity={dashed ? 0.6 : 0.95}
-            transform="translate({lastPoint.x}, {lastPoint.y}) rotate({angle})"
-        />
-    {/if}
 </g>
 
 <style>
@@ -127,8 +127,7 @@
     }
 
     @media print {
-        .arrow path,
-        .arrow polygon {
+        .arrow path {
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }

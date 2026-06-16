@@ -3,15 +3,15 @@
   "title": "Technology and Realization",
   "numberOrder": 18,
   "width": 600,
-  "offsetX": 0,
-  "relativeToCardId": "past-math-data-and-computing",
-  "offsetY": "1.5ph",
+  "relativeToCardId": "professional-skills",
+  "offsetX": "304.8+0.5pw",
+  "offsetY": "1050+0.5ph",
   "navigationFitToFrame": true,
   "color": "#FFC000",
   "sections": [
     {
       "type": "content",
-      "content": "Technology (high level coding & electrical components) is where I tend to feel most at ease, which is also where it's easiest to stop questioning yourself. My Obsidian plugin, tactone, and multiple CS & EE courses from exchange are examples of this competence: \n\nThe Obsidian plugin \\cite{obsidian3d} (\\ref{obsidian-plugin}) started from a gap I noticed in a tool I use every day \\cite{obsidian}: no plugin existed for viewing 3D models inside notes. So I built one. What began as a proof-of-concept became a proper TypeScript plugin with over 3700 installations. You write code differently when real users file bug reports and expect a response. Version management, community communication, gradual feature rollout, none of that comes up in coursework. It was technically driven: I noticed a problem I had, built a solution, others had the same problem. That worked. A different process than designing for people whose needs you've actually researched, a distinction I became more aware of through the master.\n\nTactone (\\ref{tactone-tr}) pushed into different territory, pneumatic actuation, LDR sensor processing, audio modulation, custom silicone pads, all in one coherent system. I tried to make it a reusable platform rather than a one-off: the guide explains how to swap components, upload audio, recalibrate for different environments. Writing that forced a different kind of understanding than just building it. The user study surfaced issues I hadn't anticipated, and the setup sequence mattered more than I expected, both pointing to something I keep running into: in physical-digital systems, the seams matter as much as the components."
+      "content": "Technology (high-level coding and electrical components) is where I tend to feel most at ease, which is also where it's easiest to stop questioning yourself. My Obsidian plugin, tactone, and multiple CS & EE courses from exchange are examples of this competence: \n\nThe [Obsidian plugin](/obsidian-plugin) \\cite{obsidian3d} (\\ref{obsidian-plugin}) started from a gap I noticed in a tool I use every day \\cite{obsidian}: no plugin existed for viewing 3D models inside notes. So I built one. What began as a proof-of-concept became a proper TypeScript plugin with over 3700 installations. You code differently when real users file bugreports and expect response. Version management and community communication suddenly matter. The project began from my own needs, happening to be of value for others rather than starting with user research, highlighting a contrast in process I became increasingly aware of during the master.\n\n[Tactone](/tactone) (\\ref{tactone-tr}) pushed into different territory, pneumatic actuation, multiplexed LDRs, audio-modulation, custom siliconepads, all one coherent system. Making it a reusable platform rather than a one-off: a guide explains how to swap components, upload audio, recalibrate for different environments. Creating a reusable platform and conducting a user study revealed something I keep encountering in physical-digital systems: the connections between parts matter just as much as the parts themselves.\n\nLevel: advanced. My strongest area, which is exactly why the reflection above is about not letting that ease stop me from questioning."
     }
   ]
 }

@@ -12,6 +12,8 @@
   <button
     class="canvas-action-button overview"
     on:click={onViewOverview}
+    on:mousedown|stopPropagation
+    on:touchstart|stopPropagation
     type="button"
     aria-label="View all canvas content"
     title="View overview"
@@ -23,6 +25,8 @@
   <button
     class="canvas-action-button word-count"
     on:click={onToggleWordCount}
+    on:mousedown|stopPropagation
+    on:touchstart|stopPropagation
     type="button"
     aria-label="Show canvas word count"
     title="Show canvas word count"
@@ -34,6 +38,8 @@
   <button
     class="canvas-action-button theme-toggle"
     on:click={onToggleDarkMode}
+    on:mousedown|stopPropagation
+    on:touchstart|stopPropagation
     type="button"
     aria-label="Toggle day and night mode"
     title="Toggle day and night mode"
@@ -48,6 +54,8 @@
   <button
     class="canvas-action-button close"
     on:click={onClose}
+    on:mousedown|stopPropagation
+    on:touchstart|stopPropagation
     type="button"
     aria-label="Close fullscreen canvas"
   >

@@ -38,6 +38,9 @@ function isWordChar(char: string | undefined): boolean {
 
 export function getCountedWords(text: string): string[] {
   const cleanedText = text
+    .replace(/(?:\\ref\{[^}]*\})(?:\s*,\s*\\ref\{[^}]*\})+/g, " figure ")
+    .replace(/\\cite\{[^}]*\}/g, " ")
+    .replace(/\\ref\{[^}]*\}/g, "ref")
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
     .replace(/\*\*/g, " ")
     .replace(
@@ -59,7 +62,10 @@ export function countWords(text: string): number {
   return getCountedWords(text).length;
 }
 
-function countSectionWords(section: CardSection, stats: WordCountStats): void {
+function countSectionWords(
+  section: CardDefinition["sections"][number],
+  stats: WordCountStats,
+): void {
   if (section.type === "content" && section.content) {
     stats.contentWords += countWords(section.content);
   }

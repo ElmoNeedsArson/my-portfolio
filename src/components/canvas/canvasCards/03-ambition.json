@@ -5,11 +5,14 @@
   "width": 1200,
   "offsetX": 0,
   "offsetY": "1.1ph",
+  "initialCenterMode": "middle",
+  "navigationFitToFrame": true,
+  "navigationMaxZoom": 1.2,
   "color": "rgba(249, 103, 67, 0.35)",
   "sections": [
     {
       "type": "content",
-      "content": "As a designer I have a responsibility to shape how meaningfully technology is used. Each decision should be guided by questioning whether this implementation truly adds value, by critically evaluating its impact on people, with the help of frameworks currently being used in embodied design and HCI. I recognize my tendency to gravitate toward digital solutions, and part of my professional growth lies in developing the discernment to choose technology intentionally rather than by default. In any process that includes creation, I should consider the impact my choices carry."
+      "content": "I recognize my tendency to gravitate toward digital solutions, as a designer I have a responsibility to shape how meaningfully technology is used, and part of my professional growth lies in developing the ability to choose technology intentionally rather than by default. In any process that includes creation, each decision should be guided by questioning whether this implementation truly adds value for people."
     }
   ]
 }

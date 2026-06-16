@@ -4,7 +4,7 @@
     import type { Component } from "svelte";
     import SunburstChart from "../visualizations/SunburstChart.svelte";
     import ReferencesCard from "../visualizations/ReferencesCard.svelte";
-    import { citationNumberMap } from "../../lib/citationStore";
+    import { citationNumberMap, citationCardMap } from "../../lib/citationStore";
     import { figureNumberMap, figureCardMap } from "../../lib/figureStore";
     import { EA_AREAS } from "../../lib/expertiseAreas";
 
@@ -140,9 +140,29 @@
             const num = $citationNumberMap[id];
             const label = num !== undefined ? `[${num}]` : `[?]`;
             const unknownClass = num !== undefined ? "" : " citation-unknown";
-            return `<button type="button" class="citation-ref${unknownClass}" data-cite-card="references" tabindex="0">${label}</button>`;
+            const targetCard = $citationCardMap[id] ?? "references-act1";
+            return `<button type="button" class="citation-ref${unknownClass}" data-cite-card="${targetCard}" tabindex="0">${label}</button>`;
         });
-        const withFigureRefs = withCitations.replace(/\\ref\{([^}]+)\}/g, (_, id) => {
+        const withGroupedFigureRefs = withCitations.replace(/\\ref\{([^}]+)\}(?:\s*,\s*\\ref\{([^}]+)\})+/g, (match) => {
+            const ids = Array.from(match.matchAll(/\\ref\{([^}]+)\}/g), (refMatch) => refMatch[1]);
+            return ids
+                .map((id, index) => {
+                    const num = $figureNumberMap[id];
+                    const targetCardId = $figureCardMap[id];
+                    const label =
+                        num !== undefined
+                            ? `${index === 0 ? "figure" : ""} ${num}`.trim()
+                            : index === 0
+                                ? "figure ?"
+                                : "?";
+                    if (targetCardId) {
+                        return `<button type="button" class="figure-ref" data-figure-card="${targetCardId}" tabindex="0">${label}</button>`;
+                    }
+                    return label;
+                })
+                .join(",");
+        });
+        const withFigureRefs = withGroupedFigureRefs.replace(/\\ref\{([^}]+)\}/g, (_, id) => {
             const num = $figureNumberMap[id];
             const targetCardId = $figureCardMap[id];
             const label = num !== undefined ? `Figure ${num}` : `Figure ?`;
@@ -386,6 +406,7 @@
                                 <div
                                     class="gallery-item"
                                     class:image-fit-contain={resolvedFit === "contain"}
+                                    class:is-placeholder={!imagesVisible}
                                     style="--gallery-image-height: {resolvedHeight}px;"
                                     role="button"
                                     tabindex="0"
@@ -393,13 +414,17 @@
                                     on:click={() => handleImageClick(image)}
                                     on:keydown={(e) => e.key === "Enter" && handleImageClick(image)}
                                 >
-                                    <img
-                                        src={image.src}
-                                        alt={image.alt}
-                                        draggable="false"
-                                        decoding="async"
-                                        style={imagesVisible ? undefined : "display:none"}
-                                    />
+                                    {#if imagesVisible}
+                                        <img
+                                            src={image.src}
+                                            alt={image.alt}
+                                            draggable="false"
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                    {:else}
+                                        <div class="gallery-item-placeholder" aria-hidden="true"></div>
+                                    {/if}
                                 </div>
                                 {#if image.caption}
                                     <p class="image-source-caption">
@@ -876,6 +901,18 @@
         transition: opacity 0.15s ease;
     }
 
+    .gallery-item.is-placeholder {
+        cursor: progress;
+    }
+
+    .gallery-item-placeholder {
+        width: 100%;
+        height: 100%;
+        background:
+            linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.08)),
+            rgba(0, 0, 0, 0.12);
+    }
+
     .gallery-item:hover {
         opacity: 0.88;
     }
@@ -898,6 +935,11 @@
     .single-image-gallery .gallery-item {
         height: auto;
         background: transparent;
+    }
+
+    .single-image-gallery .gallery-item.is-placeholder {
+        height: var(--gallery-image-height, 250px);
+        background: rgba(0, 0, 0, 0.2);
     }
 
     .single-image-gallery .gallery-item img {

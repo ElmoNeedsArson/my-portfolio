@@ -24,8 +24,8 @@ export const ACTS: Act[] = [
   },
   {
     id: 2,
-    label: 'Act II · Expertise',
-    description: 'What I can do',
+    label: 'Act II · Past',
+    description: 'Pre-FMP history and evidence',
     cardIds: [
       'past-business-and-entrepreneurship',
       'past-business-and-entrepreneurship-img',
@@ -42,8 +42,8 @@ export const ACTS: Act[] = [
   },
   {
     id: 3,
-    label: 'Act III · Reflection',
-    description: 'What I learned',
+    label: 'Act III · Present',
+    description: 'FMP and synthesis',
     cardIds: [
       'past-conclusion',
       'fmp-reflection',

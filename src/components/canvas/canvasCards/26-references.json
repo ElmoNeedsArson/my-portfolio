@@ -1,16 +1,19 @@
 {
-  "id": "references",
-  "title": "References",
+  "id": "references-present",
+  "title": "References — Present",
   "numberOrder": 35,
-  "relativeToCardId": "skills-sunburst",
-  "offsetX": 0,
-  "offsetY": "1.1ph",
+  "relativeToCardId": "professional-skills",
+  "offsetX": "0.5pw-600",
+  "offsetY": "3000+0.5ph",
   "width": 1200,
   "color": "rgba(74, 144, 226, 0.2)",
   "sections": [
     {
       "type": "sveltecomponent",
-      "componentName": "references"
+      "componentName": "references",
+      "componentProps": {
+        "ids": ["obsidian3d", "obsidian"]
+      }
     }
   ]
 }

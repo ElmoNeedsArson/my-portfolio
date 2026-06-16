@@ -4,14 +4,14 @@
   "numberOrder": 29,
   "width": 1200,
   "navigationFitToFrame": true,
-  "relativeToCardId": "professional-identity",
-  "offsetX": 9000,
-  "offsetY": 0,
+  "relativeToCardId": "fmp-reflection",
+  "offsetX": "1.2pw",
+  "offsetY": "0.5ph-0.5ch",
   "columns": 2,
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [
     {
       "type": "content",
-      "content": "When I started this master's, my plan for writing reflections was: write it the day before the deadline and move on... That approach did not survive contact with this program. I was forced to sit down and think about what I am doing and why. And at first, this was mostly annoying. But over time it became one of the most valuable parts of the degree (duh), because it made me confront questions I would otherwise have postponed indefinitely.\n\nThe biggest thing that came out of it is: this master's helped me develop personally. Professionally, it showed me that the work I actually want to be doing isn't the design side, it's the technical core underneath it: programming, electronics, making hardware and software genuinely work together. That's the part that pulled me in across every project. I could chase it from a design role, and the human-centered view I've built here is real and worth contributing, but I'd always be reaching at the engineering from the outside.\n\nSo I'm being deliberate about it. My next step is a master's in Robotics at the University of Twente, the degree that matches what I want to be doing day to day, building directly on the technical depth I kept gravitating toward here: software, control, the hardware-and-algorithm layer. Looking further ahead, I want to move toward the space sector, ESA or commercial.\n\nA direction I'd wanted for a long time and wasn't decisive enough to chase until this program forced me to sit with the question. The design vision doesn't disappear, it stays something I can act on from a design role when I choose to. None of this makes the past two years a detour. That clarity is, in a slightly ironic way, exactly what this master's taught me to find."}
+      "content": "This master pushed me to reflect more seriously than I had planned. I considered it as annoying, but it became one of the most valuable parts, confronting me with questions I would otherwise have postponed indefinitely.\n\nThe biggest thing that came out of it: this master's helped me develop personally, but professionally, it showed me that the work I actually want to be doing is not the design side,but the technical core underneath: programming, electronics, hardware and software. That is the part that pulled me in across every project. I could chase it from a design role, and the human-centered view I have built here is real and worth contributing, but I would always be reaching for the engineering from the outside.\n\nSo I'm being deliberate, my next step is a master's in Robotics at the University of Twente, the degree that matches what I want day-to-day, building on the technical depth I kept gravitating toward: software, control, the hardware-and-algorithm layer. Looking further ahead, I want to move toward the space sector, ESA or commercial.\n\nA direction I'd wanted for a long time and wasn't decisive enough to chase until this program forced me to sit with the question. The design vision doesn't disappear, it stays something I can act on from a design role when I choose to. None of this makes the past two years a detour. That clarity is, in a slightly ironic way, exactly what this master's taught me to find."}
   ]
 }

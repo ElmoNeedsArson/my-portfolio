@@ -79,6 +79,31 @@ export function buildFigureCards(cards: CardDefinitionInput[]): Record<string, s
   return map;
 }
 
+function collectCitationCard(section: CardSection, cardId: string, map: Record<string, string>) {
+  if (section.type === "sveltecomponent" && section.componentName === "references") {
+    const ids = (section.componentProps?.ids as string[] | undefined) ?? [];
+    for (const id of ids) {
+      map[id] = cardId;
+    }
+  }
+  for (const child of section.sections ?? []) {
+    collectCitationCard(child, cardId, map);
+  }
+}
+
+export function buildCitationCardMap(cards: CardDefinitionInput[]): Record<string, string> {
+  const map: Record<string, string> = {};
+
+  for (const card of cards) {
+    if (card.hide) continue;
+    for (const section of card.sections ?? []) {
+      collectCitationCard(section, card.id, map);
+    }
+  }
+
+  return map;
+}
+
 export type CitationResult = {
   citationMap: Record<string, number>;
   orderedSources: Source[];

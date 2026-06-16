@@ -1,6 +1,6 @@
 {
   "id": "skills-sunburst",
-  "title": "Skills & Technologies",
+  "title": "Overview (languages, frameworks, tools)",
   "numberOrder": 30,
   "relativeToCardId": "fmp-reflection",
   "offsetX": 0,
@@ -8,10 +8,6 @@
   "width": 1200,
   "color": "rgba(74, 144, 226, 0.2)",
   "sections": [
-    {
-      "type": "content",
-      "content": "Overview (languages, frameworks, tools). Hover any segment to see the projects that use it."
-    },
     {
       "type": "sveltecomponent",
       "componentName": "sunburst"

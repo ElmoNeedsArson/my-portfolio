@@ -1,14 +1,17 @@
 <script lang="ts">
-  import { citedSources } from "../../lib/citationStore";
+  import { citedSources, citationNumberMap } from "../../lib/citationStore";
+  export let ids: string[] | undefined = undefined;
+
+  $: visibleSources = ids ? $citedSources.filter((s) => ids.includes(s.id)) : $citedSources;
 </script>
 
-{#if $citedSources.length === 0}
+{#if visibleSources.length === 0}
   <p class="no-refs">No sources cited yet.</p>
 {:else}
   <ol class="reference-list">
-    {#each $citedSources as source, i}
+    {#each visibleSources as source}
       <li class="reference-item">
-        <span class="ref-num">[{i + 1}]</span>
+        <span class="ref-num">[{$citationNumberMap[source.id] ?? "?"}]</span>
         <span class="ref-body">
           {@html source.formatted}
           {#if source.url}

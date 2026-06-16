@@ -96,12 +96,18 @@ export type Waypoint = {
 };
 
 export type Connection = {
-  from: string;
+  from?: string;
   fromSide: "top" | "bottom" | "left" | "right";
-  to: string;
+  to?: string;
   toSide: "top" | "bottom" | "left" | "right";
+  fromPoint?: { x: number; y: number };
+  toPoint?: { x: number; y: number };
   waypoints?: Waypoint[];
   dashed?: boolean;
+  color?: string;
+  opacity?: number;
+  gradient?: [string, string];
+  straight?: boolean;
 };
 
 export type WordCountStats = {

@@ -1,0 +1,18 @@
+{
+  "id": "professional-skills",
+  "title": "Professional Skills",
+  "numberOrder": 11,
+  "width": 600,
+  "relativeToCardId": "professional-identity",
+  "offsetX": 5600,
+  "offsetY": "0.5ph-0.5ch",
+  "color": "rgba(250, 200, 187, 0.35)",
+  "navigationFitToFrame": true,
+  "navigationMaxZoom": 1.2,
+  "sections": [
+    {
+      "type": "content",
+      "content": "I also developed my professional skills alongside the expertise areas. My communication and scientific skills were strengthened through a TA role, tutoring highschool students, publishing a paper from [WordBond](/wordbond) (\\ref{wordbond-us}), and academic writing and scientific research in Constructive Design Research, [M12 study](/digital-twin-in-education) and FMP.\n\nCooperation developed across project teams, while my exchange semester further expanded my ability to work across cultures and languages. Organising and planning skills were tested through taking coordinating roles in group projects and independently managing the FMP, from study logistics to timeline.\n\nReflection became my most important skill during the master, and I now actively use it as a design tool to adjust my approach throughout the process rather than only at the end."
+    }
+  ]
+}

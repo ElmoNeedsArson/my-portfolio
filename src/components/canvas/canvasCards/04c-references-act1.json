@@ -1,0 +1,19 @@
+{
+  "id": "references-act1",
+  "title": "References — Act I",
+  "numberOrder": 4.6,
+  "relativeToCardId": "vision",
+  "offsetX": 0,
+  "offsetY": "4.5ph",
+  "width": 1200,
+  "color": "rgba(74, 144, 226, 0.2)",
+  "sections": [
+    {
+      "type": "sveltecomponent",
+      "componentName": "references",
+      "componentProps": {
+        "ids": ["zhai2024", "mitra2023", "bakker2010", "wilde2015", "springer1994", "stappers2017", "braga2019", "karana2015"]
+      }
+    }
+  ]
+}

@@ -1,17 +1,17 @@
 {
   "id": "past-creativity-and-aesthetics",
   "title": "Creativity and Aesthetics",
-  "numberOrder": 14,
+  "numberOrder": 20,
   "width": 600,
-  "offsetX": 0,
-  "relativeToCardId": "past-business-and-entrepreneurship",
-  "offsetY": "1.7ph",
+  "relativeToCardId": "professional-skills",
+  "offsetX": "745+0.5pw",
+  "offsetY": "-300+0.5ph",
   "navigationFitToFrame": true,
   "color": "#ED7D31",
   "sections": [
     {
       "type": "content",
-      "content": "My relationship with aesthetics changed specifically in the master. Since my bachelor, where, for example, we had to make a 3D game, 270 hours between two people, every model and shader made ourselves, way beyond what the assignment asked for. The result looked the way we wanted, but the focus was on looks (\\ref{interactive-media}).\n\nThe AIBPO project is probably where my shift in perspective became most visible. The main aesthetic goal wasn't to make something look good, it was to make an audience feel the discomfort of a system we were critiquing. Ambiguity and staged authority became intentional design materials. The real limitation is that a live performance leaves almost nothing behind, the intent is inaccessible to anyone who wasn't in the room.\n\nThe shift is less about skill and more about what I was asking aesthetics to do: execution in one case, framing in the other."
+      "content": "My relationship with aesthetics changed in the master. Since my bachelor, making [a 3D game](/interactive-media-project), 270 hours between two people, every model and shader our own, far beyond the assignment, focussed mainly on the visual end result (\\ref{interactive-media}).\n\nThe [AIBPO](/aesthetics-of-ai-data) project is where my shift in perspective became most visible. The main aesthetic goal wasn't to make something look good, it was to make an audience feel the discomfort of a system we were critiquing. Ambiguity and staged authority became intentional design materials. The real limitation is that a live performance leaves almost nothing behind, the intent is inaccessible to anyone who wasn't in the room.\n\nThe shift is less about skill and more about what I was asking aesthetics to do: execution in one case, framing in the other.\n\nLevel: intermediate. I can use aesthetics as framing rather than only execution, while still building the critical perspective to question my own instincts."
     }
   ]
 }
