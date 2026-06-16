@@ -39,6 +39,17 @@
     export let title: string;
     export let color: string = "rgba(255, 255, 255, 0.18)";
     export let hideHeader: boolean = false;
+
+    function headerTextColor(c: string): string | undefined {
+        if (!c.startsWith("#") || c.length !== 7) return undefined;
+        const r = parseInt(c.slice(1, 3), 16);
+        const g = parseInt(c.slice(3, 5), 16);
+        const b = parseInt(c.slice(5, 7), 16);
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance > 0.6 ? "#141414" : "#ffffff";
+    }
+
+    $: headerTextOverride = headerTextColor(color);
     export let contentAlign: "left" | "center" = "left";
     export let introTitle: string | undefined = undefined;
     export let introSubtitle: string | undefined = undefined;
@@ -293,6 +304,7 @@
         top: {y}px;
         width: {width}px;
         --card-color: {color};
+        {headerTextOverride ? `--header-text-color: ${headerTextOverride};` : ''}
     "
 >
     {#if !hideHeader}
@@ -412,7 +424,7 @@
                         {#each (s.eaTags ?? []) as key}
                             {#if EA_AREAS[key as keyof typeof EA_AREAS]}
                                 {@const ea = EA_AREAS[key as keyof typeof EA_AREAS]}
-                                <span class="project-ea-chip chip-cross" style="border:1px dashed {ea.base}88;color:{ea.base}CC;">{EA_SHORT[key] ?? key}</span>
+                                <span class="project-ea-chip chip-cross" style="background:{ea.base}30;border:1px solid {ea.base};color:{ea.base};">{EA_SHORT[key] ?? key}</span>
                             {/if}
                         {/each}
                     </div>
@@ -529,7 +541,7 @@
         margin: 0;
         font-size: 1.3rem;
         font-weight: 600;
-        color: var(--primary-text-color);
+        color: var(--header-text-color, var(--primary-text-color));
         letter-spacing: 0.3px;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
@@ -707,10 +719,6 @@
         font-size: 0.86rem;
         font-weight: 600;
         letter-spacing: 0.04em;
-    }
-
-    .chip-cross {
-        background: transparent;
     }
 
     .pullquote {

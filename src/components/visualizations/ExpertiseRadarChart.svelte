@@ -21,11 +21,11 @@
     ];
 
     const areaColors: { [key: string]: string } = {
-        "Math, Data and Computing": "#3b82f6",
-        "Technology and Realization": "#8b5cf6",
-        "Creativity and Aesthetics": "#ec4899",
-        "User and Society": "#10b981",
-        "Business and Entrepreneurship": "#f59e0b"
+        "Math, Data and Computing": "#7030A0",
+        "Technology and Realization": "#FFC000",
+        "Creativity and Aesthetics": "#ED7D31",
+        "User and Society": "#70AD46",
+        "Business and Entrepreneurship": "#4473C5"
     };
 
     function getShortLabel(area: string): string {

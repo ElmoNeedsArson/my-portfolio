@@ -21,20 +21,20 @@
   --canvas-card-background: rgba(26, 29, 33, 0.92);
   --canvas-card-shadow: rgba(0, 0, 0, 1);
 
-  --ea-b_e-base:   #8A6BA6;
-  --ea-b_e-tint:   rgba(138, 107, 166, 0.35);
+  --ea-b_e-base:   #4473C5;
+  --ea-b_e-tint:   rgba( 68, 115, 197, 0.35);
 
-  --ea-c_a-base:   #C76B4A;
-  --ea-c_a-tint:   rgba(199, 107,  74, 0.35);
+  --ea-c_a-base:   #ED7D31;
+  --ea-c_a-tint:   rgba(237, 125,  49, 0.35);
 
-  --ea-m_d_c-base: #C99A3B;
-  --ea-m_d_c-tint: rgba(201, 154,  59, 0.35);
+  --ea-m_d_c-base: #7030A0;
+  --ea-m_d_c-tint: rgba(112,  48, 160, 0.35);
 
-  --ea-t_r-base:   #3E7CA6;
-  --ea-t_r-tint:   rgba( 62, 124, 166, 0.35);
+  --ea-t_r-base:   #FFC000;
+  --ea-t_r-tint:   rgba(255, 192,   0, 0.35);
 
-  --ea-u_s-base:   #6E8B5B;
-  --ea-u_s-tint:   rgba(110, 139,  91, 0.35);
+  --ea-u_s-base:   #70AD46;
+  --ea-u_s-tint:   rgba(112, 173,  70, 0.35);
 }
 
 [data-theme="light"] {

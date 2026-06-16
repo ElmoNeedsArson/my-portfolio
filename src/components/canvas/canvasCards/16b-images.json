@@ -5,6 +5,7 @@
   "width": 1600,
   "offsetX": "1.1pw",
   "offsetY": 0,
+  "paddingY": "0",
   "hideHeader": true,
   "color": "rgba(110, 139, 91, 0.35)",
   "sections": [

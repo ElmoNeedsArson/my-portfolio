@@ -5,10 +5,10 @@
   "width": 600,
   "offsetX": 0,
   "relativeToCardId": "past-technology-and-realization",
-  "offsetY": "1.05ph",
+  "offsetY": "1.1ph",
   "hide": false,
   "navigationFitToFrame": true,
-  "color": "rgba(110, 139, 91, 0.35)",
+  "color": "#70AD46",
   "sections": [
     {
       "type": "content",

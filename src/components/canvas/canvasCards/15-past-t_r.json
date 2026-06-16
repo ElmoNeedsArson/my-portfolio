@@ -7,7 +7,7 @@
   "relativeToCardId": "past-math-data-and-computing",
   "offsetY": "1.5ph",
   "navigationFitToFrame": true,
-  "color": "rgba(62, 124, 166, 0.35)",
+  "color": "#FFC000",
   "sections": [
     {
       "type": "content",
