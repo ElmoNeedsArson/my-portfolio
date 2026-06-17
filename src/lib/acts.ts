@@ -11,7 +11,7 @@ export type Act = {
 export const ACTS: Act[] = [
   {
     id: 1,
-    label: 'Act I · Identity',
+    label: 'I · Identity',
     description: 'Who I am',
     cardIds: [
       'intro-overview',
@@ -24,7 +24,7 @@ export const ACTS: Act[] = [
   },
   {
     id: 2,
-    label: 'Act II · Past',
+    label: 'II · Past',
     description: 'Pre-FMP history and evidence',
     cardIds: [
       'past-business-and-entrepreneurship',
@@ -42,7 +42,7 @@ export const ACTS: Act[] = [
   },
   {
     id: 3,
-    label: 'Act III · Present',
+    label: 'III · Present',
     description: 'FMP and synthesis',
     cardIds: [
       'past-conclusion',
@@ -52,7 +52,7 @@ export const ACTS: Act[] = [
   },
   {
     id: 4,
-    label: 'Act IV · Future',
+    label: 'IV · Future',
     description: 'Where I go',
     cardIds: [
       'beyond-education',
