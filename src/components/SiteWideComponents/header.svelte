@@ -9,69 +9,57 @@
         showSearchResultsStore,
         closeSearchResults,
     } from "../../lib/searchNavigation";
-    import { fade, scale, fly } from "svelte/transition";
 
-    // State variables for managing search functionality
-    let showSearchModal = false; // Controls when the search modal is visible
-
-    // Reactive statements using Svelte store subscriptions with $ syntax
-    // These automatically update when the stores change
+    let showSearchModal = false; 
     $: if ($showSearchResultsStore) {
-        showSearchModal = false; // Close search modal if results are being shown
+        showSearchModal = false; 
     }
 
-    // Simple click handler used for the social icon buttons (placeholder)
     const handleClick = (url: string) => {
         window.open(url, "_blank");
     };
 
-    // Toggle the global dark mode store. Other components subscribed to the store
-    // will react automatically when this updates.
     function toggleDarkMode() {
         darkMode.update((v) => !v);
     }
 
     function openSearch(event: MouseEvent) {
-        event.stopPropagation(); // Prevent the click from bubbling up
+        event.stopPropagation();
         showSearchModal = true;
     }
 
     function handleKeydown(event: KeyboardEvent) {
-        // Check for Ctrl+K or Ctrl+/ (or Cmd on Mac)
+        // Check for Ctrl+K or Ctrl+/
         if (
             (event.ctrlKey || event.metaKey) &&
             (event.key === "k" || event.key === "/")
         ) {
-            event.preventDefault(); // Prevent default browser behavior
-            showSearchModal = true; // Open search modal
+            event.preventDefault(); 
+            showSearchModal = true;
         }
     }
 
     function handleSearchResults(event: CustomEvent<SearchResult>) {
-        searchResultStore.set(event.detail); // Store the search results
-        showSearchModal = false; // Close the search modal
-        showSearchResultsStore.set(true); // Show the results modal
+        searchResultStore.set(event.detail);
+        showSearchModal = false; 
+        showSearchResultsStore.set(true); 
     }
 
     function handleResultsClose() {
         //console.log("Closing search results");
-        closeSearchResults(); // Use global function to close results
+        closeSearchResults(); 
     }
 
     function handleBackToSearch() {
         //console.log("Going back to search modal");
-        showSearchResultsStore.set(false); // Hide results
-        showSearchModal = true; // Show search modal again
+        showSearchResultsStore.set(false); 
+        showSearchModal = true; 
     }
 </script>
 
 <header>
-    <!-- Brand/logo -->
-    <!-- <img src={logo} alt="Logo" /> -->
 
-    <!-- Right-side controls: search, social icons + theme toggle -->
     <div class="icons">
-        <!-- Search button -->
         <button
             class="icon search-button"
             on:click={openSearch}
@@ -95,7 +83,6 @@
         </button>
         <div class="divider"></div>
 
-        <!-- Toggle the global theme. We read $darkMode to render the correct icon. -->
         <button class="mode-toggle" on:click={toggleDarkMode}>
             {#if $darkMode}
                 <Sun />
@@ -106,13 +93,11 @@
     </div>
 </header>
 
-<!-- Search Modal -->
 <SearchModal
     bind:isOpen={showSearchModal}
     on:searchResults={handleSearchResults}
 />
 
-<!-- Global keyboard event listener for search shortcuts -->
 <svelte:window on:keydown={handleKeydown} />
 
 {#if $showSearchResultsStore && $searchResultStore}
@@ -132,12 +117,9 @@
         display: flex;
         align-items: center;
         padding: 1rem;
-        /* background-color: var(--background-color); */
         background-color: transparent;
-        /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
         margin: 0px;
         color: var(--primary-text-color);
-        /* border-bottom: solid 1px var(--border-color); */
     }
 
     .icons {
@@ -150,7 +132,6 @@
     .icon {
         background-color: transparent;
         border: none;
-        /* box-shadow: none; */
         color: var(--muted-color);
         padding: 5px;
     }
@@ -182,7 +163,6 @@
     }
 
     @media (hover: hover) {
-        /* hover styles only for non-touch devices */
         .icon:hover {
             color: var(--secondary-text-color);
             cursor: pointer;

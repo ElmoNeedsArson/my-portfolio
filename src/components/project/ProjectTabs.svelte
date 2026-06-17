@@ -15,7 +15,6 @@
         const result: TabDef[] = [];
         const pAny: any = project as any;
         
-        // Prefer structured tabs object if present
         const fromMap = project.tabs ?? undefined;
         if (fromMap && typeof fromMap === "object") {
             for (const [key, value] of Object.entries(fromMap)) {
@@ -26,7 +25,6 @@
             }
         }
         
-        // Also look for top-level tabN keys
         for (const key of Object.keys(pAny)) {
             if (/^tab\d+$/i.test(key)) {
                 const content = pAny[key] as ContentBlock;
@@ -37,7 +35,6 @@
             }
         }
         
-        // Sort tabs by numeric suffix if using tabN
         result.sort((a, b) => {
             const na = parseInt(a.id.replace(/\D/g, "")) || 0;
             const nb = parseInt(b.id.replace(/\D/g, "")) || 0;
@@ -46,10 +43,8 @@
         return result;
     })();
 
-    // Ensure activeTabIndex stays in bounds
     $: if (activeTabIndex >= tabs.length) activeTabIndex = 0;
 
-    // Notify parent when active content changes
     $: activeContent = tabs.length > 0 ? tabs[activeTabIndex].content : project?.content;
     $: onContentChange(activeContent);
 

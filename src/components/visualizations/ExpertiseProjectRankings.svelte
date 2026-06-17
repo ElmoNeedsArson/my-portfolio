@@ -81,10 +81,6 @@
 </script>
 
 <div class="visualization-container">
-    <!-- <h3>Projects by Expertise Area</h3>
-    <p class="description">Browse projects ranked by their rating in each expertise dimension</p> -->
-
-    <!-- Expertise tabs -->
     <div class="tabs-container">
         {#each expertiseAreas as area, index}
             <button

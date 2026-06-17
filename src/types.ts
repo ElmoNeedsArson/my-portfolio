@@ -40,19 +40,12 @@ export interface GalleryObject {
 
 export interface ProjectSection {
   title: string;
-  // subtitle for the section
   subtitle?: string;
-  // text is optional so a section can be an image or gallery-only
   text?: string;
-  // single image (string path or object with alt/caption)
   image?: ImageObject;
-  // gallery of images with optional overall caption
   gallery?: GalleryObject;
-  // video object with src, type, and optional caption
   video?: VideoObject;
-  // embedded PDF document with optional caption and filename hint
   pdf?: PdfObject;
-  // Path to a Three.js scene file
   ThreeJSScene?: ThreeJSObject; 
 }
 
@@ -88,8 +81,6 @@ export interface Project {
   repoUrl?: string;
   demoLink?: string;
   featured?: boolean;
-  // Main content (optional when using tabbed content)
   content?: ContentBlock;
-  // Optional structured tabs container (alternative to top-level tab1/tab2...)
   tabs?: Record<string, ContentBlock>;
 }
