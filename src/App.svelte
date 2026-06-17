@@ -26,8 +26,9 @@
     window.scrollTo(0, 0);
   }
 
-  // Track page views
-  $: if ($location) {
+  // Track site visits — only once per browser session
+  if (!sessionStorage.getItem("visited")) {
+    sessionStorage.setItem("visited", "1");
     fetch("/api/pageview", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
