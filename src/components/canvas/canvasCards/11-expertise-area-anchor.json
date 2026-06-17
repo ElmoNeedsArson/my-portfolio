@@ -1,0 +1,12 @@
+{
+  "id": "expertise-area-anchor",
+  "title": "Expertise Area Anchor",
+  "numberOrder": 11,
+  "width": 600,
+  "relativeToCardId": "professional-identity",
+  "offsetX": 5600,
+  "offsetY": "0.5ph-0.5ch",
+  "color": "transparent",
+  "layoutOnly": true,
+  "sections": []
+}

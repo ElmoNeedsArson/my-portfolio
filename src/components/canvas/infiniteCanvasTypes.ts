@@ -44,6 +44,7 @@ export type CardDefinition = {
   columns?: number;
   paddingY?: string;
   hide?: boolean;
+  layoutOnly?: boolean;
   hideHeader?: boolean;
   contentAlign?: "left" | "center";
   introTitle?: string;

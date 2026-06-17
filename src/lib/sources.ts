@@ -17,8 +17,9 @@ export const sources: Source[] = [
   },
   {
     id: "springer1994",
-    formatted: "Retrieved from <i>Journal of Information Technology</i>.",
-    url: "https://link.springer.com/article/10.1057/jit.1994.6",
+    formatted:
+      "Wong, E., & Tate, G. (1994). A study of user participation in information systems development. <i>Journal of Information Technology</i>, 9, 51-60.",
+    url: "https://doi.org/10.1057/jit.1994.6",
   },
   {
     id: "zhai2024",

@@ -5,6 +5,7 @@
   "relativeToCardId": "professional-skills",
   "width": 800,
   "offsetX": 4000,
+  "navigationMaxZoom": 1.2,
   "hide": false,
   "offsetY": "0.5ph-0.5ch",
   "color": "rgba(249, 103, 67, 0.45)",

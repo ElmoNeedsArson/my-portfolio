@@ -7,7 +7,8 @@
   "offsetX": "1.2pw",
   "offsetY": "0.5ph-0.5ch",
   "columns": 2,
-  "navigationTopFactor": 0.08,
+  "initialCenterMode": "middle",
+  "navigationFitToFrame": true,
   "color": "rgba(249, 103, 67, 0.3)",
   "sections": [
     {

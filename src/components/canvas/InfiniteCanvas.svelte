@@ -136,7 +136,7 @@
 
   let citationReturnCardId: string | null = null;
 
-  $: cards = resolvedCardDefinitions;
+  $: cards = resolvedCardDefinitions.filter((card) => !card.layoutOnly);
 
   $: resolvedCardGroups = showGroups
     ? resolveCardGroups(cards, cardHeights, cardGroups)
@@ -1410,7 +1410,9 @@
       {isFullscreen}
     />
 
-    <div class="canvas-zoom-hint" aria-hidden="true">ctrl+scroll to zoom</div>
+    {#if isFullscreen}
+      <div class="canvas-zoom-hint" aria-hidden="true">ctrl+scroll to zoom</div>
+    {/if}
   </div>
 
   {#if lightboxImage}
@@ -1559,6 +1561,12 @@
     pointer-events: none;
     user-select: none;
     background: var(--background-color);
+  }
+
+  @media (hover: none), (pointer: coarse), (max-width: 900px) {
+    .canvas-zoom-hint {
+      display: none;
+    }
   }
 
   .dot-grid {

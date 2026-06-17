@@ -1,11 +1,11 @@
 {
   "id": "past-technology-and-realization",
   "title": "Technology and Realization",
-  "numberOrder": 18,
+  "numberOrder": 20,
   "width": 600,
-  "relativeToCardId": "professional-skills",
-  "offsetX": "304.8+0.5pw",
-  "offsetY": "1050+0.5ph",
+  "relativeToCardId": "expertise-area-anchor",
+  "offsetX": "745+0.5pw",
+  "offsetY": "-300+0.5ph",
   "navigationFitToFrame": true,
   "color": "#FFC000",
   "sections": [

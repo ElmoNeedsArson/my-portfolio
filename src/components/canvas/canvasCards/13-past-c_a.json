@@ -1,11 +1,11 @@
 {
   "id": "past-creativity-and-aesthetics",
   "title": "Creativity and Aesthetics",
-  "numberOrder": 20,
+  "numberOrder": 18,
   "width": 600,
-  "relativeToCardId": "professional-skills",
-  "offsetX": "745+0.5pw",
-  "offsetY": "-300+0.5ph",
+  "relativeToCardId": "expertise-area-anchor",
+  "offsetX": "304.8+0.5pw",
+  "offsetY": "1050+0.5ph",
   "navigationFitToFrame": true,
   "color": "#ED7D31",
   "sections": [

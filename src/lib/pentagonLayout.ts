@@ -14,12 +14,12 @@ export const PENTAGON_VERTICES: Record<PentagonVertexKey, PentagonVertex> = {
     cardId: "past-math-data-and-computing",
   },
   upperRight: {
-    eaKey: "c_a",
-    cardId: "past-creativity-and-aesthetics",
-  },
-  lowerRight: {
     eaKey: "t_r",
     cardId: "past-technology-and-realization",
+  },
+  lowerRight: {
+    eaKey: "c_a",
+    cardId: "past-creativity-and-aesthetics",
   },
   lowerLeft: {
     eaKey: "b_e",
@@ -43,9 +43,9 @@ export type Point = { x: number; y: number };
 export type Box = { x: number; y: number; width: number; height: number };
 
 export const PENTAGON_EDGE_POINTS: Array<{ from: Point; to: Point }> = [
-  { from: { x: 0, y: -809 }, to: { x: 950, y: -251.88 } }, // MDC into C&A
-  { from: { x: 950, y: 328.5 }, to: { x: 650, y: 1050 } }, // C&A into T&R
-  { from: { x: 305, y: 1248 }, to: { x: -305, y: 1248 } }, // T&R into B&E
+  { from: { x: 0, y: -809 }, to: { x: 950, y: -251.88 } }, // MDC into T&R
+  { from: { x: 950, y: 328.5 }, to: { x: 650, y: 1050 } }, // T&R into C&A
+  { from: { x: 305, y: 1248 }, to: { x: -305, y: 1248 } }, // C&A into B&E
   { from: { x: -650, y: 1050 }, to: { x: -850, y: 577 } }, // B&E into U&S
   { from: { x: -950, y: -251.88 }, to: { x: 0, y: -809 } }, // U&S into MDC
 ];

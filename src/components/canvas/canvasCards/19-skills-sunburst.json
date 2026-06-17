@@ -9,6 +9,10 @@
   "color": "rgba(74, 144, 226, 0.2)",
   "sections": [
     {
+      "type": "content",
+      "content": "Click outer-ring to search"
+    },
+    {
       "type": "sveltecomponent",
       "componentName": "sunburst"
     }
