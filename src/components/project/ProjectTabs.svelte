@@ -4,6 +4,12 @@
 
     export let project: Project | undefined;
     export let onContentChange: (content: ContentBlock | undefined) => void;
+    export let onTabChange: ((tabSlug: string) => void) | undefined = undefined;
+    export let initialTabId: string | undefined = undefined;
+
+    function labelToSlug(label: string): string {
+        return label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    }
 
     type TabDef = { id: string; label: string; content: ContentBlock };
     let tabs: TabDef[] = [];
@@ -43,7 +49,10 @@
         return result;
     })();
 
-    $: if (activeTabIndex >= tabs.length) activeTabIndex = 0;
+    $: if (tabs.length > 0) {
+        const idx = initialTabId ? tabs.findIndex((t) => labelToSlug(t.label) === initialTabId) : -1;
+        activeTabIndex = idx >= 0 ? idx : 0;
+    }
 
     $: activeContent = tabs.length > 0 ? tabs[activeTabIndex].content : project?.content;
     $: onContentChange(activeContent);
@@ -79,6 +88,7 @@
     function handleTabClick(index: number) {
         activeTabIndex = index;
         moveUnderline();
+        onTabChange?.(labelToSlug(tabs[index].label));
     }
 </script>
 

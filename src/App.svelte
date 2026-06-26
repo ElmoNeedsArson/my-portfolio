@@ -12,6 +12,7 @@
 
   const routes = Object.fromEntries([
     ...getHomeRoutes().map((r) => [r, Home]),
+    ["/:slug/:tab", Project],
     ["/:slug", Project],
   ]);
 
@@ -26,7 +27,7 @@
     window.scrollTo(0, 0);
   }
 
-  // Track site visits — only once per browser session
+  // Track site visits, only once per browser session
   if (!sessionStorage.getItem("visited")) {
     sessionStorage.setItem("visited", "1");
     fetch("/api/pageview", {

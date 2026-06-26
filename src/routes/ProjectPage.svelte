@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { params, push } from "svelte-spa-router";
+  import { params, push, replace } from "svelte-spa-router";
   import SvelteSeo from "svelte-seo";
   import type { Project, ContentBlock } from "../types";
   import ProjectOutline from "../components/ProjectPageNavigator.svelte";
@@ -18,6 +18,11 @@
   $: project = findProjectBySlug(slug);
 
   let activeContent: ContentBlock | undefined;
+  $: initialTabId = $params?.tab as string | undefined;
+
+  function handleTabChange(tabId: string) {
+    replace(`/${slug}/${tabId}`);
+  }
   const projectBackUrlStorageKey = "project-page-back-url-v1";
   const canvasFullscreenRestoreKey = "canvas-fullscreen-restore-v1";
 
@@ -96,7 +101,7 @@
 
       <ProjectTagList tags={project.tags} />
       <ProjectLanguagesTools languages={project.languages} tools={project.tools}/>
-      <ProjectTabs {project} onContentChange={(c) => (activeContent = c)}/>
+      <ProjectTabs {project} {initialTabId} onContentChange={(c) => (activeContent = c)} onTabChange={handleTabChange} />
 
       <ContentRenderer
         content={activeContent}

@@ -54,38 +54,72 @@
       "reason": "Serves as a personal branding and CV tool, presenting competences and projects in a way suited for job applications and professional communication."
     }
   ],
-  "content": {
-    "overview": "",
-    "keyFeatures": [],
-    "sections": [
-      {
-        "title": "What this site is",
-        "text": "Instead of relying on a CMS like WordPress, I built this portfolio in Svelte as a fully data-driven system. Every project is a JSON file. The site reads those files and renders them into project pages, filterable lists, and gallery thumbnails, all without a database or backend.\n\nDesigning the site this way made me realize how much the structure of data shapes how information can be explored. The portfolio stopped feeling like a collection of pages and more like a dataset that could be navigated from different perspectives.",
-        "image": {
-          "type": "image",
-          "src": "/assets/images/website_json_project.png",
-          "alt": "JSON-driven project data structure",
-          "caption": "Projects are defined entirely in JSON - the structure determines what can be filtered, searched, and displayed"
+  "tabs": {
+    "overview": {
+      "name": "Overview",
+      "overview": "",
+      "keyFeatures": [],
+      "sections": [
+        {
+          "title": "What this site is",
+          "text": "Instead of relying on a CMS like WordPress, I built this portfolio in Svelte as a fully data-driven system. Every project is a JSON file. The site reads those files and renders them into project pages, filterable lists, and gallery thumbnails, all without a database or backend.\n\nDesigning the site this way made me realize how much the structure of data shapes how information can be explored. The portfolio stopped feeling like a collection of pages and more like a dataset that could be navigated from different perspectives.",
+          "image": {
+            "type": "image",
+            "src": "/assets/images/website_json_project.png",
+            "alt": "JSON-driven project data structure",
+            "caption": "Projects are defined entirely in JSON - the structure determines what can be filtered, searched, and displayed"
+          }
+        },
+        {
+          "title": "Filtering and navigation",
+          "text": "One of the features I'm most fond of is the tags, languages, and tools filtering system. Rather than scrolling through a flat list of projects, you can query by what matters, a specific programming language, a design tool, a topic area. This turns the project list into something closer to a queryable dataset than a static page.",
+          "image": {
+            "type": "image",
+            "src": "/assets/images/website_search.png",
+            "alt": "Portfolio website filter and search interface",
+            "caption": "Filter projects by tags, languages, or tools - the structure of the data makes this possible"
+          }
+        },
+        {
+          "title": "The Infinite Canvas",
+          "text": "Alongside the project pages, the portfolio includes an infinite canvas, a spatial, navigable reflection space. Rather than a linear about page, I wanted reflections, goals, and identity to feel like something you explore, and how each element is related to another. Cards on the canvas link out to project pages, creating a two-way relationship between the structured project data and the more personal narrative layer.\n\nThis was also my first time building a custom canvas renderer in Svelte, handling panning, zooming, card layout from JSON, and navigation between named positions."
+        },
+        {
+          "title": "Why Svelte",
+          "text": "This was my first Svelte project. Coming from plain HTML/CSS and WordPress, Svelte's reactivity model made it easy to build filtering, live updates, and component-driven layouts without a lot of boilerplate. I get why people like it, though it's also easy to get lost in reactive variables and stores when the project grows."
         }
-      },
-      {
-        "title": "Filtering and navigation",
-        "text": "One of the features I'm most fond of is the tags, languages, and tools filtering system. Rather than scrolling through a flat list of projects, you can query by what matters, a specific programming language, a design tool, a topic area. This turns the project list into something closer to a queryable dataset than a static page.",
-        "image": {
-          "type": "image",
-          "src": "/assets/images/website_search.png",
-          "alt": "Portfolio website filter and search interface",
-          "caption": "Filter projects by tags, languages, or tools - the structure of the data makes this possible"
+      ]
+    },
+    "changelog": {
+      "name": "Changelog",
+      "overview": "",
+      "keyFeatures": [],
+      "sections": [
+        {
+          "title": "June 24, 2026",
+          "text": "<strong>Features</strong>\n• Tab navigation is now part of the URL, making individual project tabs directly shareable\n• Changelog tab on this project page\n• Live visitor counter, counts once per browser session to avoid inflation\n• SEO metadata and structured data improvements\n• Redesigned color scheme for expertise area visualizations\n\n<strong>Improvements</strong>\n• Major writing pass across all project descriptions, significant word cuts throughout\n• Eindhoven canvas major content update with a new pentagon structure throughout\n\n<strong>Bug Fixes</strong>\n• Project modals not working correctly when the canvas was in fullscreen mode\n• Broken navigation link"
+        },
+        {
+          "title": "March 31, 2026",
+          "text": "<strong>Features</strong>\n• New project page\n• Radar chart segments now show the reasoning behind each score on hover\n• Lightbox viewer for images in project pages\n\n<strong>Improvements</strong>\n• Image updates throughout the canvas\n• SEO optimization pass\n\n<strong>Bug Fixes</strong>\n• Image caching issue causing assets to load stale versions on repeat visits\n• PDF save and print options corrected"
+        },
+        {
+          "title": "March 12, 2026",
+          "text": "<strong>Features</strong>\n• Frame-based navigation in the infinite canvas, jump between named positions directly\n\n<strong>Improvements</strong>\n• Mobile layout and readability\n• Server caching for improved repeat-visit load performance"
+        },
+        {
+          "title": "March 4, 2026",
+          "text": "<strong>Features</strong>\n• Docker configuration for consistent and reproducible deployments\n• Per-image captions in project page sections\n• Download counter backed by the GitHub API (required adding an Express.js server to work around CORS)\n• Fullscreen URL flag: the canvas now preserves fullscreen state in the URL so direct links open correctly\n• PDF viewer embedded in project pages\n• Several new project pages\n\n<strong>Improvements</strong>\n• Complete structural overhaul of canvas cards, replacing accumulated layout hacks\n• Major mobile and tablet visual layout overhaul\n• Expanded content on existing project pages\n• Various canvas aesthetic updates\n\n<strong>Bug Fixes</strong>\n• Touchscreen interaction broke after a canvas refactor\n• Arrow sticky focus not behaving correctly on mobile"
+        },
+        {
+          "title": "February 13, 2026",
+          "text": "<strong>Improvements</strong>\n• Bulk cleanup of the project JSON data structure across all files\n• Print layout for project pages is now actually usable\n• Image-based section layouts"
+        },
+        {
+          "title": "November 14, 2025",
+          "text": "<strong>Features</strong>\n• Initial launch: project list with filtering by tags, programming languages, and tools\n• Gallery component with multimedia support, images and video in a single block\n• Project pages built entirely from JSON data, no CMS\n• Eindhoven section with its own dedicated navigation tab and custom canvas\n• Navigation animations and transitions between tabs\n\n<strong>Bug Fixes</strong>\n• Several navigation bugs that came with the animation update"
         }
-      },
-      {
-        "title": "The Infinite Canvas",
-        "text": "Alongside the project pages, the portfolio includes an infinite canvas, a spatial, navigable reflection space. Rather than a linear about page, I wanted reflections, goals, and identity to feel like something you explore, and how each element is related to another. Cards on the canvas link out to project pages, creating a two-way relationship between the structured project data and the more personal narrative layer.\n\nThis was also my first time building a custom canvas renderer in Svelte, handling panning, zooming, card layout from JSON, and navigation between named positions."
-      },
-      {
-        "title": "Why Svelte",
-        "text": "This was my first Svelte project. Coming from plain HTML/CSS and WordPress, Svelte's reactivity model made it easy to build filtering, live updates, and component-driven layouts without a lot of boilerplate. I get why people like it, though it's also easy to get lost in reactive variables and stores when the project grows."
-      }
-    ]
+      ]
+    }
   }
 }
