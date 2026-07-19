@@ -1,4 +1,4 @@
-import type { Project } from '../types';
+import type { Project } from '$lib/types';
 
 export type SearchCategory = 'projects' | 'tags' | 'languages' | 'tools';
 

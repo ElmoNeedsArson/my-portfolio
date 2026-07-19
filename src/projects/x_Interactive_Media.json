@@ -6,13 +6,13 @@
     "shortDesc": "",
     "thumbnail": {
         "type": "image",
-        "src": "../assets/images/Game_Planet.png",
+        "src": "/assets/images/Game_Planet.png",
         "alt": "",
         "caption": ""
     },
     "thumbnailLight": {
         "type": "image",
-        "src": "../assets/images/Game_Planet.png",
+        "src": "/assets/images/Game_Planet.png",
         "alt": "",
         "caption": ""
     },
@@ -91,17 +91,17 @@
                     "media": [
                         {
                             "type": "image",
-                            "src": "../assets/images/interactive_media/jetpack.png",
+                            "src": "/assets/images/interactive_media/jetpack.png",
                             "alt": "Promotional image I made for showcasing the plugin"
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/interactive_media/Planet.png",
+                            "src": "/assets/images/interactive_media/Planet.png",
                             "alt": "Promotional image I made for showcasing the plugin"
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/interactive_media/GUI_overlay.png",
+                            "src": "/assets/images/interactive_media/GUI_overlay.png",
                             "alt": "Promotional image I made for showcasing the plugin"
                         }
                     ],

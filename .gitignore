@@ -17,7 +17,6 @@ dist-ssr
 !.env.example
 public.zip
 Docs
-.tmp_server_stdout.log
 
 # Editor directories and files
 .vscode/*
@@ -40,6 +39,6 @@ src/assets
 .vscode
 .pretierrc
 SEARCH_ARCHITECTURE.md
-Experiments.md
 memory
-src/components/canvas/canvasCards/archived/
+build
+.svelte-kit

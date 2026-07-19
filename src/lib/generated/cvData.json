@@ -1,0 +1,178 @@
+{
+  "name": "JESSE STRIJKER",
+  "sidebarSections": [
+    {
+      "title": "Contact",
+      "items": [
+        {
+          "text": "jesse.strijker@gmail.com",
+          "href": "mailto:jesse.strijker@gmail.com"
+        },
+        {
+          "text": "+31 6 20796190",
+          "href": "tel:+31620796190"
+        },
+        {
+          "text": "linkedin.com/in/jesse-strijker",
+          "href": "https://linkedin.com/in/jesse-strijker"
+        },
+        {
+          "text": "portfolio.jessestrijker.com",
+          "href": "https://portfolio.jessestrijker.com"
+        },
+        {
+          "text": "github.com/ElmoNeedsArson",
+          "href": "https://github.com/ElmoNeedsArson"
+        }
+      ]
+    },
+    {
+      "title": "Skills",
+      "groups": [
+        {
+          "name": "Programming",
+          "text": "JavaScript, TypeScript, Python, C, C#, Java, SQL"
+        },
+        {
+          "name": "Embedded / Electronics",
+          "text": "Teensy, ESP32, Raspberry Pi, Arduino, (fritzing)"
+        },
+        {
+          "name": "Physical & Fabrication",
+          "text": "Laser cutting, 3D printing, Sewing"
+        },
+        {
+          "name": "3D & Creative Tools",
+          "text": "Fusion 360, Blender, Maya, Blockbench, Slicers"
+        },
+        {
+          "name": "(Web)Design",
+          "text": "Figma, WordPress, Svelte, Three.js, HTML/CSS"
+        },
+        {
+          "name": "Software Suites",
+          "text": "Adobe (Illustrator, Premiere Pro), Microsoft Office, Unity, SPSS, Tableau"
+        }
+      ]
+    },
+    {
+      "title": "Languages",
+      "items": [
+        {
+          "text": "Dutch - Native"
+        },
+        {
+          "text": "English - Fluent"
+        },
+        {
+          "text": "German - High school level"
+        },
+        {
+          "text": "French - High school level"
+        },
+        {
+          "text": "Norwegian - Beginner"
+        }
+      ]
+    },
+    {
+      "title": "Interests",
+      "items": [
+        {
+          "text": "Bouldering"
+        },
+        {
+          "text": "Minecraft modding/datapacks"
+        },
+        {
+          "text": "Sci-fi & creative coding"
+        },
+        {
+          "text": "Troubleshooting anything"
+        }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "title": "MSc Robotics",
+      "place": "University of Twente - EEMCS",
+      "date": "Starting Sept 2026"
+    },
+    {
+      "title": "MSc Industrial Design",
+      "place": "Eindhoven University of Technology (TU/e)",
+      "date": "2024 - 2026",
+      "body": "Focus on embodied interaction and HCI. Thesis: \"Utilizing/manipulating common devices for embodied learning.\""
+    },
+    {
+      "title": "Exchange Semester, Computer Science",
+      "place": "Technical University of Denmark (DTU), Copenhagen",
+      "date": "Aug 2025 - Jan 2026",
+      "body": "One-semester exchange with a focus on computer science coursework."
+    },
+    {
+      "title": "BSc Creative Technology",
+      "place": "University of Twente - EEMCS",
+      "date": "2020 - 2024",
+      "body": "Crossover of electrical engineering, computer science, and industrial design, with a focus on creative applications. Thesis: \"Effect of included vs. excluded briefings in serious games.\""
+    },
+    {
+      "title": "VWO, Technasium",
+      "place": "'t Hooghe Landt",
+      "date": "2014 - 2020"
+    }
+  ],
+  "experience": [
+    {
+      "title": "Teaching Assistant - course \"Playful Interactions\"",
+      "place": "Eindhoven University of Technology",
+      "date": "Feb 2026 - May 2026",
+      "body": "Supported students in creating playful interactions using microcontrollers, sensors, and actuators, from concept development through to electronics implementation."
+    },
+    {
+      "title": "Assistent-bijlesdocent (Assistant Tutor)",
+      "place": "Perquin & Van der Burgh",
+      "date": "Feb 2024 - Jul 2024",
+      "body": "Tutored students in both mainstream and special education settings, including students with autism and behavioral needs."
+    },
+    {
+      "title": "Co-Founder",
+      "place": "ExoMembra",
+      "date": "Jun 2022 - May 2024",
+      "body": "Developed cosplay-inspired exoskeletons as a rapid prototyping method for the medical device market."
+    },
+    {
+      "title": "Teaching Assistant - course \"Interactive Visualization\"",
+      "place": "University of Twente",
+      "date": "Feb 2022 - May 2024",
+      "body": "Supported 3D courses (Blender, Maya) during the 2nd and 3rd year of the bachelor."
+    },
+    {
+      "title": "Research Assistant",
+      "place": "University of Twente",
+      "date": "Sep 2023 - Feb 2024",
+      "body": "Built and tested a ready-to-use VR onboarding setup for researchers, designing the interactions and their form to introduce study participants to VR."
+    },
+    {
+      "title": "Voorraadmedewerker (supply clerk)",
+      "place": "Jumbo Supermarkten",
+      "date": "Aug 2017 - May 2020"
+    },
+    {
+      "title": "Babysitting (freelance)",
+      "date": "Sep 2018 - Sep 2020"
+    }
+  ],
+  "publications": [
+    {
+      "title": "Wordbond",
+      "text": "AI-powered shared reading tool (OCR, LLM correction, hand-tracking, TTS) helping visually impaired parents read physical books aloud in their own voice. Published at ICHEC 2025 (ACM)"
+    },
+    {
+      "title": "Digital Twins in Education",
+      "text": "currently in progress toward publication."
+    }
+  ],
+  "pdfPath": "/assets/pdfs/CV_Jesse_Strijker.pdf"
+}

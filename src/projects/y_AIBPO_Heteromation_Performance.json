@@ -114,22 +114,22 @@
                     "media": [
                         {
                             "type": "image",
-                            "src": "../assets/images/AIBPO/timeline.png",
+                            "src": "/assets/images/AIBPO/timeline.png",
                             "alt": "AIBPO Performance"
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/AIBPO/presentation1.png",
+                            "src": "/assets/images/AIBPO/presentation1.png",
                             "alt": "AIBPO Soundboard"
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/AIBPO/slide1.png",
+                            "src": "/assets/images/AIBPO/slide1.png",
                             "alt": "AIBPO Soundboard"
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/AIBPO/sketches.png",
+                            "src": "/assets/images/AIBPO/sketches.png",
                             "alt": "AIBPO Soundboard"
                         }
                     ],

@@ -6,13 +6,13 @@
     "shortDesc": "A project on visualizing data through physical installations.",
     "thumbnail": {
         "type": "image",
-        "src": "../assets/images/Physical_Data.png",
+        "src": "/assets/images/Physical_Data.png",
         "alt": "",
         "caption": "Thumbnail image for Physical Data project showcasing the installation we created."
     },
     "thumbnailLight": {
         "type": "image",
-        "src": "../assets/images/Physical_Data.png",
+        "src": "/assets/images/Physical_Data.png",
         "alt": "",
         "caption": ""
     },

@@ -7,19 +7,19 @@
     "shortDesc": "",
     "thumbnail": {
         "type": "image",
-        "src": "../assets/images/Obsidian-Plugin3.png",
+        "src": "/assets/images/Obsidian-Plugin3.png",
         "alt": "Promotional image I made for showcasing the plugin",
         "caption": "Promotional image I made for showcasing the plugin"
     },
     "thumbnailLight": {
         "type": "image",
-        "src": "../assets/images/Obsidian-Plugin3.png",
+        "src": "/assets/images/Obsidian-Plugin3.png",
         "alt": "",
         "caption": ""
     },
     "projectPageThumbnail": {
         "type": "image",
-        "src": "../assets/images/3D_Embed_1.png",
+        "src": "/assets/images/3D_Embed_1.png",
         "alt": "Promotional image I made for showcasing the plugin",
         "caption": "Promotional image I made for showcasing the plugin"
     },
@@ -78,13 +78,13 @@
                     "media": [
                         {
                             "type": "image",
-                            "src": "../assets/images/obsidian-graph-2024.png",
+                            "src": "/assets/images/obsidian-graph-2024.png",
                             "alt": "Obsidian Graph View 2024",
                             "caption": "Graph view of my Obsidian vault in 2024"
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/obsidian-graph-2025.png",
+                            "src": "/assets/images/obsidian-graph-2025.png",
                             "alt": "Obsidian Graph View 2025",
                             "caption": "Graph view of my Obsidian vault in 2025"
                         }
@@ -107,7 +107,7 @@
                     "media": [
                         {
                             "type": "video",
-                            "src": "../assets/videos/3D_obsidian_dataview.mp4",
+                            "src": "/assets/videos/3D_obsidian_dataview.mp4",
                             "autoplay": true,
                             "loop": true,
                             "muted": true,
@@ -132,12 +132,12 @@
                     "media": [
                         {
                             "type": "image",
-                            "src": "../assets/images/3D_Embed_1.png",
+                            "src": "/assets/images/3D_Embed_1.png",
                             "alt": "Promotional image I made for showcasing the plugin"
                         },
                         {
                             "type": "video",
-                            "src": "../assets/videos/3D_obsidian_minecraft.mp4",
+                            "src": "/assets/videos/3D_obsidian_minecraft.mp4",
                             "autoplay": true,
                             "loop": true,
                             "muted": true,
@@ -145,22 +145,22 @@
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/3D_Embed_2.png",
+                            "src": "/assets/images/3D_Embed_2.png",
                             "alt": "Promotional image I made for showcasing the plugin"
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/3D_Embed_3.png",
+                            "src": "/assets/images/3D_Embed_3.png",
                             "alt": "Promotional image I made for showcasing the plugin"
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/3D_Embed_4.png",
+                            "src": "/assets/images/3D_Embed_4.png",
                             "alt": "Promotional image I made for showcasing the plugin"
                         },
                         {
                             "type": "image",
-                            "src": "../assets/images/3D_Embed_5.png",
+                            "src": "/assets/images/3D_Embed_5.png",
                             "alt": "Promotional image I made for showcasing the plugin"
                         }
                     ],

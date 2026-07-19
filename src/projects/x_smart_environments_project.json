@@ -80,7 +80,7 @@
           "media": [
             {
               "type": "image",
-              "src": "../assets/images/smart_environments/watch_drawing.jpg",
+              "src": "/assets/images/smart_environments/watch_drawing.jpg",
               "alt": "Promotional image I made for showcasing the plugin",
               "caption": "A drawing of the watch we designed for this project"
              }

@@ -1,5 +1,5 @@
 import type { EAKey } from "./expertiseAreas";
-import type { Connection } from "../components/canvas/infiniteCanvasTypes";
+import type { Connection } from "$lib/components/canvas/infiniteCanvasTypes";
 
 export type PentagonVertexKey = "top" | "upperRight" | "lowerRight" | "lowerLeft" | "upperLeft";
 

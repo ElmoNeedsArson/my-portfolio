@@ -1,4 +1,4 @@
-import type { Project } from '../types';
+import type { Project } from '$lib/types';
 import { skillsTaxonomy, type TaxonomyNode } from './skillsTaxonomy';
 
 export type SkillNode = {

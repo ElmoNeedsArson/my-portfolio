@@ -6,13 +6,13 @@
     "shortDesc": "",
     "thumbnail": {
         "type": "image",
-        "src": "../assets/images/Exomembra-showcase2.png",
+        "src": "/assets/images/Exomembra-showcase2.png",
         "alt": "",
         "caption": "Image of Exomembra costume piece"
     },
     "thumbnailLight": {
         "type": "image",
-        "src": "../assets/images/Exomembra-showcase2.png",
+        "src": "/assets/images/Exomembra-showcase2.png",
         "alt": "",
         "caption": ""
     },

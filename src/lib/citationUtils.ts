@@ -1,5 +1,5 @@
 import { sources, type Source } from "./sources";
-import type { CardDefinitionInput, CardSection } from "../components/canvas/infiniteCanvasTypes";
+import type { CardDefinitionInput, CardSection } from "$lib/components/canvas/infiniteCanvasTypes";
 
 const CITE_PATTERN = /\\cite\{([^}]+)\}/g;
 
