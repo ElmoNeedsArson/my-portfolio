@@ -31,14 +31,18 @@
         "Teensy",
         "Fusion 360",
         "3D Printing",
-        "Laser Cutting"
+        "Laser Cutting",
+        "Fritzing",
+        "Slicers"
     ],
     "tags": [
         "Soft Robotics",
         "Haptics",
         "Sound Design",
         "Interaction Design",
-        "Tooling"
+        "Tooling",
+        "Pneumatics",
+        "Soft Actuation"
     ],
     "expertise": [
         {

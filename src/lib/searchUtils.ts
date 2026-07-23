@@ -1,6 +1,6 @@
 import type { Project } from '$lib/types';
 
-export type SearchCategory = 'projects' | 'tags' | 'languages' | 'tools';
+export type SearchCategory = 'all' | 'projects' | 'tags' | 'languages' | 'tools';
 
 export interface SearchResult {
     projects: Project[];
@@ -76,6 +76,12 @@ export const getAllCategoryValues = (category: SearchCategory): string[] => {
             case 'projects':
                 values.add(project.title);
                 break;
+            case 'all':
+                values.add(project.title);
+                project.tags.forEach(tag => values.add(tag));
+                project.languages.forEach(lang => values.add(lang));
+                project.tools.forEach(tool => values.add(tool));
+                break;
             case 'tags':
                 project.tags.forEach(tag => values.add(tag));
                 break;
@@ -106,6 +112,13 @@ export const searchProjects = (
 
     const filteredProjects = projects.filter(project => {
         switch (category) {
+            case 'all':
+                return terms.some(t =>
+                    project.title.toLowerCase().includes(t)
+                ) ||
+                    project.tags.some(tag => matchesAnyTerm(tag)) ||
+                    project.languages.some(lang => matchesAnyTerm(lang)) ||
+                    project.tools.some(tool => matchesAnyTerm(tool));
             case 'projects':
                 return terms.some(t =>
                     project.title.toLowerCase().includes(t) ||

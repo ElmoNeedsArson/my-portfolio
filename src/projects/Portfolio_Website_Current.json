@@ -24,9 +24,9 @@
     "caption": ""
   },
   "date": "2026-03",
-  "languages": ["JavaScript", "HTML", "CSS", "Svelte"],
-  "tools": ["SvelteKit", "Node.js", "docker", "express.js", "D3.js"],
-  "tags": ["Web Dev", "Portfolio", "Data", "Design", "Personal Website"],
+  "languages": ["JavaScript", "TypeScript", "HTML", "CSS", "Svelte"],
+  "tools": ["SvelteKit", "Node.js", "Docker", "Express.js", "D3.js"],
+  "tags": ["Web Dev", "Portfolio", "Data", "Design", "Personal Website", "Git", "SvelteKit"],
   "expertise": [
     {
       "area": "Math, Data and Computing",

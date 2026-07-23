@@ -24,8 +24,8 @@
   },
   "date": "2021-01-20",
   "languages": [],
-  "tools": ["Android Studio"],
-  "tags": ["Health"],
+  "tools": ["Android Studio", "Arduino"],
+  "tags": ["Health", "Sensors", "Wearables"],
   "expertise": [
     {
       "area": "Math, Data and Computing",

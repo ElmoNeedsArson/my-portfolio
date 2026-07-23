@@ -22,7 +22,7 @@
 
     export let isOpen = false;
 
-    let selectedCategory: SearchCategory = "projects";
+    let selectedCategory: SearchCategory = "all";
     let searchInput = "";
     let suggestions: string[] = [];
     let categoryDropdownOpen = false;

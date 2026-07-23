@@ -29,12 +29,15 @@
         "JavaScript"
     ],
     "tools": [
-        "Three.js"
+        "Three.js",
+        "Git"
     ],
     "tags": [
         "obsidian",
         "plugin",
-        "3D"
+        "3D",
+        "3D Visualization",
+        "Markdown"
     ],
     "expertise": [
         {

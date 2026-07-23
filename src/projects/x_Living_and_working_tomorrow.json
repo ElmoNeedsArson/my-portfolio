@@ -24,8 +24,8 @@
   },
   "date": "2021-04-07",
   "languages": [],
-  "tools": ["Windows Movie Maker"],
-  "tags": ["Human Centered Design"],
+  "tools": ["Windows Movie Maker", "Microsoft PowerPoint"],
+  "tags": ["Human Centered Design", "Interactive Prototype", "Interface Design"],
   "expertise": [
     {
       "area": "Math, Data and Computing",

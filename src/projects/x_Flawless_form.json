@@ -24,8 +24,8 @@
   },
   "date": "2022-04-09",
   "languages": ["Python"],
-  "tools": ["OpenCV"],
-  "tags": ["Computer Vision", "OpenCV", "Python", "Health"],
+  "tools": ["OpenCV", "MediaPipe"],
+  "tags": ["Computer Vision", "Health"],
   "expertise": [
     {
       "area": "Math, Data and Computing",

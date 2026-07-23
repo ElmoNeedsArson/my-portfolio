@@ -1,6 +1,8 @@
 <script lang="ts">
   import { Download } from '@lucide/svelte';
   import cvData from '$lib/generated/cvData.json';
+  import { navigateToSearch } from '$lib/searchNavigation';
+  import { getAllCategoryValues, type SearchCategory } from '$lib/searchUtils';
 
   type SidebarItem = {
     text: string;
@@ -30,18 +32,93 @@
     text: string;
   };
 
+  type SkillSegment = {
+    text: string;
+    match?: {
+      term: string;
+      category: SearchCategory;
+    };
+  };
+
   const nameParts = String(cvData.name ?? 'Jesse Strijker').split(/\s+/);
   const firstName = nameParts.slice(0, -1).join(' ') || nameParts[0] || 'Jesse';
   const lastName = nameParts.length > 1 ? nameParts.at(-1) : 'Strijker';
   const sidebarSections = cvData.sidebarSections as SidebarSection[];
   const education = cvData.education as CvItem[];
   const experience = cvData.experience as CvItem[];
+  const awards = (cvData.awards ?? []) as Publication[];
   const publications = cvData.publications as Publication[];
   const pdfPath = cvData.pdfPath || '/CV_Jesse_Strijker.pdf';
   const sheetWidth = 1060;
-  const sheetHeight = 1410;
+  let sheetHeight = $state(1410);
   let viewportWidth = $state(sheetWidth);
   const cvScale = $derived(Math.min(1, viewportWidth / sheetWidth));
+  const searchableSkillTerms = buildSearchableSkillTerms();
+
+  function buildSearchableSkillTerms() {
+    return (['languages', 'tools', 'tags'] as SearchCategory[])
+      .flatMap((category) =>
+        getAllCategoryValues(category).map((term) => ({
+          term,
+          category,
+          normalized: normalizeSkillTerm(term),
+        }))
+      )
+      .sort((a, b) => b.normalized.length - a.normalized.length);
+  }
+
+  function normalizeSkillTerm(value: string) {
+    return value.toLowerCase();
+  }
+
+  function hasSkillBoundary(text: string, start: number, end: number) {
+    const before = text[start - 1] ?? '';
+    const after = text[end] ?? '';
+    return !/[a-z0-9+#.]/i.test(before) && !/[a-z0-9+#.]/i.test(after);
+  }
+
+  function getSkillSegments(text: string): SkillSegment[] {
+    const segments: SkillSegment[] = [];
+    const normalizedText = normalizeSkillTerm(text);
+    let index = 0;
+
+    while (index < text.length) {
+      const match = searchableSkillTerms.find((term) => {
+        const end = index + term.normalized.length;
+        return (
+          normalizedText.startsWith(term.normalized, index) &&
+          hasSkillBoundary(text, index, end)
+        );
+      });
+
+      if (match) {
+        segments.push({
+          text: text.slice(index, index + match.normalized.length),
+          match: {
+            term: match.term,
+            category: match.category,
+          },
+        });
+        index += match.normalized.length;
+      } else {
+        const nextMatchedIndex = searchableSkillTerms
+          .map((term) => normalizedText.indexOf(term.normalized, index + 1))
+          .filter((termIndex) => termIndex >= 0)
+          .sort((a, b) => a - b)[0];
+        const nextIndex = nextMatchedIndex ?? text.length;
+        segments.push({ text: text.slice(index, nextIndex) });
+        index = nextIndex;
+      }
+    }
+
+    return segments;
+  }
+
+  function handleSkillClick(event: MouseEvent, segment: SkillSegment) {
+    event.stopPropagation();
+    if (!segment.match) return;
+    navigateToSearch(segment.match.term, 'all');
+  }
 </script>
 
 <section class="cv-page" aria-labelledby="cv-heading">
@@ -50,7 +127,7 @@
     bind:clientWidth={viewportWidth}
     style:height={`${sheetHeight * cvScale}px`}
   >
-    <article class="cv-sheet" style:transform={`scale(${cvScale})`}>
+    <article class="cv-sheet" bind:clientHeight={sheetHeight} style:transform={`scale(${cvScale})`}>
       <aside class="cv-sidebar">
         <h1 id="cv-heading"><span>{firstName}</span> <strong>{lastName}</strong></h1>
 
@@ -63,7 +140,23 @@
                 {#each section.groups as group}
                   <div class="skill-group">
                     <h3>{group.name}</h3>
-                    <p>{group.text}</p>
+                    <p>
+                      {#each getSkillSegments(group.text) as segment}
+                        {#if segment.match}
+                          <button
+                            type="button"
+                            class="cv-skill-link"
+                            title={`Click to see projects with ${segment.match.term}`}
+                            aria-label={`See projects with ${segment.match.term}`}
+                            onclick={(event) => handleSkillClick(event, segment)}
+                          >
+                            {segment.text}
+                          </button>
+                        {:else}
+                          {segment.text}
+                        {/if}
+                      {/each}
+                    </p>
                   </div>
                 {/each}
               </div>
@@ -124,6 +217,15 @@
             </div>
           {/each}
         </section>
+
+        {#if awards.length}
+          <section class="main-section">
+            <h2>Awards</h2>
+            {#each awards as item}
+              <p class="publication"><strong>{item.title}</strong> - {item.text}</p>
+            {/each}
+          </section>
+        {/if}
 
         <section class="main-section">
           <h2>Publications</h2>
@@ -247,6 +349,37 @@
     font-size: 0.85rem;
     line-height: 1.35;
     margin-bottom: 0.25rem;
+  }
+
+  .cv-skill-link {
+    appearance: none;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.18em;
+    transition:
+      color 0.16s ease,
+      text-decoration-color 0.16s ease;
+  }
+
+  .cv-skill-link:focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  @media (hover: hover) {
+    .cv-skill-link:hover {
+      color: #fff;
+      text-decoration-color: currentColor;
+    }
   }
 
   .cv-main {

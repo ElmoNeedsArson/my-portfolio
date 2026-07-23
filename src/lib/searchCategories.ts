@@ -1,4 +1,4 @@
-import { Folder, Tag, Code2, ToolCase } from '@lucide/svelte';
+import { FolderSearch, Folder, Tag, Code2, ToolCase } from '@lucide/svelte';
 import type { SearchCategory } from './searchUtils';
 
 export interface CategoryDefinition {
@@ -8,6 +8,7 @@ export interface CategoryDefinition {
 }
 
 export const SEARCH_CATEGORIES: readonly CategoryDefinition[] = [
+    { id: "all", label: "All", icon: FolderSearch },
     { id: "projects", label: "Project Names", icon: Folder },
     { id: "tags", label: "Tags", icon: Tag },
     { id: "languages", label: "Languages", icon: Code2 },

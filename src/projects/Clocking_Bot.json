@@ -37,7 +37,8 @@
         "Automation",
         "Data Visualization",
         "Google Sheets",
-        "JavaScript"
+        "Data",
+        "Dashboard"
     ],
     "content": {
         "overview": "This project is a Discord bot that tracks team work sessions directly from slash commands and writes results to Google Sheets in real time. Users can clock in, clock out with task notes, and manually add missed time. The bot also visualizes worked hours and pooled company funds in chart embeds, making operational data visible in-channel without opening external dashboards.",

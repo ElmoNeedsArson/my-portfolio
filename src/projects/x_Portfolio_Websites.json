@@ -24,8 +24,8 @@
   },
   "date": "2020-09-28",
   "languages": ["HTML", "CSS", "JavaScript"],
-  "tools": ["Wordpress", "Svelte"],
-  "tags": ["Web Development", "Portfolio", "Personal Website"],
+  "tools": ["Wordpress", "Svelte", "Git", "SvelteKit"],
+  "tags": ["Web Development", "Portfolio", "Personal Website", "Web Design", "CMS", "Personal Branding", "Information Architecture"],
   "expertise": [
     {
       "area": "Math, Data and Computing",

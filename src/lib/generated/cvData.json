@@ -31,11 +31,11 @@
       "groups": [
         {
           "name": "Programming",
-          "text": "JavaScript, TypeScript, Python, C, C#, Java, SQL"
+          "text": "JavaScript, TypeScript, Python, C, C#, Java, SQL, Git"
         },
         {
           "name": "Embedded / Electronics",
-          "text": "Teensy, ESP32, Raspberry Pi, Arduino, (fritzing)"
+          "text": "Teensy, ESP32, Raspberry Pi, Arduino, (fritzing), (Linux - Debian, ubuntu)"
         },
         {
           "name": "Physical & Fabrication",
@@ -47,7 +47,7 @@
         },
         {
           "name": "(Web)Design",
-          "text": "Figma, WordPress, Svelte, Three.js, HTML/CSS"
+          "text": "Figma, WordPress, Svelte, Three.js, HTML/CSS, Express.js, P5.js"
         },
         {
           "name": "Software Suites",
@@ -79,7 +79,7 @@
       "title": "Interests",
       "items": [
         {
-          "text": "Bouldering"
+          "text": "Bouldering/Cycling/Squash"
         },
         {
           "text": "Minecraft modding/datapacks"
@@ -140,7 +140,7 @@
       "title": "Co-Founder",
       "place": "ExoMembra",
       "date": "Jun 2022 - May 2024",
-      "body": "Developed cosplay-inspired exoskeletons as a rapid prototyping method for the medical device market."
+      "body": "Developed cosplay-inspired exoskeletons as a rapid prototyping method for the medical market."
     },
     {
       "title": "Teaching Assistant - course \"Interactive Visualization\"",
@@ -162,6 +162,12 @@
     {
       "title": "Babysitting (freelance)",
       "date": "Sep 2018 - Sep 2020"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Tu/E Totem Game jam - Winner",
+      "text": "Comparable to a hackathon, a competition with ~60 people to develop a game in 2 days about the theme 'speed'. Our hand-drawn video game concept took 1st place"
     }
   ],
   "publications": [

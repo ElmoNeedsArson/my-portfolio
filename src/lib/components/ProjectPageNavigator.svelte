@@ -223,13 +223,7 @@
 
   @media (max-width: 768px) {
     .outline-container {
-      position: relative;
-      top: auto;
-      right: auto;
-      transform: none;
-      margin: 1rem 0;
-      width: 100%;
-      max-width: none;
+      display: none;
     }
   }
 

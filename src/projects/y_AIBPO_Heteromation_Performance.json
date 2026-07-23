@@ -24,13 +24,17 @@
     },
     "date": "2025-04",
     "languages": [
-        "JavaScript"
+        "JavaScript",
+        "HTML",
+        "CSS"
     ],
     "tools": [
         "Data Foundry",
         "p5.js",
         "Canva",
-        "QR-based Mobile Interaction"
+        "QR-based Mobile Interaction",
+        "LLM",
+        "AI API"
     ],
     "tags": [
         "Performance",

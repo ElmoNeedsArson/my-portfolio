@@ -23,9 +23,9 @@
         "caption": ""
     },
     "date": "2025-09",
-    "languages": [],
-    "tools": [],
-    "tags": [],
+    "languages": ["TypeScript"],
+    "tools": ["Whisper"],
+    "tags": ["Obsidian", "Plugin", "Local-First", "Transcription", "Audio", "Privacy"],
     "expertise": [
         {
             "area": "Math, Data and Computing",

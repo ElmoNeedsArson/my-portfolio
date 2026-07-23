@@ -21,6 +21,7 @@ const sidebarHeadings = new Map([
 const mainHeadings = new Map([
   ["EDUCATION", "education"],
   ["EXPERIENCE", "experience"],
+  ["AWARDS", "awards"],
   ["PUBLICATIONS", "publications"],
 ]);
 
@@ -30,8 +31,12 @@ function compactHeading(value) {
 
 function normalizeText(value) {
   return value
+    .replace(/\s*[\u2013\u2014]\s*/g, " - ")
     .replace(/\s+([,.;:!?])/g, "$1")
+    .replace(/[\u2018\u2019]/g, "'")
     .replace(/\s*–\s*/g, " - ")
+    .replace(/â€˜|â€™/g, "'")
+    .replace(/'\s*s\s+peed\s*'/gi, "'speed'")
     .replace(/\s+-\s+/g, " - ")
     .replace(/\s+/g, " ")
     .trim();
@@ -245,7 +250,7 @@ function parsePublications(lines) {
         .filter((item) => !titleParts.includes(item))
         .map((item) => item.text)
         .join(" ")
-        .replace(/^\s*-\s*/, "");
+        .replace(/^\s*[-\u2013\u2014]\s*/, "");
 
       if (afterTitle.trim()) current.lines.push(afterTitle);
       continue;
@@ -269,6 +274,7 @@ async function generateCvData() {
     sidebarSections: sidebar.sections,
     education: parseTimedItems(sectionMainLines(lines, "education")),
     experience: parseTimedItems(sectionMainLines(lines, "experience")),
+    awards: parsePublications(sectionMainLines(lines, "awards")),
     publications: parsePublications(sectionMainLines(lines, "publications")),
     pdfPath: publicPdfPath,
   };
